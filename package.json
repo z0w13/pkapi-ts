@@ -83,5 +83,9 @@
     "**/*.{js,json}": [
       "npm run lint:fix"
     ]
+  },
+  "dependencies": {
+    "discord-snowflake": "^2.0.0",
+    "effect": "^3.16.16"
   }
 }
