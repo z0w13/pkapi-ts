@@ -1,6 +1,8 @@
 import z, { ZodType } from 'zod'
 import { objectToCamel } from 'ts-case-convert'
 
+import { HTTPError } from './errors.ts'
+
 import System from './models/System.ts'
 import Member from './models/Member.ts'
 import Group from './models/Group.ts'
@@ -16,6 +18,7 @@ import MemberGuildSettings from './models/MemberGuildSettings.ts'
 import Switch from './models/Switch.ts'
 import Message from './models/Message.ts'
 import { SwitchID } from './models/SwitchID.ts'
+import APIError from './models/APIError.ts'
 
 export default class PluralKit {
   constructor (protected token: string | null = null) {}
@@ -267,7 +270,6 @@ export default class PluralKit {
 
   async updateGroup (groupRef: GroupRef, data: Partial<Group>): Promise<Group> {
     // TODO: Proper type and validation for UpdateGroupRequest
-    // TODO: Error object on failure
     return this.requestParsed(
       `https://api.pluralkit.me/v2/groups/${groupRef}`,
       {},
@@ -455,7 +457,16 @@ export default class PluralKit {
       options.body = JSON.stringify(data)
     }
 
-    return fetch(url + (params.size ? `?${params.toString()}` : ''), options)
+    const resp = await fetch(url + (params.size ? `?${params.toString()}` : ''), options)
+    if (APIError.isAPIErrorStatus(resp.status)) {
+      throw APIError.fromResponse(resp, await resp.json())
+    }
+
+    if (resp.status < 200 || resp.status > 299) {
+      throw await HTTPError.fromResponse(resp)
+    }
+
+    return resp
   }
 
   async requestParsed<O, T>(
