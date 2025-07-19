@@ -15,3 +15,8 @@ const SystemUUID = Schema.UUID.pipe(Schema.brand('SystemUUID'))
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type SystemUUID = Schema.Schema.Type<typeof SystemUUID>
 export { SystemUUID }
+
+const SystemRef = Schema.Union(SystemID, SystemUUID)
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type SystemRef = Schema.Schema.Type<typeof SystemRef>
+export { SystemRef }
