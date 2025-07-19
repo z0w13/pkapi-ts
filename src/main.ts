@@ -11,7 +11,7 @@ import DiscordSnowflake from './models/DiscordSnowflake.ts'
 import SystemGuildSettings from './models/SystemGuildSettings.ts'
 import { SystemRef } from './models/SystemID.ts'
 import AutoproxySettings from './models/AutoproxySettings.ts'
-import MemberID from './models/MemberID.ts'
+import { MemberRef } from './models/MemberID.ts'
 import { GroupRef } from './models/GroupID.ts'
 import MemberGuildSettings from './models/MemberGuildSettings.ts'
 import Switch from './models/Switch.ts'
@@ -139,25 +139,27 @@ export default class PluralKit {
     )
   }
 
-  async getMember (id: MemberID): Promise<Member> {
-    // TODO: MemberRef instead of MemberID
-    return this.requestParsed(`https://api.pluralkit.me/v2/members/${id}`, {}, 'GET', Member)
+  async getMember (memberRef: MemberRef): Promise<Member> {
+    return this.requestParsed(`https://api.pluralkit.me/v2/members/${memberRef}`, {}, 'GET', Member)
   }
 
   // TODO: Return type, also document in PluralKit docs
-  async getMemberGroups (id: MemberID): Promise<unknown> {
-    // TODO: MemberRef instead of MemberID
-    return this.requestParsed(`https://api.pluralkit.me/v2/members/${id}/groups`, {}, 'GET', Member)
+  async getMemberGroups (memberRef: MemberRef): Promise<unknown> {
+    return this.requestParsed(
+      `https://api.pluralkit.me/v2/members/${memberRef}/groups`,
+      {},
+      'GET',
+      Member
+    )
   }
 
   async getMemberGuildSettings (
-    id: MemberID,
+    memberRef: MemberRef,
     guildId: DiscordSnowflake
   ): Promise<MemberGuildSettings> {
-    // TODO: MemberRef instead of MemberID
     // TODO: Branded Snowflakes
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${id}/guilds/${guildId}`,
+      `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
       {},
       'GET',
       MemberGuildSettings
@@ -172,13 +174,12 @@ export default class PluralKit {
   }
 
   async updateMember (
-    id: MemberID,
+    memberRef: MemberRef,
     member: Partial<Omit<Member, 'id' | 'uuid' | 'createdAt' | 'lastMessageAt'>>
   ): Promise<Member> {
-    // TODO: MemberRef instead of MemberID
     // TODO: Proper type and validation for UpdateMemberRequest
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${id}`,
+      `https://api.pluralkit.me/v2/members/${memberRef}`,
       {},
       'PATCH',
       Member,
@@ -186,21 +187,23 @@ export default class PluralKit {
     )
   }
 
-  async deleteMember (id: MemberID): Promise<void> {
-    // TODO: MemberRef instead of MemberID
-    const resp = await this.request(`https://api.pluralkit.me/v2/members/${id}`, {}, 'DELETE')
+  async deleteMember (memberRef: MemberRef): Promise<void> {
+    const resp = await this.request(
+      `https://api.pluralkit.me/v2/members/${memberRef}`,
+      {},
+      'DELETE'
+    )
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error deleting member ${id}`)
+      throw Error(`error deleting member ${memberRef}`)
     }
   }
 
-  async addMemberToGroups (memberId: MemberID, groupRefs: Array<GroupRef>): Promise<void> {
-    // TODO: MemberRef instead of MemberID
+  async addMemberToGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
     // TODO: Proper type and validation for AddMemberToGroupsRequest
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/members/${memberId}/groups/add`,
+      `https://api.pluralkit.me/v2/members/${memberRef}/groups/add`,
       {},
       'POST',
       groupRefs
@@ -208,15 +211,14 @@ export default class PluralKit {
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error adding member ${memberId} to groups ${groupRefs.join(', ')}`)
+      throw Error(`error adding member ${memberRef} to groups ${groupRefs.join(', ')}`)
     }
   }
 
-  async removeMemberFromGroups (memberId: MemberID, groupRefs: Array<GroupRef>): Promise<void> {
-    // TODO: MemberRef instead of MemberID
+  async removeMemberFromGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
     // TODO: Proper type and validation for RemoveMemberFromGroupsRequest
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/members/${memberId}/groups/remove`,
+      `https://api.pluralkit.me/v2/members/${memberRef}/groups/remove`,
       {},
       'POST',
       groupRefs
@@ -224,15 +226,14 @@ export default class PluralKit {
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error removing member ${memberId} from groups ${groupRefs.join(', ')}`)
+      throw Error(`error removing member ${memberRef} from groups ${groupRefs.join(', ')}`)
     }
   }
 
-  async overwriteMemberGroups (memberId: MemberID, groupRefs: Array<GroupRef>): Promise<void> {
-    // TODO: MemberRef instead of MemberID
+  async overwriteMemberGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
     // TODO: Proper type and validation for OverwriteMemberGroupsRequest
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/members/${memberId}/groups/overwrite`,
+      `https://api.pluralkit.me/v2/members/${memberRef}/groups/overwrite`,
       {},
       'POST',
       groupRefs
@@ -240,20 +241,19 @@ export default class PluralKit {
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error overwriting groups for member ${memberId} with ${groupRefs.join(', ')}`)
+      throw Error(`error overwriting groups for member ${memberRef} with ${groupRefs.join(', ')}`)
     }
   }
 
   async updateMemberGuildSettings (
-    memberId: MemberID,
+    memberRef: MemberRef,
     guildId: DiscordSnowflake,
     settings: Partial<MemberGuildSettings>
   ): Promise<MemberGuildSettings> {
-    // TODO: MemberRef instead of MemberID
     // TODO: Branded Snowflakes
     // TODO: Proper type and validation for UpdateMemberGuildSettingsRequest
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${memberId}/guilds/${guildId}`,
+      `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
       {},
       'PATCH',
       MemberGuildSettings,
@@ -305,13 +305,12 @@ export default class PluralKit {
     }
   }
 
-  async addMembersToGroup (groupRef: GroupRef, members: Array<MemberID>): Promise<void> {
-    // TODO: MemberRef instead of MemberID
+  async addMembersToGroup (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/add`,
       {},
       'POST',
-      members
+      memberRefs
     )
 
     if (resp.status !== 204) {
@@ -320,13 +319,12 @@ export default class PluralKit {
     }
   }
 
-  async removeMembersFromGroup (groupRef: GroupRef, members: Array<MemberID>): Promise<void> {
-    // TODO: MemberRef instead of MemberID
+  async removeMembersFromGroup (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/remove`,
       {},
       'POST',
-      members
+      memberRefs
     )
 
     if (resp.status !== 204) {
@@ -335,18 +333,17 @@ export default class PluralKit {
     }
   }
 
-  async overwriteGroupMembers (groupRef: GroupRef, members: Array<MemberID>): Promise<void> {
-    // TODO: MemberRef instead of MemberID
+  async overwriteGroupMembers (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/overwrite`,
       {},
       'POST',
-      members
+      memberRefs
     )
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error overwriting members for group ${groupRef} with ${members.join(', ')}`)
+      throw Error(`error overwriting members for group ${groupRef} with ${memberRefs.join(', ')}`)
     }
   }
 
@@ -388,13 +385,9 @@ export default class PluralKit {
     )
   }
 
-  async createSwitch (systemRef: SystemRef, members: Array<MemberID | UUID>, timestamp?: DateTime) {
-    // TODO: SwitchRef instead of UUID
-    // TODO: Return type, also document in PluralKit docs
-    // TODO: Proper type and validation for CreateSwitchRequest
-
+  async createSwitch (systemRef: SystemRef, memberRefs: Array<MemberRef>, timestamp?: DateTime) {
     const data: Record<string, unknown> = {
-      members
+      members: memberRefs
     }
     if (timestamp) {
       data.timestamp = formatIso(timestamp)
@@ -426,7 +419,7 @@ export default class PluralKit {
   async updateSwitchMembers (
     systemRef: SystemRef,
     switchId: UUID,
-    members: Array<MemberID | UUID>
+    memberRefs: Array<MemberRef>
   ): Promise<Switch> {
     // TODO: SwitchRef instead of UUID
     // TODO: Narrowed type for method (members = Array<Member>)
@@ -437,7 +430,7 @@ export default class PluralKit {
       {},
       'PATCH',
       Switch,
-      { members }
+      { members: memberRefs }
     )
   }
 
