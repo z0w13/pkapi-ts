@@ -1,22 +1,23 @@
-import { Schema } from 'effect'
+import z from 'zod'
+
 import PluralKitID, { PluralKitIDFromString } from './PluralKitID.ts'
 
-const GroupID = PluralKitID.pipe(Schema.brand('GroupID'))
+const GroupID = PluralKitID.brand<'GroupID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupID = Schema.Schema.Type<typeof GroupID>
+type GroupID = z.infer<typeof GroupID>
 export default GroupID
 
-const GroupIDFromString = Schema.compose(PluralKitIDFromString, GroupID)
+const GroupIDFromString = PluralKitIDFromString.brand<'GroupID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupIDFromString = Schema.Schema.Type<typeof GroupID>
+type GroupIDFromString = z.infer<typeof GroupID>
 export { GroupIDFromString }
 
-const GroupUUID = Schema.UUID.pipe(Schema.brand('GroupUUID'))
+const GroupUUID = z.uuidv4().brand<'GroupUUID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupUUID = Schema.Schema.Type<typeof GroupUUID>
+type GroupUUID = z.infer<typeof GroupUUID>
 export { GroupUUID }
 
-const GroupRef = Schema.Union(GroupID, GroupUUID)
+const GroupRef = z.union([GroupID, GroupUUID])
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupRef = Schema.Schema.Type<typeof GroupRef>
+type GroupRef = z.infer<typeof GroupRef>
 export { GroupRef }

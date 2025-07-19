@@ -2,8 +2,7 @@ import { test, describe, beforeEach, mock } from 'node:test'
 import assert from 'node:assert'
 
 import PluralKitID, { PluralKitIDFromString } from '../../src/models/PluralKitID.ts'
-import { Schema } from 'effect/index'
-import { ParseError } from 'effect/ParseResult'
+import { ZodError } from 'zod'
 
 describe('PluralKitID', () => {
   beforeEach(() => {
@@ -23,21 +22,21 @@ describe('PluralKitID', () => {
   })) {
     const [input, output] = testCase
     test(`${input} parses to ${output}`, () => {
-      assert.equal(Schema.decodeSync(PluralKitIDFromString)(input), output)
+      assert.equal(PluralKitIDFromString.parse(input), output)
     })
   }
 
   for (const input of ['ab-cde', 'abc-de', 'asdfasasdf', 'sdfasdf-sdfsafd']) {
     test(`${input} fails to parse`, () => {
       try {
-        Schema.decodeSync(PluralKitIDFromString)(input)
+        PluralKitIDFromString.parse(input)
       } catch (e) {
-        assert.equal(e instanceof ParseError, true)
+        assert.equal(e instanceof ZodError, true)
       }
     })
   }
 
   test('encodes correctly', () => {
-    assert.equal(Schema.encodeSync(PluralKitID)(PluralKitID.make('abcdef')), 'abcdef')
+    assert.equal(PluralKitID.parse('abcdef'), 'abcdef')
   })
 })

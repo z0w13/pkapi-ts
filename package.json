@@ -86,6 +86,7 @@
   },
   "dependencies": {
     "discord-snowflake": "^2.0.0",
-    "effect": "^3.16.16"
+    "ts-case-convert": "^2.1.0",
+    "zod": "^4.0.5"
   }
 }

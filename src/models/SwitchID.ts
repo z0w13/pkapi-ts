@@ -1,6 +1,6 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
-const SwitchID = Schema.UUID.pipe(Schema.brand('SwitchID'))
+const SwitchID = z.uuidv4().brand<'SwitchID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type SwitchID = Schema.Schema.Type<typeof SwitchID>
+type SwitchID = z.infer<typeof SwitchID>
 export { SwitchID }
