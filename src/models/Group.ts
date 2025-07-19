@@ -1,27 +1,24 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
 import Color from './Color.ts'
-import URL from './URL.ts'
 import { GroupIDFromString, GroupUUID } from './GroupID.ts'
 import { SystemIDFromString } from './SystemID.ts'
 import GroupPrivacy from './GroupPrivacy.ts'
 
-const Group = Schema.Struct({
+const Group = z.object({
   id: GroupIDFromString,
   uuid: GroupUUID,
-  system: Schema.UndefinedOr(SystemIDFromString),
+  system: z.optional(SystemIDFromString),
 
-  name: Schema.String.pipe(Schema.maxLength(100)),
-  displayName: Schema.propertySignature(
-    Schema.NullOr(Schema.String.pipe(Schema.maxLength(100)))
-  ).pipe(Schema.fromKey('display_name')),
-  description: Schema.NullOr(Schema.String.pipe(Schema.maxLength(100))),
-  icon: Schema.NullOr(URL.pipe(Schema.maxLength(256))),
-  banner: Schema.NullOr(URL.pipe(Schema.maxLength(256))),
-  color: Schema.NullOr(Color),
-  privacy: Schema.NullOr(GroupPrivacy)
+  name: z.string().max(100),
+  displayName: z.nullable(z.string().max(100)),
+  description: z.nullable(z.string().max(100)),
+  icon: z.nullable(z.url().max(256)),
+  banner: z.nullable(z.url().max(256)),
+  color: z.nullable(Color),
+  privacy: z.nullable(GroupPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type Group = Schema.Schema.Type<typeof Group>
+type Group = z.infer<typeof Group>
 
 export default Group

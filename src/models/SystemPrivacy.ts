@@ -1,24 +1,16 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
 import PrivacyValue from './PrivacyValue.ts'
 
-const SystemPrivacy = Schema.Struct({
-  descriptionPrivacy: Schema.propertySignature(PrivacyValue).pipe(
-    Schema.fromKey('description_privacy')
-  ),
-  pronounPrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('pronoun_privacy')),
-  memberListPrivacy: Schema.propertySignature(PrivacyValue).pipe(
-    Schema.fromKey('member_list_privacy')
-  ),
-  groupListPrivacy: Schema.propertySignature(PrivacyValue).pipe(
-    Schema.fromKey('group_list_privacy')
-  ),
-  frontPrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('front_privacy')),
-  frontHistoryPrivacy: Schema.propertySignature(PrivacyValue).pipe(
-    Schema.fromKey('front_history_privacy')
-  )
+const SystemPrivacy = z.object({
+  descriptionPrivacy: PrivacyValue,
+  pronounPrivacy: PrivacyValue,
+  memberListPrivacy: PrivacyValue,
+  groupListPrivacy: PrivacyValue,
+  frontPrivacy: PrivacyValue,
+  frontHistoryPrivacy: PrivacyValue
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type SystemPrivacy = Schema.Schema.Type<typeof SystemPrivacy>
+type SystemPrivacy = z.infer<typeof SystemPrivacy>
 
 export default SystemPrivacy

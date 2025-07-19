@@ -1,7 +1,7 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
-const PrivacyValue = Schema.NullOr(Schema.Literal('private', 'public'))
+const PrivacyValue = z.nullable(z.literal(['private', 'public']))
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type PrivacyValue = Schema.Schema.Type<typeof PrivacyValue>
+type PrivacyValue = z.infer<typeof PrivacyValue>
 
 export default PrivacyValue

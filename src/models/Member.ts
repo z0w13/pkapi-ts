@@ -1,49 +1,36 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
 import Color from './Color.ts'
 import { BirthdayFromString } from './Birthday.ts'
 import ProxyTag from './ProxyTag.ts'
-import URL from './URL.ts'
 import SystemID from './SystemID.ts'
 import { MemberIDFromString, MemberUUID } from './MemberID.ts'
 import MemberPrivacy from './MemberPrivacy.ts'
 
-const Member = Schema.Struct({
+const Member = z.object({
   id: MemberIDFromString,
   uuid: MemberUUID,
-  system: Schema.UndefinedOr(SystemID),
+  system: z.optional(SystemID),
 
-  name: Schema.NullOr(Schema.String.pipe(Schema.maxLength(100))),
-  displayName: Schema.propertySignature(
-    Schema.NullOr(Schema.String.pipe(Schema.maxLength(100)))
-  ).pipe(Schema.fromKey('display_name')),
-  color: Schema.NullOr(Color),
-  birthday: Schema.NullOr(BirthdayFromString),
-  pronouns: Schema.NullOr(Schema.String.pipe(Schema.maxLength(100))),
-  avatarUrl: Schema.propertySignature(Schema.NullOr(URL.pipe(Schema.maxLength(256)))).pipe(
-    Schema.fromKey('avatar_url')
-  ),
-  webhookAvatarUrl: Schema.propertySignature(Schema.NullOr(URL.pipe(Schema.maxLength(256)))).pipe(
-    Schema.fromKey('webhook_avatar_url')
-  ),
-  banner: Schema.NullOr(URL.pipe(Schema.maxLength(256))),
-  description: Schema.NullOr(Schema.String.pipe(Schema.maxLength(1000))),
-  created: Schema.NullOr(Schema.DateFromString),
-  proxyTags: Schema.propertySignature(Schema.Array(ProxyTag)).pipe(Schema.fromKey('proxy_tags')),
-  keepProxy: Schema.propertySignature(Schema.Boolean).pipe(Schema.fromKey('keep_proxy')),
-  tts: Schema.Boolean,
-  autoproxyEnabled: Schema.propertySignature(Schema.NullOr(Schema.Boolean)).pipe(
-    Schema.fromKey('autoproxy_enabled')
-  ),
-  messageCount: Schema.propertySignature(Schema.NullOr(Schema.Number)).pipe(
-    Schema.fromKey('message_count')
-  ),
-  lastMessageTimestamp: Schema.propertySignature(Schema.NullOr(Schema.DateFromString)).pipe(
-    Schema.fromKey('last_message_timestamp')
-  ),
-  privacy: Schema.NullOr(MemberPrivacy)
+  name: z.nullable(z.string().max(100)),
+  displayName: z.nullable(z.string().max(100)),
+  color: z.nullable(Color),
+  birthday: z.nullable(BirthdayFromString),
+  pronouns: z.nullable(z.string().max(100)),
+  avatarUrl: z.nullable(z.url().max(256)),
+  webhookAvatarUrl: z.nullable(z.url().max(256)),
+  banner: z.nullable(z.url().max(256)),
+  description: z.nullable(z.string().max(1000)),
+  created: z.nullable(z.iso.datetime()),
+  proxyTags: z.array(ProxyTag),
+  keepProxy: z.boolean(),
+  tts: z.boolean(),
+  autoproxyEnabled: z.nullable(z.boolean()),
+  messageCount: z.nullable(z.int().min(0)),
+  lastMessageTimestamp: z.nullable(z.iso.datetime()),
+  privacy: z.nullable(MemberPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type Member = Schema.Schema.Type<typeof Member>
+type Member = z.infer<typeof Member>
 
 export default Member

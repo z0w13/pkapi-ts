@@ -1,19 +1,24 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
-import DiscordSnowflake from './DiscordSnowflake.ts'
+import {
+  GuildSnowflake,
+  ChannelSnowflake,
+  UserSnowflake,
+  MessageSnowflake
+} from './DiscordSnowflake.ts'
 import Member from './Member.ts'
 import System from './System.ts'
 
-const Message = Schema.Struct({
-  timestamp: Schema.DateFromString,
-  id: DiscordSnowflake,
-  original: DiscordSnowflake,
-  sender: DiscordSnowflake,
-  channel: DiscordSnowflake,
-  guild: DiscordSnowflake,
-  system: Schema.UndefinedOr(System),
-  member: Schema.UndefinedOr(Member)
+const Message = z.object({
+  timestamp: z.iso.datetime(),
+  id: MessageSnowflake,
+  original: MessageSnowflake,
+  sender: UserSnowflake,
+  channel: ChannelSnowflake,
+  guild: GuildSnowflake,
+  system: z.optional(System),
+  member: z.optional(Member)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type Message = Schema.Schema.Type<typeof Message>
+type Message = z.infer<typeof Message>
 export default Message

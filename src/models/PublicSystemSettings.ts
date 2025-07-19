@@ -1,17 +1,18 @@
-import { Schema } from 'effect'
+import z from 'zod'
+
 import SystemSettings from './SystemSettings.ts'
 
-const PublicSystemSettings = SystemSettings.pick(
-  'pingsEnabled',
-  'latchTimeout',
-  'caseSensitiveProxyTags',
-  'proxyErrorMessageEnabled',
-  'hidDisplaySplit',
-  'hidDisplayCaps',
-  'hidListPadding',
-  'proxySwitch',
-  'nameFormat'
-)
+const PublicSystemSettings = SystemSettings.pick({
+  pingsEnabled: true,
+  latchTimeout: true,
+  caseSensitiveProxyTags: true,
+  proxyErrorMessageEnabled: true,
+  hidDisplaySplit: true,
+  hidDisplayCaps: true,
+  hidListPadding: true,
+  proxySwitch: true,
+  nameFormat: true
+})
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type PublicSystemSettings = Schema.Schema.Type<typeof PublicSystemSettings>
+type PublicSystemSettings = z.infer<typeof PublicSystemSettings>
 export default PublicSystemSettings

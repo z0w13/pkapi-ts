@@ -1,25 +1,30 @@
+import z from 'zod'
 import { isSnowflake } from 'discord-snowflake'
-import { Schema } from 'effect'
 
-const DiscordSnowflake = Schema.String.pipe(
-  Schema.filter((value) => isSnowflake(value) || 'not a discord snowflake'),
-  Schema.brand('DiscordSnowflake')
-)
+const DiscordSnowflake = z
+  .string()
+  .refine((value) => isSnowflake(value), { error: 'not a discord snowflake' })
+  .brand<'DiscordSnowflake'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type DiscordSnowflake = Schema.Schema.Type<typeof DiscordSnowflake>
+type DiscordSnowflake = z.infer<typeof DiscordSnowflake>
 export default DiscordSnowflake
 
-const GuildSnowflake = DiscordSnowflake.pipe(Schema.brand('GuildSnowflake'))
+const GuildSnowflake = DiscordSnowflake.brand<'GuildSnowflake'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GuildSnowflake = Schema.Schema.Type<typeof GuildSnowflake>
+type GuildSnowflake = z.infer<typeof GuildSnowflake>
 export { GuildSnowflake }
 
-const ChannelSnowflake = DiscordSnowflake.pipe(Schema.brand('ChannelSnowflake'))
+const ChannelSnowflake = DiscordSnowflake.brand<'ChannelSnowflake'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type ChannelSnowflake = Schema.Schema.Type<typeof ChannelSnowflake>
+type ChannelSnowflake = z.infer<typeof ChannelSnowflake>
 export { ChannelSnowflake }
 
-const MessageSnowflake = DiscordSnowflake.pipe(Schema.brand('MessageSnowflake'))
+const UserSnowflake = DiscordSnowflake.brand<'UserSnowflake'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type MessageSnowflake = Schema.Schema.Type<typeof MessageSnowflake>
+type UserSnowflake = z.infer<typeof UserSnowflake>
+export { UserSnowflake }
+
+const MessageSnowflake = DiscordSnowflake.brand<'MessageSnowflake'>()
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type MessageSnowflake = z.infer<typeof MessageSnowflake>
 export { MessageSnowflake }
