@@ -75,10 +75,7 @@ export default class PluralKit {
     )
   }
 
-  async updateSystem (
-    systemRef: SystemRef,
-    data: Partial<Omit<System, 'id' | 'uuid' | 'createdAt'>>
-  ): Promise<System> {
+  async updateSystem (systemRef: SystemRef, data: Partial<System>): Promise<System> {
     // TODO: Proper type and validation for UpdateSystemRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}`,
@@ -161,17 +158,12 @@ export default class PluralKit {
     )
   }
 
-  async createMember (
-    member: Partial<Omit<Member, 'id' | 'uuid' | 'createdAt' | 'lastMessageAt'>>
-  ): Promise<Member> {
+  async createMember (member: Partial<Member>): Promise<Member> {
     // TODO: Proper type and validation for CreateMemberRequest
     return this.requestParsed('https://api.pluralkit.me/v2/members', {}, 'POST', Member, member)
   }
 
-  async updateMember (
-    memberRef: MemberRef,
-    member: Partial<Omit<Member, 'id' | 'uuid' | 'createdAt' | 'lastMessageAt'>>
-  ): Promise<Member> {
+  async updateMember (memberRef: MemberRef, member: Partial<Member>): Promise<Member> {
     // TODO: Proper type and validation for UpdateMemberRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}`,
@@ -268,17 +260,12 @@ export default class PluralKit {
     )
   }
 
-  async createGroup (
-    group: Partial<Omit<Group, 'id' | 'uuid' | 'name' | 'createdAt'>> & Pick<Group, 'name'>
-  ): Promise<Group> {
+  async createGroup (group: Partial<Group> & Pick<Group, 'name'>): Promise<Group> {
     // TODO: Proper type and validation for CreateGroupRequest
     return this.requestParsed('https://api.pluralkit.me/v2/groups', {}, 'POST', Group, group)
   }
 
-  async updateGroup (
-    groupRef: GroupRef,
-    data: Partial<Omit<Group, 'id' | 'uuid' | 'createdAt'>>
-  ): Promise<Group> {
+  async updateGroup (groupRef: GroupRef, data: Partial<Group>): Promise<Group> {
     // TODO: Proper type and validation for UpdateGroupRequest
     // TODO: Error object on failure
     return this.requestParsed(
