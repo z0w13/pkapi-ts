@@ -1,5 +1,4 @@
 import { Schema } from 'effect'
-import { UUID } from 'effect/Schema'
 import { formatIso, DateTime } from 'effect/DateTime'
 
 import System from './models/System.ts'
@@ -16,6 +15,7 @@ import { GroupRef } from './models/GroupID.ts'
 import MemberGuildSettings from './models/MemberGuildSettings.ts'
 import Switch from './models/Switch.ts'
 import Message from './models/Message.ts'
+import { SwitchID } from './models/SwitchID.ts'
 
 export default class PluralKit {
   constructor (protected token: string | null = null) {}
@@ -364,8 +364,7 @@ export default class PluralKit {
     )
   }
 
-  async getSwitch (systemRef: SystemRef, switchId: UUID): Promise<Switch> {
-    // TODO: SwitchRef instead of UUID
+  async getSwitch (systemRef: SystemRef, switchId: SwitchID): Promise<Switch> {
     // TODO: Narrowed type for method (members = Array<Member>)
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
@@ -402,8 +401,11 @@ export default class PluralKit {
     )
   }
 
-  async updateSwitch (systemRef: SystemRef, switchId: UUID, timestamp: DateTime): Promise<Switch> {
-    // TODO: SwitchRef instead of UUID
+  async updateSwitch (
+    systemRef: SystemRef,
+    switchId: SwitchID,
+    timestamp: DateTime
+  ): Promise<Switch> {
     // TODO: Narrowed type for method (members = Array<Member>)
     // TODO: Proper type and validation for UpdateSwitchRequest
 
@@ -418,10 +420,9 @@ export default class PluralKit {
 
   async updateSwitchMembers (
     systemRef: SystemRef,
-    switchId: UUID,
+    switchId: SwitchID,
     memberRefs: Array<MemberRef>
   ): Promise<Switch> {
-    // TODO: SwitchRef instead of UUID
     // TODO: Narrowed type for method (members = Array<Member>)
     // TODO: Proper type and validation for UpdateSwitchMembersRequest
 
@@ -434,9 +435,7 @@ export default class PluralKit {
     )
   }
 
-  async deleteSwitch (systemRef: SystemRef, switchId: UUID) {
-    // TODO: SwitchRef instead of UUID
-    // TODO: SystemRef instead of SystemRef
+  async deleteSwitch (systemRef: SystemRef, switchId: SwitchID) {
     const resp = await this.request(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
