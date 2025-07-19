@@ -6,7 +6,7 @@ import Member from './models/Member.ts'
 import Group from './models/Group.ts'
 import SystemSettings from './models/SystemSettings.ts'
 import PublicSystemSettings from './models/PublicSystemSettings.ts'
-import DiscordSnowflake from './models/DiscordSnowflake.ts'
+import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.ts'
 import SystemGuildSettings from './models/SystemGuildSettings.ts'
 import { SystemRef } from './models/SystemID.ts'
 import AutoproxySettings from './models/AutoproxySettings.ts'
@@ -51,10 +51,9 @@ export default class PluralKit {
   }
 
   async getOwnSystemAutoproxySettings (
-    guildId: DiscordSnowflake,
-    channelId: DiscordSnowflake
+    guildId: GuildSnowflake,
+    channelId: GuildSnowflake
   ): Promise<AutoproxySettings> {
-    // TODO: Branded Snowflakes
     if (!this.token) {
       throw new Error('token missing')
     }
@@ -67,8 +66,7 @@ export default class PluralKit {
     )
   }
 
-  async getOwnSystemGuildSettings (guildId: DiscordSnowflake): Promise<SystemGuildSettings> {
-    // TODO: Branded Snowflakes
+  async getOwnSystemGuildSettings (guildId: GuildSnowflake): Promise<SystemGuildSettings> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
       {},
@@ -106,10 +104,9 @@ export default class PluralKit {
   }
 
   async updateOwnSystemGuildSettings (
-    guildId: DiscordSnowflake,
+    guildId: GuildSnowflake,
     data: Partial<SystemGuildSettings>
   ): Promise<SystemGuildSettings> {
-    // TODO: Branded Snowflakes
     // TODO: Proper type and validation for UpdateSystemGuildSettingsRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
@@ -121,13 +118,12 @@ export default class PluralKit {
   }
 
   async updateOwnSystemAutoproxySettings (
-    guildId: DiscordSnowflake,
+    guildId: GuildSnowflake,
     // NOTE: Currently unsupported, see
     //       https://pluralkit.me/api/endpoints/#update-system-autoproxy-settings
-    /* channelId: DiscordSnowflake, */
+    /* channelId: ChannelSnowflake, */
     data: Partial<AutoproxySettings>
   ): Promise<AutoproxySettings> {
-    // TODO: Branded Snowflakes
     // TODO: Proper type and validation for UpdateSystemAutoproxySettingsRequest
 
     return this.requestParsed(
@@ -155,9 +151,8 @@ export default class PluralKit {
 
   async getMemberGuildSettings (
     memberRef: MemberRef,
-    guildId: DiscordSnowflake
+    guildId: GuildSnowflake
   ): Promise<MemberGuildSettings> {
-    // TODO: Branded Snowflakes
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
       {},
@@ -247,10 +242,9 @@ export default class PluralKit {
 
   async updateMemberGuildSettings (
     memberRef: MemberRef,
-    guildId: DiscordSnowflake,
+    guildId: GuildSnowflake,
     settings: Partial<MemberGuildSettings>
   ): Promise<MemberGuildSettings> {
-    // TODO: Branded Snowflakes
     // TODO: Proper type and validation for UpdateMemberGuildSettingsRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
@@ -448,8 +442,7 @@ export default class PluralKit {
     }
   }
 
-  async getProxiedMessageInformation (messageId: DiscordSnowflake): Promise<Message> {
-    // TODO: Branded Snowflakes
+  async getProxiedMessageInformation (messageId: MessageSnowflake): Promise<Message> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/messages/${messageId}`,
       {},
