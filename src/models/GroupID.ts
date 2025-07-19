@@ -10,3 +10,8 @@ const GroupIDFromString = Schema.compose(PluralKitIDFromString, GroupID)
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type GroupIDFromString = Schema.Schema.Type<typeof GroupID>
 export { GroupIDFromString }
+
+const GroupUUID = Schema.UUID.pipe(Schema.brand('GroupUUID'))
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type GroupUUID = Schema.Schema.Type<typeof GroupUUID>
+export { GroupUUID }

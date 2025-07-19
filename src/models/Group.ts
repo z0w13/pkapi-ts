@@ -2,13 +2,13 @@ import { Schema } from 'effect'
 
 import Color from './Color.ts'
 import URL from './URL.ts'
-import { GroupIDFromString } from './GroupID.ts'
+import { GroupIDFromString, GroupUUID } from './GroupID.ts'
 import { SystemIDFromString } from './SystemID.ts'
 import GroupPrivacy from './GroupPrivacy.ts'
 
 const Group = Schema.Struct({
   id: GroupIDFromString,
-  uuid: Schema.UUID,
+  uuid: GroupUUID,
   system: Schema.UndefinedOr(SystemIDFromString),
 
   name: Schema.String.pipe(Schema.maxLength(100)),
