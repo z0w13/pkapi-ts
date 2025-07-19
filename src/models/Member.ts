@@ -5,12 +5,12 @@ import { BirthdayFromString } from './Birthday.ts'
 import ProxyTag from './ProxyTag.ts'
 import URL from './URL.ts'
 import SystemID from './SystemID.ts'
-import { MemberIDFromString } from './MemberID.ts'
+import { MemberIDFromString, MemberUUID } from './MemberID.ts'
 import MemberPrivacy from './MemberPrivacy.ts'
 
 const Member = Schema.Struct({
   id: MemberIDFromString,
-  uuid: Schema.UUID,
+  uuid: MemberUUID,
   system: Schema.UndefinedOr(SystemID),
 
   name: Schema.NullOr(Schema.String.pipe(Schema.maxLength(100))),
