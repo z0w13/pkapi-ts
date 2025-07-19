@@ -1,9 +1,11 @@
 import { Schema } from 'effect'
+
 import Member from './Member.ts'
 import { MemberIDFromString } from './MemberID.ts'
+import { SwitchID } from './SwitchID.ts'
 
 const Switch = Schema.Struct({
-  id: Schema.UUID,
+  id: SwitchID,
   timestamp: Schema.DateFromString,
   members: Schema.Union(Schema.Array(Member), Schema.Array(MemberIDFromString))
 })
