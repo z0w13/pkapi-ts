@@ -9,7 +9,7 @@ import SystemSettings from './models/SystemSettings.ts'
 import PublicSystemSettings from './models/PublicSystemSettings.ts'
 import DiscordSnowflake from './models/DiscordSnowflake.ts'
 import SystemGuildSettings from './models/SystemGuildSettings.ts'
-import SystemID from './models/SystemID.ts'
+import { SystemRef } from './models/SystemID.ts'
 import AutoproxySettings from './models/AutoproxySettings.ts'
 import MemberID from './models/MemberID.ts'
 import GroupID from './models/GroupID.ts'
@@ -24,15 +24,13 @@ export default class PluralKit {
     this.token = token
   }
 
-  async getSystem (id: SystemID): Promise<System> {
-    // TODO: SystemRef instead of SystemID
-    return this.requestParsed(`https://api.pluralkit.me/v2/systems/${id}`, {}, 'GET', System)
+  async getSystem (systemRef: SystemRef): Promise<System> {
+    return this.requestParsed(`https://api.pluralkit.me/v2/systems/${systemRef}`, {}, 'GET', System)
   }
 
-  async getSystemSettings (id: SystemID): Promise<PublicSystemSettings> {
-    // TODO: SystemRef instead of SystemID
+  async getSystemSettings (systemRef: SystemRef): Promise<PublicSystemSettings> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${id}/settings`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/settings`,
       {},
       'GET',
       PublicSystemSettings
@@ -80,13 +78,12 @@ export default class PluralKit {
   }
 
   async updateSystem (
-    id: SystemID,
+    systemRef: SystemRef,
     data: Partial<Omit<System, 'id' | 'uuid' | 'createdAt'>>
   ): Promise<System> {
-    // TODO: SystemRef instead of SystemID
     // TODO: Proper type and validation for UpdateSystemRequest
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${id}`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}`,
       {},
       'PATCH',
       System,
@@ -94,11 +91,13 @@ export default class PluralKit {
     )
   }
 
-  async updateSystemSettings (id: SystemID, data: Partial<SystemSettings>): Promise<SystemSettings> {
-    // TODO: SystemRef instead of SystemID
+  async updateSystemSettings (
+    systemRef: SystemRef,
+    data: Partial<SystemSettings>
+  ): Promise<SystemSettings> {
     // TODO: Proper type and validation for UpdateSystemSettingsRequest
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${id}/settings`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/settings`,
       {},
       'PATCH',
       SystemSettings,
@@ -355,8 +354,7 @@ export default class PluralKit {
     }
   }
 
-  async getSwitches (id: SystemID, limit = 100, before?: DateTime) {
-    // TODO: SystemRef instead of SystemID
+  async getSwitches (systemRef: SystemRef, limit = 100, before?: DateTime) {
     const params: Record<string, string> = {
       limit: limit.toString()
     }
@@ -366,38 +364,35 @@ export default class PluralKit {
 
     // TODO: Narrowed type for method (members = Array<MemberID>)
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${id}/switches`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
       params,
       'GET',
       Schema.Array(Switch)
     )
   }
 
-  async getSwitch (systemId: SystemID, switchId: UUID): Promise<Switch> {
-    // TODO: SystemRef instead of SystemID
+  async getSwitch (systemRef: SystemRef, switchId: UUID): Promise<Switch> {
     // TODO: SwitchRef instead of UUID
     // TODO: Narrowed type for method (members = Array<Member>)
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemId}/switches/${switchId}`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'GET',
       Switch
     )
   }
 
-  async getFronters (systemId: SystemID) {
-    // TODO: SystemRef instead of SystemID
+  async getFronters (systemRef: SystemRef) {
     // TODO: Narrowed type for method (members = Array<Member>)
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemId}/fronters`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/fronters`,
       {},
       'GET',
       Switch
     )
   }
 
-  async createSwitch (systemId: SystemID, members: Array<MemberID | UUID>, timestamp?: DateTime) {
-    // TODO: SystemRef instead of SystemID
+  async createSwitch (systemRef: SystemRef, members: Array<MemberID | UUID>, timestamp?: DateTime) {
     // TODO: SwitchRef instead of UUID
     // TODO: Return type, also document in PluralKit docs
     // TODO: Proper type and validation for CreateSwitchRequest
@@ -410,7 +405,7 @@ export default class PluralKit {
     }
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemId}/switches`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
       {},
       'POST',
       Switch,
@@ -418,14 +413,13 @@ export default class PluralKit {
     )
   }
 
-  async updateSwitch (systemId: SystemID, switchId: UUID, timestamp: DateTime): Promise<Switch> {
-    // TODO: SystemRef instead of SystemID
+  async updateSwitch (systemRef: SystemRef, switchId: UUID, timestamp: DateTime): Promise<Switch> {
     // TODO: SwitchRef instead of UUID
     // TODO: Narrowed type for method (members = Array<Member>)
     // TODO: Proper type and validation for UpdateSwitchRequest
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemId}/switches/${switchId}`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'PATCH',
       Switch,
@@ -434,17 +428,16 @@ export default class PluralKit {
   }
 
   async updateSwitchMembers (
-    systemId: SystemID,
+    systemRef: SystemRef,
     switchId: UUID,
     members: Array<MemberID | UUID>
   ): Promise<Switch> {
-    // TODO: SystemRef instead of SystemID
     // TODO: SwitchRef instead of UUID
     // TODO: Narrowed type for method (members = Array<Member>)
     // TODO: Proper type and validation for UpdateSwitchMembersRequest
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemId}/switches/${switchId}/members`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}/members`,
       {},
       'PATCH',
       Switch,
@@ -452,18 +445,18 @@ export default class PluralKit {
     )
   }
 
-  async deleteSwitch (systemId: SystemID, switchId: UUID) {
+  async deleteSwitch (systemRef: SystemRef, switchId: UUID) {
     // TODO: SwitchRef instead of UUID
-    // TODO: SystemRef instead of SystemID
+    // TODO: SystemRef instead of SystemRef
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/systems/${systemId}/switches/${switchId}`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'DELETE'
     )
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error deleting switch ${switchId} for system ${systemId}`)
+      throw Error(`error deleting switch ${switchId} for system ${systemRef}`)
     }
   }
 
