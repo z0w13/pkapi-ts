@@ -2,12 +2,12 @@ import { Schema } from 'effect'
 
 import Color from './Color.ts'
 import URL from './URL.ts'
-import { SystemIDFromString } from './SystemID.ts'
+import { SystemIDFromString, SystemUUID } from './SystemID.ts'
 import SystemPrivacy from './SystemPrivacy.ts'
 
 const System = Schema.Struct({
   id: SystemIDFromString,
-  uuid: Schema.UUID,
+  uuid: SystemUUID,
 
   // TODO: Fix when the documentation updates
   //       see https://github.com/PluralKit/PluralKit/pull/751
