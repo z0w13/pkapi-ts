@@ -12,7 +12,7 @@ import SystemGuildSettings from './models/SystemGuildSettings.ts'
 import { SystemRef } from './models/SystemID.ts'
 import AutoproxySettings from './models/AutoproxySettings.ts'
 import MemberID from './models/MemberID.ts'
-import GroupID from './models/GroupID.ts'
+import { GroupRef } from './models/GroupID.ts'
 import MemberGuildSettings from './models/MemberGuildSettings.ts'
 import Switch from './models/Switch.ts'
 import Message from './models/Message.ts'
@@ -196,54 +196,51 @@ export default class PluralKit {
     }
   }
 
-  async addMemberToGroups (memberId: MemberID, groupIds: Array<GroupID>): Promise<void> {
+  async addMemberToGroups (memberId: MemberID, groupRefs: Array<GroupRef>): Promise<void> {
     // TODO: MemberRef instead of MemberID
-    // TODO: GroupRef instead of GroupID
     // TODO: Proper type and validation for AddMemberToGroupsRequest
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberId}/groups/add`,
       {},
       'POST',
-      groupIds
+      groupRefs
     )
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error adding member ${memberId} to groups ${groupIds.join(', ')}`)
+      throw Error(`error adding member ${memberId} to groups ${groupRefs.join(', ')}`)
     }
   }
 
-  async removeMemberFromGroups (memberId: MemberID, groupIds: Array<GroupID>): Promise<void> {
+  async removeMemberFromGroups (memberId: MemberID, groupRefs: Array<GroupRef>): Promise<void> {
     // TODO: MemberRef instead of MemberID
-    // TODO: GroupRef instead of GroupID
     // TODO: Proper type and validation for RemoveMemberFromGroupsRequest
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberId}/groups/remove`,
       {},
       'POST',
-      groupIds
+      groupRefs
     )
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error removing member ${memberId} from groups ${groupIds.join(', ')}`)
+      throw Error(`error removing member ${memberId} from groups ${groupRefs.join(', ')}`)
     }
   }
 
-  async overwriteMemberGroups (memberId: MemberID, groupIds: Array<GroupID>): Promise<void> {
+  async overwriteMemberGroups (memberId: MemberID, groupRefs: Array<GroupRef>): Promise<void> {
     // TODO: MemberRef instead of MemberID
-    // TODO: GroupRef instead of GroupID
     // TODO: Proper type and validation for OverwriteMemberGroupsRequest
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberId}/groups/overwrite`,
       {},
       'POST',
-      groupIds
+      groupRefs
     )
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error overwriting groups for member ${memberId} with ${groupIds.join(', ')}`)
+      throw Error(`error overwriting groups for member ${memberId} with ${groupRefs.join(', ')}`)
     }
   }
 
@@ -264,15 +261,13 @@ export default class PluralKit {
     )
   }
 
-  async getGroup (id: GroupID): Promise<Group> {
-    // TODO: GroupRef instead of GroupID
-    return this.requestParsed(`https://api.pluralkit.me/v2/groups/${id}`, {}, 'GET', Group)
+  async getGroup (groupRef: GroupRef): Promise<Group> {
+    return this.requestParsed(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'GET', Group)
   }
 
-  async getGroupMembers (id: GroupID) {
-    // TODO: GroupRef instead of GroupID
+  async getGroupMembers (groupRef: GroupRef) {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/groups/${id}/members`,
+      `https://api.pluralkit.me/v2/groups/${groupRef}/members`,
       {},
       'GET',
       Schema.Array(Group)
@@ -287,30 +282,33 @@ export default class PluralKit {
   }
 
   async updateGroup (
-    id: GroupID,
+    groupRef: GroupRef,
     data: Partial<Omit<Group, 'id' | 'uuid' | 'createdAt'>>
   ): Promise<Group> {
-    // TODO: GroupRef instead of GroupID
     // TODO: Proper type and validation for UpdateGroupRequest
     // TODO: Error object on failure
-    return this.requestParsed(`https://api.pluralkit.me/v2/groups/${id}`, {}, 'PATCH', Group, data)
+    return this.requestParsed(
+      `https://api.pluralkit.me/v2/groups/${groupRef}`,
+      {},
+      'PATCH',
+      Group,
+      data
+    )
   }
 
-  async deleteGroup (id: GroupID): Promise<void> {
-    // TODO: GroupRef instead of GroupID
-    const resp = await this.request(`https://api.pluralkit.me/v2/groups/${id}`, {}, 'DELETE')
+  async deleteGroup (groupRef: GroupRef): Promise<void> {
+    const resp = await this.request(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'DELETE')
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error deleting group ${id}`)
+      throw Error(`error deleting group ${groupRef}`)
     }
   }
 
-  async addMembersToGroup (id: GroupID, members: Array<MemberID>): Promise<void> {
-    // TODO: GroupRef instead of GroupID
+  async addMembersToGroup (groupRef: GroupRef, members: Array<MemberID>): Promise<void> {
     // TODO: MemberRef instead of MemberID
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/groups/${id}/add`,
+      `https://api.pluralkit.me/v2/groups/${groupRef}/add`,
       {},
       'POST',
       members
@@ -318,15 +316,14 @@ export default class PluralKit {
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error deleting group ${id}`)
+      throw Error(`error deleting group ${groupRef}`)
     }
   }
 
-  async removeMembersFromGroup (id: GroupID, members: Array<MemberID>): Promise<void> {
-    // TODO: GroupRef instead of GroupID
+  async removeMembersFromGroup (groupRef: GroupRef, members: Array<MemberID>): Promise<void> {
     // TODO: MemberRef instead of MemberID
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/groups/${id}/remove`,
+      `https://api.pluralkit.me/v2/groups/${groupRef}/remove`,
       {},
       'POST',
       members
@@ -334,15 +331,14 @@ export default class PluralKit {
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error deleting group ${id}`)
+      throw Error(`error deleting group ${groupRef}`)
     }
   }
 
-  async overwriteGroupMembers (id: GroupID, members: Array<MemberID>): Promise<void> {
-    // TODO: GroupRef instead of GroupID
+  async overwriteGroupMembers (groupRef: GroupRef, members: Array<MemberID>): Promise<void> {
     // TODO: MemberRef instead of MemberID
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/groups/${id}/overwrite`,
+      `https://api.pluralkit.me/v2/groups/${groupRef}/overwrite`,
       {},
       'POST',
       members
@@ -350,7 +346,7 @@ export default class PluralKit {
 
     if (resp.status !== 204) {
       // TODO: Better error type
-      throw Error(`error overwriting members for group ${id} with ${members.join(', ')}`)
+      throw Error(`error overwriting members for group ${groupRef} with ${members.join(', ')}`)
     }
   }
 
