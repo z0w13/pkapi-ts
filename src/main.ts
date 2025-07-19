@@ -16,6 +16,7 @@ import Switch from './models/Switch.ts'
 import Message from './models/Message.ts'
 import { SwitchID } from './models/SwitchID.ts'
 import { objectToCamel } from 'ts-case-convert'
+import APIError from './models/APIError.ts'
 
 export default class PluralKit {
   constructor (protected token: string | null = null) {}
@@ -455,7 +456,18 @@ export default class PluralKit {
       options.body = JSON.stringify(data)
     }
 
-    return fetch(url + (params.size ? `?${params.toString()}` : ''), options)
+    const resp = await fetch(url + (params.size ? `?${params.toString()}` : ''), options)
+    if (APIError.isAPIErrorStatus(resp.status)) {
+      throw APIError.fromResponse(resp, await resp.json())
+    }
+
+    if (resp.status < 200 || resp.status > 299) {
+      const content = await resp.text()
+      // TODO: Proper HTTPError class
+      throw new Error(`HTTP Error ${resp.status} ${resp.statusText}: ${content}`)
+    }
+
+    return resp
   }
 
   async requestParsed<O, T>(
