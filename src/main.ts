@@ -1,5 +1,5 @@
-import { Schema } from 'effect'
-import { formatIso, DateTime } from 'effect/DateTime'
+import z, { ZodType } from 'zod'
+import { objectToCamel } from 'ts-case-convert'
 
 import System from './models/System.ts'
 import Member from './models/Member.ts'
@@ -264,7 +264,7 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/groups/${groupRef}/members`,
       {},
       'GET',
-      Schema.Array(Group)
+      z.array(Group)
     )
   }
 
@@ -341,12 +341,12 @@ export default class PluralKit {
     }
   }
 
-  async getSwitches (systemRef: SystemRef, limit = 100, before?: DateTime) {
+  async getSwitches (systemRef: SystemRef, limit = 100, before?: Date) {
     const params: Record<string, string> = {
       limit: limit.toString()
     }
     if (before) {
-      params.before = formatIso(before)
+      params.before = before.toISOString()
     }
 
     // TODO: Narrowed type for method (members = Array<MemberID>)
@@ -354,7 +354,7 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
       params,
       'GET',
-      Schema.Array(Switch)
+      z.array(Switch)
     )
   }
 
@@ -378,12 +378,12 @@ export default class PluralKit {
     )
   }
 
-  async createSwitch (systemRef: SystemRef, memberRefs: Array<MemberRef>, timestamp?: DateTime) {
+  async createSwitch (systemRef: SystemRef, memberRefs: Array<MemberRef>, timestamp?: Date) {
     const data: Record<string, unknown> = {
       members: memberRefs
     }
     if (timestamp) {
-      data.timestamp = formatIso(timestamp)
+      data.timestamp = timestamp.toISOString()
     }
 
     return this.requestParsed(
@@ -395,11 +395,7 @@ export default class PluralKit {
     )
   }
 
-  async updateSwitch (
-    systemRef: SystemRef,
-    switchId: SwitchID,
-    timestamp: DateTime
-  ): Promise<Switch> {
+  async updateSwitch (systemRef: SystemRef, switchId: SwitchID, timestamp: Date): Promise<Switch> {
     // TODO: Narrowed type for method (members = Array<Member>)
     // TODO: Proper type and validation for UpdateSwitchRequest
 
@@ -408,7 +404,7 @@ export default class PluralKit {
       {},
       'PATCH',
       Switch,
-      { timestamp: formatIso(timestamp) }
+      { timestamp: timestamp.toISOString() }
     )
   }
 
@@ -457,6 +453,7 @@ export default class PluralKit {
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     data?: T
   ): Promise<Response> {
+    console.log({ url, parameters, method })
     const headers = new Headers()
     if (this.token) {
       headers.append('Authorization', this.token)
@@ -471,17 +468,22 @@ export default class PluralKit {
       options.body = JSON.stringify(data)
     }
 
-    return fetch(url + params.size ? `?${params.toString()}` : '', options)
+    return fetch(url + (params.size ? `?${params.toString()}` : ''), options)
   }
 
-  async requestParsed<A, I, T>(
+  async requestParsed<O, T>(
     url: string,
     parameters: Record<string, string> = {},
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
-    schema: Schema.Schema<A, I>,
+    schema: ZodType<O>,
     data?: T
-  ): Promise<A> {
+  ): Promise<O> {
     const resp = await this.request(url, parameters, method, data)
-    return Schema.decodeUnknownSync(schema)(await resp.json())
+    const json = await resp.json()
+    if (typeof json !== 'object' || json === null) {
+      throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
+    }
+
+    return schema.parse(objectToCamel(json))
   }
 }

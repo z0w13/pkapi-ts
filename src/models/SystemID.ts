@@ -1,22 +1,22 @@
-import { Schema } from 'effect'
+import z from 'zod'
 import PluralKitID, { PluralKitIDFromString } from './PluralKitID.ts'
 
-const SystemID = PluralKitID.pipe(Schema.brand('SystemID'))
+const SystemID = PluralKitID.brand<'SystemID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type SystemID = Schema.Schema.Type<typeof SystemID>
+type SystemID = z.infer<typeof SystemID>
 export default SystemID
 
-const SystemIDFromString = Schema.compose(PluralKitIDFromString, SystemID)
+const SystemIDFromString = PluralKitIDFromString.brand<'SystemID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type SystemIDFromString = Schema.Schema.Type<typeof SystemID>
+type SystemIDFromString = z.infer<typeof SystemID>
 export { SystemIDFromString }
 
-const SystemUUID = Schema.UUID.pipe(Schema.brand('SystemUUID'))
+const SystemUUID = z.uuidv4().brand<'SystemUUID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type SystemUUID = Schema.Schema.Type<typeof SystemUUID>
+type SystemUUID = z.infer<typeof SystemUUID>
 export { SystemUUID }
 
-const SystemRef = Schema.Union(SystemID, SystemUUID)
+const SystemRef = z.union([SystemID, SystemUUID])
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type SystemRef = Schema.Schema.Type<typeof SystemRef>
+type SystemRef = z.infer<typeof SystemRef>
 export { SystemRef }

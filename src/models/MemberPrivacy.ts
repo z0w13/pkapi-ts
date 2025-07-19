@@ -1,20 +1,18 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
 import PrivacyValue from './PrivacyValue.ts'
 
-const MemberPrivacy = Schema.Struct({
+const MemberPrivacy = z.object({
   visibility: PrivacyValue,
-  namePrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('name_privacy')),
-  descriptionPrivacy: Schema.propertySignature(PrivacyValue).pipe(
-    Schema.fromKey('description_privacy')
-  ),
-  birthdayPrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('birthday_privacy')),
-  pronounPrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('pronoun_privacy')),
-  avatarPrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('avatar_privacy')),
-  metadataPrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('metadata_privacy')),
-  proxyPrivacy: Schema.propertySignature(PrivacyValue).pipe(Schema.fromKey('proxy_privacy'))
+  namePrivacy: PrivacyValue,
+  descriptionPrivacy: PrivacyValue,
+  birthdayPrivacy: PrivacyValue,
+  pronounPrivacy: PrivacyValue,
+  avatarPrivacy: PrivacyValue,
+  metadataPrivacy: PrivacyValue,
+  proxyPrivacy: PrivacyValue
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type MemberPrivacy = Schema.Schema.Type<typeof MemberPrivacy>
+type MemberPrivacy = z.infer<typeof MemberPrivacy>
 
 export default MemberPrivacy

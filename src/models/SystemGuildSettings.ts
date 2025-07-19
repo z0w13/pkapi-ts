@@ -1,14 +1,12 @@
-import { Schema } from 'effect'
-import DiscordSnowflake from './DiscordSnowflake.ts'
+import z from 'zod'
+import { GuildSnowflake } from './DiscordSnowflake.ts'
 
-const SystemGuildSettings = Schema.Struct({
-  guildId: Schema.propertySignature(DiscordSnowflake).pipe(Schema.fromKey('guild_id')),
-  proxyingEnabled: Schema.propertySignature(Schema.Boolean).pipe(
-    Schema.fromKey('proxying_enabled')
-  ),
-  tag: Schema.NullOr(Schema.String.pipe(Schema.maxLength(79))),
-  tagEnabled: Schema.propertySignature(Schema.Boolean).pipe(Schema.fromKey('tag_enabled'))
+const SystemGuildSettings = z.object({
+  guildId: GuildSnowflake,
+  proxyingEnabled: z.boolean(),
+  tag: z.nullable(z.string().max(79)),
+  tagEnabled: z.boolean()
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type SystemGuildSettings = Schema.Schema.Type<typeof SystemGuildSettings>
+type SystemGuildSettings = z.infer<typeof SystemGuildSettings>
 export default SystemGuildSettings

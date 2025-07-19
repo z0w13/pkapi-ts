@@ -1,10 +1,10 @@
-import { Schema } from 'effect'
+import z from 'zod'
 
-const ProxyTag = Schema.Struct({
-  prefix: Schema.NullOr(Schema.String),
-  suffix: Schema.NullOr(Schema.String)
+const ProxyTag = z.object({
+  prefix: z.nullable(z.string()),
+  suffix: z.nullable(z.string())
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type ProxyTag = Schema.Schema.Type<typeof ProxyTag>
+type ProxyTag = z.infer<typeof ProxyTag>
 
 export default ProxyTag
