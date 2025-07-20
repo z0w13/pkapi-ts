@@ -7,3 +7,9 @@ export class HTTPError extends Error {
     return new HTTPError(resp.status, resp.statusText, await resp.text())
   }
 }
+
+export class AuthorizationRequired extends Error {
+  constructor () {
+    super('tried to call method that requires authorization without a token')
+  }
+}
