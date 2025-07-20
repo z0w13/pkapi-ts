@@ -503,12 +503,20 @@ export default class PluralKit {
     }
 
     const resp = await fetch(url + (params.size ? `?${params.toString()}` : ''), options)
-    if (APIError.isAPIErrorStatus(resp.status)) {
-      throw APIError.fromResponse(resp, await resp.json())
-    }
-
     if (resp.status < 200 || resp.status > 299) {
-      throw await HTTPError.fromResponse(resp)
+      const body = await resp.text()
+      if (APIError.isAPIErrorStatus(resp.status)) {
+        // try to parse the error from json and if it fails return a regular HTTPError
+        try {
+          throw APIError.fromResponse(resp, JSON.parse(body))
+        } catch (e) {
+          if (e instanceof APIError || !(e instanceof SyntaxError)) {
+            throw e
+          }
+        }
+      }
+
+      throw new HTTPError(resp.status, resp.statusText, body)
     }
 
     return resp
