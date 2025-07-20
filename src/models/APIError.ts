@@ -40,6 +40,10 @@ export default class APIError extends Error {
 
   static isAPIErrorStatus (status: number): boolean {
     // https://pluralkit.me/api/errors/#json-error-codes
-    return [400, 401, 403, 404].includes(status)
+    return [
+      400, 401, 403, 404,
+      // Awaiting docs update from PR https://github.com/PluralKit/PluralKit/pull/754
+      501
+    ].includes(status)
   }
 }
