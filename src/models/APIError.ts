@@ -20,30 +20,3 @@ const ErrorResponse = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type ErrorResponse = z.infer<typeof ErrorResponse>
 export { ErrorResponse }
-
-export default class APIError extends Error {
-  constructor (resp: Response, apiResponse: ErrorResponse) {
-    super(
-      `API Error: HTTP ${resp.status} ${resp.statusText}, ` +
-        `API ${apiResponse.code} ${apiResponse.message}`
-    )
-  }
-
-  static fromResponse (resp: Response, json: unknown) {
-    if (typeof json !== 'object' || json === null) {
-      // TODO: Error parsing specific error
-      throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
-    }
-
-    return new APIError(resp, ErrorResponse.parse(json))
-  }
-
-  static isAPIErrorStatus (status: number): boolean {
-    // https://pluralkit.me/api/errors/#json-error-codes
-    return [
-      400, 401, 403, 404,
-      // Awaiting docs update from PR https://github.com/PluralKit/PluralKit/pull/754
-      501
-    ].includes(status)
-  }
-}

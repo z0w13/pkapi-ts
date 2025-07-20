@@ -1,7 +1,7 @@
 import z, { ZodType } from 'zod'
 import { objectToCamel } from 'ts-case-convert'
 
-import { HTTPError } from './errors.ts'
+import { APIError, HTTPError, AuthorizationRequired } from './errors.ts'
 
 import System from './models/System.ts'
 import Member from './models/Member.ts'
@@ -18,8 +18,6 @@ import MemberGuildSettings from './models/MemberGuildSettings.ts'
 import Switch from './models/Switch.ts'
 import Message from './models/Message.ts'
 import { SwitchID } from './models/SwitchID.ts'
-import APIError from './models/APIError.ts'
-import { AuthorizationRequired } from './errors.ts'
 
 export default class PluralKit {
   constructor (protected token: string | null = null) {}
