@@ -59,14 +59,18 @@ export default class PluralKit {
   }
 
   async getOwnSystemAutoproxySettings (
-    guildId: GuildSnowflake,
-    channelId: GuildSnowflake
+    // NOTE: Currently unsupported, see
+    //       https://pluralkit.me/api/endpoints/#update-system-autoproxy-settings
+    guildId: GuildSnowflake
+    // NOTE: Currently unsupported, see
+    //       https://pluralkit.me/api/endpoints/#update-system-autoproxy-settings
+    /* channelId: ChannelSnowflake, */
   ): Promise<AutoproxySettings> {
     this.checkToken()
 
     return this.requestParsed(
       'https://api.pluralkit.me/v2/systems/@me/autoproxy',
-      { guild_id: guildId, channel_id: channelId },
+      { guild_id: guildId },
       'GET',
       AutoproxySettings
     )
