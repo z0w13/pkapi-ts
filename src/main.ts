@@ -488,7 +488,7 @@ export default class PluralKit {
     data?: T
   ): Promise<Response> {
     console.log({ url, parameters, method })
-    const headers = new Headers()
+    const headers = new Headers(data ? { 'Content-Type': 'application/json' } : {})
     if (this.token) {
       headers.append('Authorization', this.token)
     }
