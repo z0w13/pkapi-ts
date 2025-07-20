@@ -19,12 +19,19 @@ import Switch from './models/Switch.ts'
 import Message from './models/Message.ts'
 import { SwitchID } from './models/SwitchID.ts'
 import APIError from './models/APIError.ts'
+import { AuthorizationRequired } from './errors.ts'
 
 export default class PluralKit {
   constructor (protected token: string | null = null) {}
 
   public async setToken (token: string | null = null) {
     this.token = token
+  }
+
+  protected checkToken () {
+    if (!this.token) {
+      throw new AuthorizationRequired()
+    }
   }
 
   async getSystem (systemRef: SystemRef): Promise<System> {
@@ -41,9 +48,7 @@ export default class PluralKit {
   }
 
   async getOwnSystemSettings (): Promise<SystemSettings> {
-    if (!this.token) {
-      throw new Error('token missing')
-    }
+    this.checkToken()
 
     return this.requestParsed(
       'https://api.pluralkit.me/v2/systems/@me/settings',
@@ -57,9 +62,7 @@ export default class PluralKit {
     guildId: GuildSnowflake,
     channelId: GuildSnowflake
   ): Promise<AutoproxySettings> {
-    if (!this.token) {
-      throw new Error('token missing')
-    }
+    this.checkToken()
 
     return this.requestParsed(
       'https://api.pluralkit.me/v2/systems/@me/autoproxy',
@@ -70,6 +73,8 @@ export default class PluralKit {
   }
 
   async getOwnSystemGuildSettings (guildId: GuildSnowflake): Promise<SystemGuildSettings> {
+    this.checkToken()
+
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
       {},
@@ -79,6 +84,8 @@ export default class PluralKit {
   }
 
   async updateSystem (systemRef: SystemRef, data: Partial<System>): Promise<System> {
+    this.checkToken()
+
     // TODO: Proper type and validation for UpdateSystemRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}`,
@@ -93,6 +100,8 @@ export default class PluralKit {
     systemRef: SystemRef,
     data: Partial<SystemSettings>
   ): Promise<SystemSettings> {
+    this.checkToken()
+
     // TODO: Proper type and validation for UpdateSystemSettingsRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/settings`,
@@ -107,6 +116,8 @@ export default class PluralKit {
     guildId: GuildSnowflake,
     data: Partial<SystemGuildSettings>
   ): Promise<SystemGuildSettings> {
+    this.checkToken()
+
     // TODO: Proper type and validation for UpdateSystemGuildSettingsRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
@@ -124,6 +135,8 @@ export default class PluralKit {
     /* channelId: ChannelSnowflake, */
     data: Partial<AutoproxySettings>
   ): Promise<AutoproxySettings> {
+    this.checkToken()
+
     // TODO: Proper type and validation for UpdateSystemAutoproxySettingsRequest
 
     return this.requestParsed(
@@ -162,11 +175,15 @@ export default class PluralKit {
   }
 
   async createMember (member: Partial<Member>): Promise<Member> {
+    this.checkToken()
+
     // TODO: Proper type and validation for CreateMemberRequest
     return this.requestParsed('https://api.pluralkit.me/v2/members', {}, 'POST', Member, member)
   }
 
   async updateMember (memberRef: MemberRef, member: Partial<Member>): Promise<Member> {
+    this.checkToken()
+
     // TODO: Proper type and validation for UpdateMemberRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}`,
@@ -178,6 +195,8 @@ export default class PluralKit {
   }
 
   async deleteMember (memberRef: MemberRef): Promise<void> {
+    this.checkToken()
+
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}`,
       {},
@@ -191,6 +210,8 @@ export default class PluralKit {
   }
 
   async addMemberToGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
+    this.checkToken()
+
     // TODO: Proper type and validation for AddMemberToGroupsRequest
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups/add`,
@@ -206,6 +227,8 @@ export default class PluralKit {
   }
 
   async removeMemberFromGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
+    this.checkToken()
+
     // TODO: Proper type and validation for RemoveMemberFromGroupsRequest
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups/remove`,
@@ -221,6 +244,8 @@ export default class PluralKit {
   }
 
   async overwriteMemberGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
+    this.checkToken()
+
     // TODO: Proper type and validation for OverwriteMemberGroupsRequest
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups/overwrite`,
@@ -240,6 +265,8 @@ export default class PluralKit {
     guildId: GuildSnowflake,
     settings: Partial<MemberGuildSettings>
   ): Promise<MemberGuildSettings> {
+    this.checkToken()
+
     // TODO: Proper type and validation for UpdateMemberGuildSettingsRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
@@ -264,11 +291,15 @@ export default class PluralKit {
   }
 
   async createGroup (group: Partial<Group> & Pick<Group, 'name'>): Promise<Group> {
+    this.checkToken()
+
     // TODO: Proper type and validation for CreateGroupRequest
     return this.requestParsed('https://api.pluralkit.me/v2/groups', {}, 'POST', Group, group)
   }
 
   async updateGroup (groupRef: GroupRef, data: Partial<Group>): Promise<Group> {
+    this.checkToken()
+
     // TODO: Proper type and validation for UpdateGroupRequest
     return this.requestParsed(
       `https://api.pluralkit.me/v2/groups/${groupRef}`,
@@ -280,6 +311,8 @@ export default class PluralKit {
   }
 
   async deleteGroup (groupRef: GroupRef): Promise<void> {
+    this.checkToken()
+
     const resp = await this.request(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'DELETE')
 
     if (resp.status !== 204) {
@@ -289,6 +322,8 @@ export default class PluralKit {
   }
 
   async addMembersToGroup (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
+    this.checkToken()
+
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/add`,
       {},
@@ -303,6 +338,8 @@ export default class PluralKit {
   }
 
   async removeMembersFromGroup (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
+    this.checkToken()
+
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/remove`,
       {},
@@ -317,6 +354,8 @@ export default class PluralKit {
   }
 
   async overwriteGroupMembers (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
+    this.checkToken()
+
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/overwrite`,
       {},
@@ -368,6 +407,8 @@ export default class PluralKit {
   }
 
   async createSwitch (systemRef: SystemRef, memberRefs: Array<MemberRef>, timestamp?: Date) {
+    this.checkToken()
+
     const data: Record<string, unknown> = {
       members: memberRefs
     }
@@ -385,6 +426,8 @@ export default class PluralKit {
   }
 
   async updateSwitch (systemRef: SystemRef, switchId: SwitchID, timestamp: Date): Promise<Switch> {
+    this.checkToken()
+
     // TODO: Narrowed type for method (members = Array<Member>)
     // TODO: Proper type and validation for UpdateSwitchRequest
 
@@ -402,6 +445,8 @@ export default class PluralKit {
     switchId: SwitchID,
     memberRefs: Array<MemberRef>
   ): Promise<Switch> {
+    this.checkToken()
+
     // TODO: Narrowed type for method (members = Array<Member>)
     // TODO: Proper type and validation for UpdateSwitchMembersRequest
 
@@ -415,6 +460,8 @@ export default class PluralKit {
   }
 
   async deleteSwitch (systemRef: SystemRef, switchId: SwitchID) {
+    this.checkToken()
+
     const resp = await this.request(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
