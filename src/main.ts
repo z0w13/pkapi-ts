@@ -24,6 +24,10 @@ import {
 import Message, { MessageFromApi } from './models/Message.ts'
 import { SwitchID } from './models/SwitchID.ts'
 
+interface Options {
+  token?: string | null
+}
+
 export default class PluralKit {
   constructor (protected token: string | null = null) {}
 
@@ -37,42 +41,52 @@ export default class PluralKit {
     }
   }
 
-  async getSystem (systemRef: SystemRef): Promise<System> {
+  async getSystem (systemRef: SystemRef, options: Options = {}): Promise<System> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}`,
       {},
       'GET',
-      SystemFromApi
+      SystemFromApi,
+      undefined,
+      options
     )
   }
 
-  async getSystemSettings (systemRef: SystemRef): Promise<PublicSystemSettings> {
+  async getSystemSettings (
+    systemRef: SystemRef,
+    options: Options = {}
+  ): Promise<PublicSystemSettings> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/settings`,
       {},
       'GET',
-      PublicSystemSettings
+      PublicSystemSettings,
+      undefined,
+      options
     )
   }
 
-  async getOwnSystemSettings (): Promise<SystemSettings> {
+  async getOwnSystemSettings (options: Options = {}): Promise<SystemSettings> {
     this.checkToken()
 
     return this.requestParsed(
       'https://api.pluralkit.me/v2/systems/@me/settings',
       {},
       'GET',
-      SystemSettings
+      SystemSettings,
+      undefined,
+      options
     )
   }
 
   async getOwnSystemAutoproxySettings (
     // NOTE: Currently unsupported, see
     //       https://pluralkit.me/api/endpoints/#update-system-autoproxy-settings
-    guildId: GuildSnowflake
+    guildId: GuildSnowflake,
     // NOTE: Currently unsupported, see
     //       https://pluralkit.me/api/endpoints/#update-system-autoproxy-settings
     /* channelId: ChannelSnowflake, */
+    options: Options = {}
   ): Promise<AutoproxySettings> {
     this.checkToken()
 
@@ -80,22 +94,33 @@ export default class PluralKit {
       'https://api.pluralkit.me/v2/systems/@me/autoproxy',
       { guild_id: guildId },
       'GET',
-      AutoproxySettingsFromApi
+      AutoproxySettingsFromApi,
+      undefined,
+      options
     )
   }
 
-  async getOwnSystemGuildSettings (guildId: GuildSnowflake): Promise<SystemGuildSettings> {
+  async getOwnSystemGuildSettings (
+    guildId: GuildSnowflake,
+    options: Options = {}
+  ): Promise<SystemGuildSettings> {
     this.checkToken()
 
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
       {},
       'GET',
-      SystemGuildSettings
+      SystemGuildSettings,
+      undefined,
+      options
     )
   }
 
-  async updateSystem (systemRef: SystemRef, data: Partial<System>): Promise<System> {
+  async updateSystem (
+    systemRef: SystemRef,
+    data: Partial<System>,
+    options: Options = {}
+  ): Promise<System> {
     this.checkToken()
 
     return this.requestParsed(
@@ -103,13 +128,15 @@ export default class PluralKit {
       {},
       'PATCH',
       SystemFromApi,
-      System.partial().parse(data)
+      System.partial().parse(data),
+      options
     )
   }
 
   async updateSystemSettings (
     systemRef: SystemRef,
-    data: Partial<SystemSettings>
+    data: Partial<SystemSettings>,
+    options: Options = {}
   ): Promise<SystemSettings> {
     this.checkToken()
 
@@ -118,13 +145,15 @@ export default class PluralKit {
       {},
       'PATCH',
       SystemSettings,
-      SystemSettings.partial().parse(data)
+      SystemSettings.partial().parse(data),
+      options
     )
   }
 
   async updateOwnSystemGuildSettings (
     guildId: GuildSnowflake,
-    data: Partial<SystemGuildSettings>
+    data: Partial<SystemGuildSettings>,
+    options: Options = {}
   ): Promise<SystemGuildSettings> {
     this.checkToken()
 
@@ -133,7 +162,8 @@ export default class PluralKit {
       {},
       'PATCH',
       SystemGuildSettings,
-      SystemGuildSettings.partial().parse(data)
+      SystemGuildSettings.partial().parse(data),
+      options
     )
   }
 
@@ -142,7 +172,8 @@ export default class PluralKit {
     // NOTE: Currently unsupported, see
     //       https://pluralkit.me/api/endpoints/#update-system-autoproxy-settings
     /* channelId: ChannelSnowflake, */
-    data: Partial<AutoproxySettings>
+    data: Partial<AutoproxySettings>,
+    options: Options = {}
   ): Promise<AutoproxySettings> {
     this.checkToken()
 
@@ -151,50 +182,63 @@ export default class PluralKit {
       {},
       'PATCH',
       AutoproxySettingsFromApi,
-      AutoproxySettings.partial().parse(data)
+      AutoproxySettings.partial().parse(data),
+      options
     )
   }
 
-  async getMember (memberRef: MemberRef): Promise<Member> {
+  async getMember (memberRef: MemberRef, options: Options = {}): Promise<Member> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}`,
       {},
       'GET',
-      MemberFromApi
+      MemberFromApi,
+      undefined,
+      options
     )
   }
 
-  async getSystemMembers (memberRef: MemberRef): Promise<Array<Member>> {
+  async getSystemMembers (systemRef: SystemRef, options: Options = {}): Promise<Array<Member>> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${memberRef}/members`,
+      `https://api.pluralkit.me/v2/systems/${systemRef}/members`,
       {},
       'GET',
-      z.array(MemberFromApi)
+      z.array(MemberFromApi),
+      undefined,
+      options
     )
   }
 
-  async getMemberGroups (memberRef: MemberRef): Promise<Array<Group>> {
+  async getMemberGroups (memberRef: MemberRef, options: Options = {}): Promise<Array<Group>> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups`,
       {},
       'GET',
-      z.array(Group)
+      z.array(Group),
+      undefined,
+      options
     )
   }
 
   async getMemberGuildSettings (
     memberRef: MemberRef,
-    guildId: GuildSnowflake
+    guildId: GuildSnowflake,
+    options: Options = {}
   ): Promise<MemberGuildSettings> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
       {},
       'GET',
-      MemberGuildSettings
+      MemberGuildSettings,
+      undefined,
+      options
     )
   }
 
-  async createMember (member: Partial<Member> & Pick<Member, 'name'>): Promise<Member> {
+  async createMember (
+    member: Partial<Member> & Pick<Member, 'name'>,
+    options: Options = {}
+  ): Promise<Member> {
     this.checkToken()
 
     return this.requestParsed(
@@ -202,11 +246,16 @@ export default class PluralKit {
       {},
       'POST',
       MemberFromApi,
-      MemberToApi.partial().required({ name: true }).parse(member)
+      MemberToApi.partial().required({ name: true }).parse(member),
+      options
     )
   }
 
-  async updateMember (memberRef: MemberRef, member: Partial<Member>): Promise<Member> {
+  async updateMember (
+    memberRef: MemberRef,
+    member: Partial<Member>,
+    options: Options = {}
+  ): Promise<Member> {
     this.checkToken()
 
     return this.requestParsed(
@@ -214,17 +263,20 @@ export default class PluralKit {
       {},
       'PATCH',
       MemberFromApi,
-      MemberToApi.partial().required({ name: true }).parse(member)
+      MemberToApi.partial().required({ name: true }).parse(member),
+      options
     )
   }
 
-  async deleteMember (memberRef: MemberRef): Promise<void> {
+  async deleteMember (memberRef: MemberRef, options: Options = {}): Promise<void> {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}`,
       {},
-      'DELETE'
+      'DELETE',
+      undefined,
+      options
     )
 
     if (resp.status !== 204) {
@@ -234,14 +286,19 @@ export default class PluralKit {
     }
   }
 
-  async addMemberToGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
+  async addMemberToGroups (
+    memberRef: MemberRef,
+    groupRefs: Array<GroupRef>,
+    options: Options = {}
+  ): Promise<void> {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups/add`,
       {},
       'POST',
-      groupRefs
+      groupRefs,
+      options
     )
     if (resp.status !== 204) {
       throw Error(`error adding member ${memberRef} to groups ${groupRefs.join(', ')}`, {
@@ -250,14 +307,19 @@ export default class PluralKit {
     }
   }
 
-  async removeMemberFromGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
+  async removeMemberFromGroups (
+    memberRef: MemberRef,
+    groupRefs: Array<GroupRef>,
+    options: Options = {}
+  ): Promise<void> {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups/remove`,
       {},
       'POST',
-      groupRefs
+      groupRefs,
+      options
     )
 
     if (resp.status !== 204) {
@@ -267,14 +329,19 @@ export default class PluralKit {
     }
   }
 
-  async overwriteMemberGroups (memberRef: MemberRef, groupRefs: Array<GroupRef>): Promise<void> {
+  async overwriteMemberGroups (
+    memberRef: MemberRef,
+    groupRefs: Array<GroupRef>,
+    options: Options = {}
+  ): Promise<void> {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups/overwrite`,
       {},
       'POST',
-      groupRefs
+      groupRefs,
+      options
     )
 
     if (resp.status !== 204) {
@@ -287,7 +354,8 @@ export default class PluralKit {
   async updateMemberGuildSettings (
     memberRef: MemberRef,
     guildId: GuildSnowflake,
-    settings: Partial<MemberGuildSettings>
+    settings: Partial<MemberGuildSettings>,
+    options: Options = {}
   ): Promise<MemberGuildSettings> {
     this.checkToken()
 
@@ -296,24 +364,37 @@ export default class PluralKit {
       {},
       'PATCH',
       MemberGuildSettings,
-      MemberGuildSettings.partial().parse(settings)
+      MemberGuildSettings.partial().parse(settings),
+      options
     )
   }
 
-  async getGroup (groupRef: GroupRef): Promise<Group> {
-    return this.requestParsed(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'GET', Group)
+  async getGroup (groupRef: GroupRef, options: Options = {}): Promise<Group> {
+    return this.requestParsed(
+      `https://api.pluralkit.me/v2/groups/${groupRef}`,
+      {},
+      'GET',
+      Group,
+      undefined,
+      options
+    )
   }
 
-  async getGroupMembers (groupRef: GroupRef): Promise<Array<Member>> {
+  async getGroupMembers (groupRef: GroupRef, options: Options = {}): Promise<Array<Member>> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/groups/${groupRef}/members`,
       {},
       'GET',
-      z.array(Member)
+      z.array(Member),
+      undefined,
+      options
     )
   }
 
-  async createGroup (group: Partial<Group> & Pick<Group, 'name'>): Promise<Group> {
+  async createGroup (
+    group: Partial<Group> & Pick<Group, 'name'>,
+    options: Options = {}
+  ): Promise<Group> {
     this.checkToken()
 
     return this.requestParsed(
@@ -321,11 +402,16 @@ export default class PluralKit {
       {},
       'POST',
       Group,
-      Group.partial().required({ name: true }).parse(group)
+      Group.partial().required({ name: true }).parse(group),
+      options
     )
   }
 
-  async updateGroup (groupRef: GroupRef, data: Partial<Group>): Promise<Group> {
+  async updateGroup (
+    groupRef: GroupRef,
+    data: Partial<Group>,
+    options: Options = {}
+  ): Promise<Group> {
     this.checkToken()
 
     return this.requestParsed(
@@ -333,14 +419,21 @@ export default class PluralKit {
       {},
       'PATCH',
       Group,
-      Group.partial().parse(data)
+      Group.partial().parse(data),
+      options
     )
   }
 
-  async deleteGroup (groupRef: GroupRef): Promise<void> {
+  async deleteGroup (groupRef: GroupRef, options: Options = {}): Promise<void> {
     this.checkToken()
 
-    const resp = await this.request(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'DELETE')
+    const resp = await this.request(
+      `https://api.pluralkit.me/v2/groups/${groupRef}`,
+      {},
+      'DELETE',
+      undefined,
+      options
+    )
 
     if (resp.status !== 204) {
       throw Error(`error deleting group ${groupRef}`, {
@@ -349,14 +442,19 @@ export default class PluralKit {
     }
   }
 
-  async addMembersToGroup (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
+  async addMembersToGroup (
+    groupRef: GroupRef,
+    memberRefs: Array<MemberRef>,
+    options: Options = {}
+  ): Promise<void> {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/add`,
       {},
       'POST',
-      memberRefs
+      memberRefs,
+      options
     )
 
     if (resp.status !== 204) {
@@ -366,14 +464,19 @@ export default class PluralKit {
     }
   }
 
-  async removeMembersFromGroup (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
+  async removeMembersFromGroup (
+    groupRef: GroupRef,
+    memberRefs: Array<MemberRef>,
+    options: Options = {}
+  ): Promise<void> {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/remove`,
       {},
       'POST',
-      memberRefs
+      memberRefs,
+      options
     )
 
     if (resp.status !== 204) {
@@ -383,14 +486,19 @@ export default class PluralKit {
     }
   }
 
-  async overwriteGroupMembers (groupRef: GroupRef, memberRefs: Array<MemberRef>): Promise<void> {
+  async overwriteGroupMembers (
+    groupRef: GroupRef,
+    memberRefs: Array<MemberRef>,
+    options: Options = {}
+  ): Promise<void> {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/groups/${groupRef}/overwrite`,
       {},
       'POST',
-      memberRefs
+      memberRefs,
+      options
     )
 
     if (resp.status !== 204) {
@@ -403,7 +511,8 @@ export default class PluralKit {
   async getSwitches (
     systemRef: SystemRef,
     limit = 100,
-    before?: Date
+    before?: Date,
+    options: Options = {}
   ): Promise<Array<SwitchWithMemberIDs>> {
     const params: Record<string, string> = {
       limit: limit.toString()
@@ -416,32 +525,43 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
       params,
       'GET',
-      z.array(SwitchWithMemberIDsFromApi)
+      z.array(SwitchWithMemberIDsFromApi),
+      undefined,
+      options
     )
   }
 
-  async getSwitch (systemRef: SystemRef, switchId: SwitchID): Promise<SwitchWithMembers> {
+  async getSwitch (
+    systemRef: SystemRef,
+    switchId: SwitchID,
+    options: Options = {}
+  ): Promise<SwitchWithMembers> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'GET',
-      SwitchWithMembersFromApi
+      SwitchWithMembersFromApi,
+      undefined,
+      options
     )
   }
 
-  async getFronters (systemRef: SystemRef): Promise<SwitchWithMembers> {
+  async getFronters (systemRef: SystemRef, options: Options = {}): Promise<SwitchWithMembers> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/fronters`,
       {},
       'GET',
-      SwitchWithMembersFromApi
+      SwitchWithMembersFromApi,
+      undefined,
+      options
     )
   }
 
   async createSwitch (
     systemRef: SystemRef,
     memberRefs: Array<MemberRef>,
-    timestamp?: Date
+    timestamp?: Date,
+    options: Options = {}
   ): Promise<SwitchWithMembers> {
     this.checkToken()
 
@@ -457,14 +577,16 @@ export default class PluralKit {
       {},
       'POST',
       SwitchWithMembersFromApi,
-      data
+      data,
+      options
     )
   }
 
   async updateSwitch (
     systemRef: SystemRef,
     switchId: SwitchID,
-    timestamp: Date
+    timestamp: Date,
+    options: Options = {}
   ): Promise<SwitchWithMembers> {
     this.checkToken()
 
@@ -473,14 +595,16 @@ export default class PluralKit {
       {},
       'PATCH',
       SwitchWithMembersFromApi,
-      { timestamp: timestamp.toISOString() }
+      { timestamp: timestamp.toISOString() },
+      options
     )
   }
 
   async updateSwitchMembers (
     systemRef: SystemRef,
     switchId: SwitchID,
-    memberRefs: Array<MemberRef>
+    memberRefs: Array<MemberRef>,
+    options: Options = {}
   ): Promise<SwitchWithMembers> {
     this.checkToken()
 
@@ -489,17 +613,20 @@ export default class PluralKit {
       {},
       'PATCH',
       SwitchWithMembersFromApi,
-      memberRefs
+      memberRefs,
+      options
     )
   }
 
-  async deleteSwitch (systemRef: SystemRef, switchId: SwitchID) {
+  async deleteSwitch (systemRef: SystemRef, switchId: SwitchID, options: Options = {}) {
     this.checkToken()
 
     const resp = await this.request(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
-      'DELETE'
+      'DELETE',
+      undefined,
+      options
     )
 
     if (resp.status !== 204) {
@@ -509,12 +636,17 @@ export default class PluralKit {
     }
   }
 
-  async getProxiedMessageInformation (messageId: MessageSnowflake): Promise<Message> {
+  async getProxiedMessageInformation (
+    messageId: MessageSnowflake,
+    options: Options = {}
+  ): Promise<Message> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/messages/${messageId}`,
       {},
       'GET',
-      MessageFromApi
+      MessageFromApi,
+      undefined,
+      options
     )
   }
 
@@ -522,24 +654,25 @@ export default class PluralKit {
     url: string,
     parameters: Record<string, string> = {},
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
-    data?: T
+    data: T | undefined,
+    options: Options
   ): Promise<Response> {
     console.log({ url, parameters, method })
     const headers = new Headers(data ? { 'Content-Type': 'application/json' } : {})
     if (this.token) {
-      headers.append('Authorization', this.token)
+      headers.append('Authorization', this.token ?? options.token)
     }
 
     const params = new URLSearchParams(parameters)
-    const options: RequestInit = {
+    const requestOptions: RequestInit = {
       method,
       headers
     }
     if (data) {
-      options.body = JSON.stringify(data)
+      requestOptions.body = JSON.stringify(data)
     }
 
-    const resp = await fetch(url + (params.size ? `?${params.toString()}` : ''), options)
+    const resp = await fetch(url + (params.size ? `?${params.toString()}` : ''), requestOptions)
     if (resp.status < 200 || resp.status > 299) {
       const body = await resp.text()
       if (APIError.isAPIErrorStatus(resp.status)) {
@@ -564,9 +697,10 @@ export default class PluralKit {
     parameters: Record<string, string> = {},
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     schema: ZodType<O>,
-    data?: T
+    data: T | undefined,
+    options: Options
   ): Promise<O> {
-    const resp = await this.request(url, parameters, method, data)
+    const resp = await this.request(url, parameters, method, data, options)
     const json = await resp.json()
     if (typeof json !== 'object' || json === null) {
       throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
