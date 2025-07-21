@@ -26,8 +26,7 @@ export class APIError extends Error {
 
   static fromResponse (resp: Response, json: unknown) {
     if (typeof json !== 'object' || json === null) {
-      // TODO: Error parsing specific error
-      throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
+      throw new TypeError(`Expected JSON object, got ${JSON.stringify(json)} instead`)
     }
 
     return new APIError(resp, ErrorResponse.parse(json))
