@@ -6,6 +6,7 @@ import { SwitchID } from './SwitchID.ts'
 
 const Switch = z.object({
   id: SwitchID,
+  // TODO: Convert Date <-> string
   timestamp: z.iso.datetime(),
   members: z.union([z.array(Member), z.array(MemberIDFromString)])
 })
