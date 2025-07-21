@@ -17,6 +17,7 @@ const System = z.object({
   avatarUrl: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
+  // TODO: Convert Date <-> string
   created: z.nullable(z.iso.datetime()),
   privacy: z.nullable(SystemPrivacy)
 })

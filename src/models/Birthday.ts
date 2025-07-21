@@ -8,6 +8,7 @@ const Birthday = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Birthday = z.infer<typeof Birthday>
 
+// TODO: Convert Birthday <-> string
 export const BirthdayFromString = z
   .string()
   .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, { error: 'not a string in YYYY-MM-DD format' })

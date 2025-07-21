@@ -10,6 +10,7 @@ import Member from './Member.ts'
 import System from './System.ts'
 
 const Message = z.object({
+  // TODO: Convert Date <-> string
   timestamp: z.iso.datetime(),
   id: MessageSnowflake,
   original: MessageSnowflake,

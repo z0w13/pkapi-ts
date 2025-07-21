@@ -14,6 +14,7 @@ const AutoproxySettings = z
     channelId: z.optional(ChannelSnowflake),
     autoproxyMode: AutoproxyMode,
     autoproxyMember: z.optional(MemberID),
+    // TODO: Convert Date <-> string
     lastLatchTimestamp: z.iso.datetime()
   })
   .refine((v) => v.autoproxyMode === 'front' && v.autoproxyMember, {
