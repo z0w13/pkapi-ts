@@ -14,8 +14,7 @@ const AutoproxySettings = z
     channelId: z.optional(ChannelSnowflake),
     autoproxyMode: AutoproxyMode,
     autoproxyMember: z.optional(MemberID),
-    // TODO: Convert Date <-> string
-    lastLatchTimestamp: z.iso.datetime()
+    lastLatchTimestamp: z.nullable(z.date())
   })
   .refine((v) => v.autoproxyMode === 'front' && v.autoproxyMember, {
     error: 'autoproxyMember must be `null` if autoproxyMode is set to `front`'
@@ -23,3 +22,7 @@ const AutoproxySettings = z
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type AutoproxySettings = z.infer<typeof AutoproxySettings>
 export default AutoproxySettings
+
+export const AutoproxySettingsFromApi = AutoproxySettings.extend({
+  lastLatchTimestamp: z.nullable(z.iso.datetime().transform((v) => new Date(v)))
+})

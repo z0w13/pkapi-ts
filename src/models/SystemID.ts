@@ -1,7 +1,7 @@
 import z from 'zod'
 import PluralKitID, { PluralKitIDFromString } from './PluralKitID.ts'
 
-const SystemID = PluralKitID.brand<'SystemID'>()
+const SystemID = z.union([PluralKitID, z.literal('@me').brand<'PluralKitID'>()]).brand<'SystemID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type SystemID = z.infer<typeof SystemID>
 export default SystemID

@@ -5,10 +5,20 @@ const Birthday = z.object({
   month: z.number(),
   day: z.number()
 })
+
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Birthday = z.infer<typeof Birthday>
 
-// TODO: Convert Birthday <-> string
+export const BirthdayToString = Birthday.transform((input) => {
+  return (
+    `${(input.year ? input.year : 4).toString().padStart(4, '0')}` +
+    `-${input.month.toString().padStart(2, '0')}` +
+    `-${input.day.toString().padStart(2, '0')}`
+  )
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+export type BirthdayToString = z.infer<typeof BirthdayToString>
+
 export const BirthdayFromString = z
   .string()
   .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, { error: 'not a string in YYYY-MM-DD format' })

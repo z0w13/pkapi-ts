@@ -3,20 +3,25 @@ import { objectToCamel } from 'ts-case-convert'
 
 import { APIError, HTTPError, AuthorizationRequired } from './errors.ts'
 
-import System from './models/System.ts'
-import Member from './models/Member.ts'
+import System, { SystemFromApi } from './models/System.ts'
+import Member, { MemberFromApi, MemberToApi } from './models/Member.ts'
 import Group from './models/Group.ts'
 import SystemSettings from './models/SystemSettings.ts'
 import PublicSystemSettings from './models/PublicSystemSettings.ts'
 import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.ts'
 import SystemGuildSettings from './models/SystemGuildSettings.ts'
 import { SystemRef } from './models/SystemID.ts'
-import AutoproxySettings from './models/AutoproxySettings.ts'
-import MemberID, { MemberRef } from './models/MemberID.ts'
+import AutoproxySettings, { AutoproxySettingsFromApi } from './models/AutoproxySettings.ts'
+import { MemberRef } from './models/MemberID.ts'
 import { GroupRef } from './models/GroupID.ts'
 import MemberGuildSettings from './models/MemberGuildSettings.ts'
-import Switch from './models/Switch.ts'
-import Message from './models/Message.ts'
+import {
+  SwitchWithMemberIDs,
+  SwitchWithMemberIDsFromApi,
+  SwitchWithMembers,
+  SwitchWithMembersFromApi
+} from './models/Switch.ts'
+import Message, { MessageFromApi } from './models/Message.ts'
 import { SwitchID } from './models/SwitchID.ts'
 
 export default class PluralKit {
@@ -33,7 +38,12 @@ export default class PluralKit {
   }
 
   async getSystem (systemRef: SystemRef): Promise<System> {
-    return this.requestParsed(`https://api.pluralkit.me/v2/systems/${systemRef}`, {}, 'GET', System)
+    return this.requestParsed(
+      `https://api.pluralkit.me/v2/systems/${systemRef}`,
+      {},
+      'GET',
+      SystemFromApi
+    )
   }
 
   async getSystemSettings (systemRef: SystemRef): Promise<PublicSystemSettings> {
@@ -70,7 +80,7 @@ export default class PluralKit {
       'https://api.pluralkit.me/v2/systems/@me/autoproxy',
       { guild_id: guildId },
       'GET',
-      AutoproxySettings
+      AutoproxySettingsFromApi
     )
   }
 
@@ -92,7 +102,7 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/systems/${systemRef}`,
       {},
       'PATCH',
-      System,
+      SystemFromApi,
       System.partial().parse(data)
     )
   }
@@ -140,13 +150,18 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
       {},
       'PATCH',
-      AutoproxySettings,
+      AutoproxySettingsFromApi,
       AutoproxySettings.partial().parse(data)
     )
   }
 
   async getMember (memberRef: MemberRef): Promise<Member> {
-    return this.requestParsed(`https://api.pluralkit.me/v2/members/${memberRef}`, {}, 'GET', Member)
+    return this.requestParsed(
+      `https://api.pluralkit.me/v2/members/${memberRef}`,
+      {},
+      'GET',
+      MemberFromApi
+    )
   }
 
   async getMemberGroups (memberRef: MemberRef): Promise<Array<Group>> {
@@ -177,8 +192,8 @@ export default class PluralKit {
       'https://api.pluralkit.me/v2/members',
       {},
       'POST',
-      Member,
-      Member.partial().required({ name: true }).parse(member)
+      MemberFromApi,
+      MemberToApi.partial().required({ name: true }).parse(member)
     )
   }
 
@@ -189,8 +204,8 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/members/${memberRef}`,
       {},
       'PATCH',
-      Member,
-      Member.partial().required({ name: true }).parse(member)
+      MemberFromApi,
+      MemberToApi.partial().required({ name: true }).parse(member)
     )
   }
 
@@ -280,7 +295,7 @@ export default class PluralKit {
     return this.requestParsed(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'GET', Group)
   }
 
-  async getGroupMembers (groupRef: GroupRef) {
+  async getGroupMembers (groupRef: GroupRef): Promise<Array<Group>> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/groups/${groupRef}/members`,
       {},
@@ -376,7 +391,11 @@ export default class PluralKit {
     }
   }
 
-  async getSwitches (systemRef: SystemRef, limit = 100, before?: Date) {
+  async getSwitches (
+    systemRef: SystemRef,
+    limit = 100,
+    before?: Date
+  ): Promise<Array<SwitchWithMemberIDs>> {
     const params: Record<string, string> = {
       limit: limit.toString()
     }
@@ -388,37 +407,33 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
       params,
       'GET',
-      z.array(
-        Switch.extend({
-          members: z.array(MemberID)
-        })
-      )
+      z.array(SwitchWithMemberIDsFromApi)
     )
   }
 
-  async getSwitch (systemRef: SystemRef, switchId: SwitchID) {
+  async getSwitch (systemRef: SystemRef, switchId: SwitchID): Promise<SwitchWithMembers> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'GET',
-      Switch.extend({
-        members: z.array(Member)
-      })
+      SwitchWithMembersFromApi
     )
   }
 
-  async getFronters (systemRef: SystemRef) {
+  async getFronters (systemRef: SystemRef): Promise<SwitchWithMembers> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/fronters`,
       {},
       'GET',
-      Switch.extend({
-        members: z.array(Member)
-      })
+      SwitchWithMembersFromApi
     )
   }
 
-  async createSwitch (systemRef: SystemRef, memberRefs: Array<MemberRef>, timestamp?: Date) {
+  async createSwitch (
+    systemRef: SystemRef,
+    memberRefs: Array<MemberRef>,
+    timestamp?: Date
+  ): Promise<SwitchWithMembers> {
     this.checkToken()
 
     const data: Record<string, unknown> = {
@@ -432,21 +447,23 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
       {},
       'POST',
-      Switch,
+      SwitchWithMembersFromApi,
       data
     )
   }
 
-  async updateSwitch (systemRef: SystemRef, switchId: SwitchID, timestamp: Date) {
+  async updateSwitch (
+    systemRef: SystemRef,
+    switchId: SwitchID,
+    timestamp: Date
+  ): Promise<SwitchWithMembers> {
     this.checkToken()
 
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'PATCH',
-      Switch.extend({
-        members: z.array(Member)
-      }),
+      SwitchWithMembersFromApi,
       { timestamp: timestamp.toISOString() }
     )
   }
@@ -455,16 +472,14 @@ export default class PluralKit {
     systemRef: SystemRef,
     switchId: SwitchID,
     memberRefs: Array<MemberRef>
-  ) {
+  ): Promise<SwitchWithMembers> {
     this.checkToken()
 
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}/members`,
       {},
       'PATCH',
-      Switch.extend({
-        members: z.array(Member)
-      }),
+      SwitchWithMembersFromApi,
       memberRefs
     )
   }
@@ -490,7 +505,7 @@ export default class PluralKit {
       `https://api.pluralkit.me/v2/messages/${messageId}`,
       {},
       'GET',
-      Message
+      MessageFromApi
     )
   }
 

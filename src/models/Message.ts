@@ -10,8 +10,7 @@ import Member from './Member.ts'
 import System from './System.ts'
 
 const Message = z.object({
-  // TODO: Convert Date <-> string
-  timestamp: z.iso.datetime(),
+  timestamp: z.date(),
   id: MessageSnowflake,
   original: MessageSnowflake,
   sender: UserSnowflake,
@@ -23,3 +22,7 @@ const Message = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Message = z.infer<typeof Message>
 export default Message
+
+export const MessageFromApi = Message.extend({
+  timestamp: z.iso.datetime().transform((v) => new Date(v))
+})
