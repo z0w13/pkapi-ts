@@ -22,9 +22,16 @@ const System = z.object({
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type System = z.infer<typeof System>
-
 export default System
 
 export const SystemFromApi = System.extend({
   created: z.nullable(z.iso.datetime().transform((v) => new Date(v)))
 })
+
+const SimpleSystem = System.extend({
+  id: z.string(),
+  uuid: z.uuid(),
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type SimpleSystem = z.infer<typeof SimpleSystem>
+export { SimpleSystem }

@@ -44,3 +44,12 @@ export const MemberFromApi = Member.extend({
 export const MemberToApi = Member.extend({
   birthday: z.nullable(BirthdayToString)
 })
+
+const SimpleMember = Member.extend({
+  id: z.string(),
+  uuid: z.uuid(),
+  system: z.optional(z.string()),
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type SimpleMember = z.infer<typeof SimpleMember>
+export { SimpleMember }
