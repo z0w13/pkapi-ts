@@ -17,11 +17,14 @@ const System = z.object({
   avatarUrl: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
-  // TODO: Convert Date <-> string
-  created: z.nullable(z.iso.datetime()),
+  created: z.nullable(z.date()),
   privacy: z.nullable(SystemPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type System = z.infer<typeof System>
 
 export default System
+
+export const SystemFromApi = System.extend({
+  created: z.nullable(z.iso.datetime().transform((v) => new Date(v)))
+})
