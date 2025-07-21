@@ -149,13 +149,12 @@ export default class PluralKit {
     return this.requestParsed(`https://api.pluralkit.me/v2/members/${memberRef}`, {}, 'GET', Member)
   }
 
-  // TODO: Return type, also document in PluralKit docs
-  async getMemberGroups (memberRef: MemberRef): Promise<unknown> {
+  async getMemberGroups (memberRef: MemberRef): Promise<Array<Group>> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/members/${memberRef}/groups`,
       {},
       'GET',
-      Member
+      z.array(Group)
     )
   }
 
