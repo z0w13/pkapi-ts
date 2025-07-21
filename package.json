@@ -4,7 +4,6 @@
   "description": "A typescript library for the PluralKit API",
   "types": "dist/main.d.ts",
   "type": "module",
-  "bin": "./dist/bin/cli.cjs",
   "exports": {
     ".": {
       "import": {
