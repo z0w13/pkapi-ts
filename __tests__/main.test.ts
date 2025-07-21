@@ -1,7 +1,7 @@
 import { test, describe, beforeEach, mock } from 'node:test'
 import assert from 'node:assert'
 
-import PluralKit from '../src/main.ts'
+import StrictTypedClient from '../src/StrictTypedClient.ts'
 import { GuildSnowflake } from '../src/models/DiscordSnowflake.ts'
 import { AuthorizationRequired } from '../src/errors.ts'
 
@@ -12,7 +12,7 @@ describe('PluralKit', () => {
   })
 
   test('throws when a method that requires token is called without token', async () => {
-    const pluralKit = new PluralKit()
+    const pluralKit = new StrictTypedClient()
     try {
       await pluralKit.getOwnSystemAutoproxySettings(GuildSnowflake.parse('0'))
     } catch (e) {

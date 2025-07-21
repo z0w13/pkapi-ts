@@ -20,5 +20,13 @@ const Group = z.object({
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Group = z.infer<typeof Group>
-
 export default Group
+
+const SimpleGroup = Group.extend({
+  id: z.string(),
+  uuid: z.uuid(),
+  system: z.optional(z.string())
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type SimpleGroup = z.infer<typeof SimpleGroup>
+export { SimpleGroup }
