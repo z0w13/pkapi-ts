@@ -204,8 +204,9 @@ export default class PluralKit {
     )
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error deleting member ${memberRef}`)
+      throw Error(`error deleting member ${memberRef}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -218,10 +219,10 @@ export default class PluralKit {
       'POST',
       groupRefs
     )
-
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error adding member ${memberRef} to groups ${groupRefs.join(', ')}`)
+      throw Error(`error adding member ${memberRef} to groups ${groupRefs.join(', ')}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -236,8 +237,9 @@ export default class PluralKit {
     )
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error removing member ${memberRef} from groups ${groupRefs.join(', ')}`)
+      throw Error(`error removing member ${memberRef} from groups ${groupRefs.join(', ')}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -252,8 +254,9 @@ export default class PluralKit {
     )
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error overwriting groups for member ${memberRef} with ${groupRefs.join(', ')}`)
+      throw Error(`error overwriting groups for member ${memberRef} with ${groupRefs.join(', ')}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -316,8 +319,9 @@ export default class PluralKit {
     const resp = await this.request(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'DELETE')
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error deleting group ${groupRef}`)
+      throw Error(`error deleting group ${groupRef}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -332,8 +336,9 @@ export default class PluralKit {
     )
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error deleting group ${groupRef}`)
+      throw Error(`error deleting group ${groupRef}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -348,8 +353,9 @@ export default class PluralKit {
     )
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error deleting group ${groupRef}`)
+      throw Error(`error deleting group ${groupRef}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -364,8 +370,9 @@ export default class PluralKit {
     )
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error overwriting members for group ${groupRef} with ${memberRefs.join(', ')}`)
+      throw Error(`error overwriting members for group ${groupRef} with ${memberRefs.join(', ')}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
@@ -466,8 +473,9 @@ export default class PluralKit {
     )
 
     if (resp.status !== 204) {
-      // TODO: Better error type
-      throw Error(`error deleting switch ${switchId} for system ${systemRef}`)
+      throw Error(`error deleting switch ${switchId} for system ${systemRef}`, {
+        cause: await HTTPError.fromResponse(resp)
+      })
     }
   }
 
