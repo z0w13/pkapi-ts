@@ -14,7 +14,7 @@ const AutoproxySettings = z
     channelId: z.optional(ChannelSnowflake),
     autoproxyMode: AutoproxyMode,
     autoproxyMember: z.optional(MemberID),
-    lastLatchTimestamp: z.date()
+    lastLatchTimestamp: z.iso.datetime()
   })
   .refine((v) => v.autoproxyMode === 'front' && v.autoproxyMember, {
     error: 'autoproxyMember must be `null` if autoproxyMode is set to `front`'
