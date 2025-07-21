@@ -380,6 +380,17 @@ export default class PluralKit {
     )
   }
 
+  async getGroups (systemRef: SystemRef, options: Options = {}): Promise<Array<Group>> {
+    return this.requestParsed(
+     `https://api.pluralkit.me/v2/systems/${systemRef}/groups`,
+     {},
+     'GET',
+     z.array(Group),
+     undefined,
+     options
+    )
+  }
+
   async getGroupMembers (groupRef: GroupRef, options: Options = {}): Promise<Array<Member>> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/groups/${groupRef}/members`,
