@@ -16,7 +16,7 @@
       },
       "default": "./dist/main.mjs"
     },
-    "./dist/*": {
+    "./*": {
       "types": "./dist/*.d.ts",
       "import": "./dist/*.mjs",
       "require": "./dist/*.cjs"
