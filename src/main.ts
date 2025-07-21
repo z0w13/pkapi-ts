@@ -12,7 +12,7 @@ import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.ts'
 import SystemGuildSettings from './models/SystemGuildSettings.ts'
 import { SystemRef } from './models/SystemID.ts'
 import AutoproxySettings from './models/AutoproxySettings.ts'
-import { MemberRef } from './models/MemberID.ts'
+import MemberID, { MemberRef } from './models/MemberID.ts'
 import { GroupRef } from './models/GroupID.ts'
 import MemberGuildSettings from './models/MemberGuildSettings.ts'
 import Switch from './models/Switch.ts'
@@ -384,32 +384,37 @@ export default class PluralKit {
       params.before = before.toISOString()
     }
 
-    // TODO: Narrowed type for method (members = Array<MemberID>)
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
       params,
       'GET',
-      z.array(Switch)
+      z.array(
+        Switch.extend({
+          members: z.array(MemberID)
+        })
+      )
     )
   }
 
-  async getSwitch (systemRef: SystemRef, switchId: SwitchID): Promise<Switch> {
-    // TODO: Narrowed type for method (members = Array<Member>)
+  async getSwitch (systemRef: SystemRef, switchId: SwitchID) {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'GET',
-      Switch
+      Switch.extend({
+        members: z.array(Member)
+      })
     )
   }
 
   async getFronters (systemRef: SystemRef) {
-    // TODO: Narrowed type for method (members = Array<Member>)
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/fronters`,
       {},
       'GET',
-      Switch
+      Switch.extend({
+        members: z.array(Member)
+      })
     )
   }
 
@@ -432,15 +437,16 @@ export default class PluralKit {
     )
   }
 
-  async updateSwitch (systemRef: SystemRef, switchId: SwitchID, timestamp: Date): Promise<Switch> {
+  async updateSwitch (systemRef: SystemRef, switchId: SwitchID, timestamp: Date) {
     this.checkToken()
 
-    // TODO: Narrowed type for method (members = Array<Member>)
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'PATCH',
-      Switch,
+      Switch.extend({
+        members: z.array(Member)
+      }),
       { timestamp: timestamp.toISOString() }
     )
   }
@@ -449,16 +455,16 @@ export default class PluralKit {
     systemRef: SystemRef,
     switchId: SwitchID,
     memberRefs: Array<MemberRef>
-  ): Promise<Switch> {
+  ) {
     this.checkToken()
-
-    // TODO: Narrowed type for method (members = Array<Member>)
 
     return this.requestParsed(
       `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}/members`,
       {},
       'PATCH',
-      Switch,
+      Switch.extend({
+        members: z.array(Member)
+      }),
       memberRefs
     )
   }
