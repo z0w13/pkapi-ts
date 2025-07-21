@@ -304,12 +304,12 @@ export default class PluralKit {
     return this.requestParsed(`https://api.pluralkit.me/v2/groups/${groupRef}`, {}, 'GET', Group)
   }
 
-  async getGroupMembers (groupRef: GroupRef): Promise<Array<Group>> {
+  async getGroupMembers (groupRef: GroupRef): Promise<Array<Member>> {
     return this.requestParsed(
       `https://api.pluralkit.me/v2/groups/${groupRef}/members`,
       {},
       'GET',
-      z.array(Group)
+      z.array(Member)
     )
   }
 
