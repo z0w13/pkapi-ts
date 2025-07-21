@@ -17,11 +17,25 @@ export class AuthorizationRequired extends Error {
 }
 
 export class APIError extends Error {
+  /** http status code */
+  public status: number | undefined
+  /** http status text */
+  public statusText: string | undefined
+  /** code from the PluralKit api */
+  public code: number | undefined
+  /** message from the PluralKit api */
+  public message: string
+
   constructor (resp: Response, apiResponse: ErrorResponse) {
     super(
       `API Error: HTTP ${resp.status} ${resp.statusText}, ` +
         `API ${apiResponse.code} ${apiResponse.message}`
     )
+
+    this.status = resp.status
+    this.statusText = resp.statusText
+    this.code = apiResponse.code
+    this.message = apiResponse.message
   }
 
   static fromResponse (resp: Response, json: unknown) {
