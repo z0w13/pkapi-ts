@@ -28,10 +28,6 @@ export const BirthdayFromString = z
       ctx.addIssue(`Couldn't parse day: '${split[2]}'`)
     }
 
-    if (ctx.issues.length > 0) {
-      return z.NEVER
-    }
-
     return ctx.issues.length > 0
       ? z.NEVER
       : {
