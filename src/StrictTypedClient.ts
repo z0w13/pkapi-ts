@@ -29,7 +29,7 @@ export interface Options {
 }
 
 export default class StrictTypedClient {
-  constructor (protected token: string | null = null) {}
+  constructor (protected token: string | null = null, protected baseURL: string | null = 'https://api.pluralkit.me/') {}
 
   public async setToken (token: string | null = null) {
     this.token = token
@@ -43,7 +43,7 @@ export default class StrictTypedClient {
 
   async getSystem (systemRef: SystemRef, options: Options = {}): Promise<System> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}`,
+      `/v2/systems/${systemRef}`,
       {},
       'GET',
       SystemFromApi,
@@ -57,7 +57,7 @@ export default class StrictTypedClient {
     options: Options = {}
   ): Promise<PublicSystemSettings> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/settings`,
+      `/v2/systems/${systemRef}/settings`,
       {},
       'GET',
       PublicSystemSettings,
@@ -70,7 +70,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      'https://api.pluralkit.me/v2/systems/@me/settings',
+      '/v2/systems/@me/settings',
       {},
       'GET',
       SystemSettings,
@@ -91,7 +91,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      'https://api.pluralkit.me/v2/systems/@me/autoproxy',
+      '/v2/systems/@me/autoproxy',
       { guild_id: guildId },
       'GET',
       AutoproxySettingsFromApi,
@@ -107,7 +107,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
+      `/v2/systems/@me/guilds/${guildId}`,
       {},
       'GET',
       SystemGuildSettings,
@@ -124,7 +124,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}`,
+      `/v2/systems/${systemRef}`,
       {},
       'PATCH',
       SystemFromApi,
@@ -141,7 +141,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/settings`,
+      `/v2/systems/${systemRef}/settings`,
       {},
       'PATCH',
       SystemSettings,
@@ -158,7 +158,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
+      `/v2/systems/@me/guilds/${guildId}`,
       {},
       'PATCH',
       SystemGuildSettings,
@@ -178,7 +178,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/@me/guilds/${guildId}`,
+      `/v2/systems/@me/guilds/${guildId}`,
       {},
       'PATCH',
       AutoproxySettingsFromApi,
@@ -189,7 +189,7 @@ export default class StrictTypedClient {
 
   async getMember (memberRef: MemberRef, options: Options = {}): Promise<Member> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${memberRef}`,
+      `/v2/members/${memberRef}`,
       {},
       'GET',
       MemberFromApi,
@@ -200,7 +200,7 @@ export default class StrictTypedClient {
 
   async getSystemMembers (systemRef: SystemRef, options: Options = {}): Promise<Array<Member>> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/members`,
+      `/v2/systems/${systemRef}/members`,
       {},
       'GET',
       z.array(MemberFromApi),
@@ -211,7 +211,7 @@ export default class StrictTypedClient {
 
   async getMemberGroups (memberRef: MemberRef, options: Options = {}): Promise<Array<Group>> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${memberRef}/groups`,
+      `/v2/members/${memberRef}/groups`,
       {},
       'GET',
       z.array(Group),
@@ -226,7 +226,7 @@ export default class StrictTypedClient {
     options: Options = {}
   ): Promise<MemberGuildSettings> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
+      `/v2/members/${memberRef}/guilds/${guildId}`,
       {},
       'GET',
       MemberGuildSettings,
@@ -242,7 +242,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      'https://api.pluralkit.me/v2/members',
+      '/v2/members',
       {},
       'POST',
       MemberFromApi,
@@ -259,7 +259,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${memberRef}`,
+      `/v2/members/${memberRef}`,
       {},
       'PATCH',
       MemberFromApi,
@@ -272,7 +272,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/members/${memberRef}`,
+      `/v2/members/${memberRef}`,
       {},
       'DELETE',
       undefined,
@@ -294,7 +294,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/members/${memberRef}/groups/add`,
+      `/v2/members/${memberRef}/groups/add`,
       {},
       'POST',
       groupRefs,
@@ -315,7 +315,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/members/${memberRef}/groups/remove`,
+      `/v2/members/${memberRef}/groups/remove`,
       {},
       'POST',
       groupRefs,
@@ -337,7 +337,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/members/${memberRef}/groups/overwrite`,
+      `/v2/members/${memberRef}/groups/overwrite`,
       {},
       'POST',
       groupRefs,
@@ -360,7 +360,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/members/${memberRef}/guilds/${guildId}`,
+      `/v2/members/${memberRef}/guilds/${guildId}`,
       {},
       'PATCH',
       MemberGuildSettings,
@@ -371,7 +371,7 @@ export default class StrictTypedClient {
 
   async getGroup (groupRef: GroupRef, options: Options = {}): Promise<Group> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/groups/${groupRef}`,
+      `/v2/groups/${groupRef}`,
       {},
       'GET',
       Group,
@@ -382,7 +382,7 @@ export default class StrictTypedClient {
 
   async getGroups (systemRef: SystemRef, options: Options = {}): Promise<Array<Group>> {
     return this.requestParsed(
-     `https://api.pluralkit.me/v2/systems/${systemRef}/groups`,
+     `/v2/systems/${systemRef}/groups`,
      {},
      'GET',
      z.array(Group),
@@ -393,7 +393,7 @@ export default class StrictTypedClient {
 
   async getGroupMembers (groupRef: GroupRef, options: Options = {}): Promise<Array<Member>> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/groups/${groupRef}/members`,
+      `/v2/groups/${groupRef}/members`,
       {},
       'GET',
       z.array(Member),
@@ -409,7 +409,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      'https://api.pluralkit.me/v2/groups',
+      '/v2/groups',
       {},
       'POST',
       Group,
@@ -426,7 +426,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/groups/${groupRef}`,
+      `/v2/groups/${groupRef}`,
       {},
       'PATCH',
       Group,
@@ -439,7 +439,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/groups/${groupRef}`,
+      `/v2/groups/${groupRef}`,
       {},
       'DELETE',
       undefined,
@@ -461,7 +461,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/groups/${groupRef}/add`,
+      `/v2/groups/${groupRef}/add`,
       {},
       'POST',
       memberRefs,
@@ -483,7 +483,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/groups/${groupRef}/remove`,
+      `/v2/groups/${groupRef}/remove`,
       {},
       'POST',
       memberRefs,
@@ -505,7 +505,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/groups/${groupRef}/overwrite`,
+      `/v2/groups/${groupRef}/overwrite`,
       {},
       'POST',
       memberRefs,
@@ -533,7 +533,7 @@ export default class StrictTypedClient {
     }
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
+      `/v2/systems/${systemRef}/switches`,
       params,
       'GET',
       z.array(SwitchWithMemberIDsFromApi),
@@ -548,7 +548,7 @@ export default class StrictTypedClient {
     options: Options = {}
   ): Promise<SwitchWithMembers> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
+      `/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'GET',
       SwitchWithMembersFromApi,
@@ -559,7 +559,7 @@ export default class StrictTypedClient {
 
   async getFronters (systemRef: SystemRef, options: Options = {}): Promise<SwitchWithMembers> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/fronters`,
+      `/v2/systems/${systemRef}/fronters`,
       {},
       'GET',
       SwitchWithMembersFromApi,
@@ -584,7 +584,7 @@ export default class StrictTypedClient {
     }
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/switches`,
+      `/v2/systems/${systemRef}/switches`,
       {},
       'POST',
       SwitchWithMembersFromApi,
@@ -602,7 +602,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
+      `/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'PATCH',
       SwitchWithMembersFromApi,
@@ -620,7 +620,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}/members`,
+      `/v2/systems/${systemRef}/switches/${switchId}/members`,
       {},
       'PATCH',
       SwitchWithMembersFromApi,
@@ -633,7 +633,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `https://api.pluralkit.me/v2/systems/${systemRef}/switches/${switchId}`,
+      `/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'DELETE',
       undefined,
@@ -652,7 +652,7 @@ export default class StrictTypedClient {
     options: Options = {}
   ): Promise<Message> {
     return this.requestParsed(
-      `https://api.pluralkit.me/v2/messages/${messageId}`,
+      `/v2/messages/${messageId}`,
       {},
       'GET',
       MessageFromApi,
@@ -662,13 +662,13 @@ export default class StrictTypedClient {
   }
 
   async request<T>(
-    url: string,
+    path: string,
     parameters: Record<string, string> = {},
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     data: T | undefined,
     options: Options
   ): Promise<Response> {
-    console.log({ url, parameters, method })
+    console.log({ path, parameters, method })
     const headers = new Headers(data ? { 'Content-Type': 'application/json' } : {})
     if (this.token) {
       headers.append('Authorization', this.token ?? options.token)
@@ -683,7 +683,7 @@ export default class StrictTypedClient {
       requestOptions.body = JSON.stringify(data)
     }
 
-    const resp = await fetch(url + (params.size ? `?${params.toString()}` : ''), requestOptions)
+    const resp = await fetch(this.baseURL + path + (params.size ? `?${params.toString()}` : ''), requestOptions)
     if (resp.status < 200 || resp.status > 299) {
       const body = await resp.text()
       if (APIError.isAPIErrorStatus(resp.status)) {
@@ -704,14 +704,14 @@ export default class StrictTypedClient {
   }
 
   async requestParsed<O, T>(
-    url: string,
+    path: string,
     parameters: Record<string, string> = {},
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     schema: ZodType<O>,
     data: T | undefined,
     options: Options
   ): Promise<O> {
-    const resp = await this.request(url, parameters, method, data, options)
+    const resp = await this.request(path, parameters, method, data, options)
     const json = await resp.json()
     if (typeof json !== 'object' || json === null) {
       throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
