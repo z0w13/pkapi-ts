@@ -1,0 +1,49 @@
+services:
+  api:
+    image: ghcr.io/pluralkit/pluralkit:6c0c7a5c9918c106bef1ccc09b4ee434ca830c1b
+    command: [ "bin/PluralKit.API.dll" ]
+    environment:
+      PluralKit__Database: "Host=postgres;Port=5432;Username=pluralkit;Database=pluralkit;Password=pluralkit"
+      PluralKit__MessagesDatabase: "Host=postgres;Port=5432;Username=pluralkit;Database=pluralkit;Password=pluralkit"
+      PluralKit__RedisAddr: "redis,abortConnect=false"
+      PluralKit__Token: "Bot fake-token"
+      PluralKit__Api__ClientId: "fake-client"
+      PluralKit__Api__ClientSecret: "fake-secret"
+      PluralKit__Api__TrustAuth: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  api-rust:
+    image: ghcr.io/pluralkit/api:6c0c7a5c9918c106bef1ccc09b4ee434ca830c1b
+    # so signals actually stop the container
+    init: true
+    environment:
+      pluralkit__db__data_db_uri: "postgresql://pluralkit:pluralkit@postgres:5432/pluralkit"
+      pluralkit__db__data_redis_addr: "redis://redis:6379"
+      pluralkit__api__ratelimit_redis_addr: "redis://redis:6379"
+      pluralkit__api__remote_url: "http://api:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  redis:
+    image: valkey/valkey:8.1.3
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  postgres:
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: "pluralkit"
+      POSTGRES_DB: "pluralkit"
+      POSTGRES_PASSWORD: "pluralkit"
+    healthcheck:
+      test: ["CMD", "pg_isready", "--username=pluralkit"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
