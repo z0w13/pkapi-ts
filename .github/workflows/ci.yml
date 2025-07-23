@@ -22,8 +22,10 @@ jobs:
         run: pnpm run lint
       - name: build project
         run: pnpm run build
-      - name: run tests
+      - name: run tests (unit)
         run: pnpm run test
+      - name: run tests (integration)
+        run: pnpm run test:integration
       - name: coverage
         uses: codecov/codecov-action@v4
         if: github.actor != 'dependabot[bot]'
