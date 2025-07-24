@@ -1,5 +1,5 @@
 import z, { ZodType } from 'zod'
-import { objectToCamel } from 'ts-case-convert'
+import { objectToCamel, objectToSnake } from 'ts-case-convert'
 
 import { APIError, HTTPError, AuthorizationRequired } from './errors.ts'
 
@@ -680,7 +680,7 @@ export default class StrictTypedClient {
       headers
     }
     if (data) {
-      requestOptions.body = JSON.stringify(data)
+      requestOptions.body = JSON.stringify(objectToSnake(data))
     }
 
     const resp = await fetch(this.baseURL + path + (params.size ? `?${params.toString()}` : ''), requestOptions)
