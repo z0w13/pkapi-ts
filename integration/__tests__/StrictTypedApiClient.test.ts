@@ -55,6 +55,11 @@ describe('PluralKit', () => {
   test('getSystemSettings', async () => {
     const db = await getDatabase()
     const client = getTypedClient()
+
+    await createSystem(db, 'exmpl', 'test system')
+    const settings = await client.getSystemSettings(SystemRef.parse('exmpl'))
+
+    expect(settings.hidListPadding).toBe('off')
   })
 
   test('getOwnSystemSettings', async () => {
