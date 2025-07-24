@@ -1,6 +1,6 @@
 import z from 'zod'
 
-const IDPaddingFormat = z.literal(['none', 'left', 'right'])
+const IDPaddingFormat = z.literal(['off', 'left', 'right'])
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type IDPaddingFormat = z.infer<typeof IDPaddingFormat>
 export { IDPaddingFormat }
