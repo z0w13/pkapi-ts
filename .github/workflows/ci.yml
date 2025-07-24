@@ -3,12 +3,25 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  test:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - uses: pnpm/action-setup@v4
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: lint
+        run: pnpm lint
+  unit:
     strategy:
       matrix:
         node: ["22.x"]
         platform: [ubuntu-latest]
-    name: Node v${{matrix.node}} ((${{matrix.platform}}))
+    name: Unit Tests (Node v${{matrix.node}} ${{matrix.platform}})
     runs-on: ${{matrix.platform}}
     steps:
       - uses: actions/checkout@v4
@@ -18,12 +31,32 @@ jobs:
       - uses: pnpm/action-setup@v4
       - name: install dependencies
         run: pnpm install --frozen-lockfile
-      - name: lint code
-        run: pnpm run lint
-      - name: build project
-        run: pnpm run build
       - name: run tests (unit)
         run: pnpm run test
+      - name: coverage
+        uses: codecov/codecov-action@v4
+        if: github.actor != 'dependabot[bot]'
+        with:
+          fail_ci_if_error: true
+          verbose: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+        env:
+          CI: true
+  integration:
+    strategy:
+      matrix:
+        node: ["22.x"]
+        platform: [ubuntu-latest]
+    name: Integration Tests (Node v${{matrix.node}} ${{matrix.platform}})
+    runs-on: ${{matrix.platform}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{matrix.node}}
+      - uses: pnpm/action-setup@v4
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
       - name: run tests (integration)
         run: pnpm run test:integration
       - name: coverage
@@ -38,7 +71,7 @@ jobs:
 
   release-preview:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [lint, unit, integration]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
