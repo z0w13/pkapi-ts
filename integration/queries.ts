@@ -1,16 +1,36 @@
 import { Client } from 'pg'
 
 export async function createSystemWithToken (db: Client, hid: string, name: string) {
-  return parseInt((await db.query({
+  const systemId = parseInt((await db.query({
     text: 'INSERT INTO systems (hid, name, token) VALUES ($1, $2, $3) RETURNING id',
     values: [
       hid, name, process.env.PLURALKIT_TOKEN,
     ]
   })).rows[0]['id'])
+
+  // create system settings and guild settings
+  await createSystemSettings(db, systemId)
+  await createSystemGuilds(db, systemId, 1)
+
+  return systemId
 }
 
 export async function createSystem (db: Client, hid: string, name: string) {
-  return parseInt((await db.query({ text: 'INSERT INTO systems (hid, name) VALUES ($1, $2) RETURNING id', values: [hid, name] })).rows[0]['id'])
+  const systemId = parseInt((await db.query({ text: 'INSERT INTO systems (hid, name) VALUES ($1, $2) RETURNING id', values: [hid, name] })).rows[0]['id'])
+
+  // create system settings and guild settings
+  await createSystemSettings(db, systemId)
+  await createSystemGuilds(db, systemId, 1)
+
+  return systemId
+}
+
+export async function createSystemSettings (db: Client, id: number) {
+  await db.query({ text: 'INSERT INTO system_config (system) VALUES ($1)', values: [id] })
+}
+
+export async function createSystemGuilds (db: Client, systemId: number, guildId: number) {
+  await db.query({ text: 'INSERT INTO system_guild (system, guild) VALUES ($1, $2)', values: [systemId, guildId] })
 }
 
 export async function deleteSystem (db: Client, hid: string) {
