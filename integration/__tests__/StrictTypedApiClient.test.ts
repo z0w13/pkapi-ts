@@ -4,6 +4,7 @@ import { getDatabase, getTypedClient } from '../util.ts'
 
 import { SystemRef } from '../../src/models/SystemID.ts'
 import { createSystem, createSystemWithToken } from '../queries.ts'
+import { GuildSnowflake } from '../../src/models/DiscordSnowflake.ts'
 
 beforeEach(async () => {
   const db = await getDatabase()
@@ -74,7 +75,12 @@ describe('PluralKit', () => {
 
   test('getOwnSystemAutoproxySettings', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'test system')
+    const settings = await client.getOwnSystemAutoproxySettings(GuildSnowflake.parse('1'))
+
+    expect(settings.autoproxyMode).toBe('off')
   })
 
   test('getOwnSystemGuildSettings', async () => {
