@@ -64,7 +64,12 @@ describe('PluralKit', () => {
 
   test('getOwnSystemSettings', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'test system')
+    const settings = await client.getSystemSettings(SystemRef.parse('exmpl'))
+
+    expect(settings.hidListPadding).toBe('off')
   })
 
   test('getOwnSystemAutoproxySettings', async () => {
