@@ -85,7 +85,12 @@ describe('PluralKit', () => {
 
   test('getOwnSystemGuildSettings', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'test system')
+    const settings = await client.getOwnSystemGuildSettings(GuildSnowflake.parse('1'))
+
+    expect(settings.proxyingEnabled).toBe(true)
   })
 
   test('updateSystem', async () => {
