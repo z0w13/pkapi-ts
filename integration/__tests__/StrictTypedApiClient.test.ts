@@ -106,7 +106,13 @@ describe('PluralKit', () => {
 
   test('updateSystemSettings', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'old name')
+
+    expect(await client.updateSystemSettings(SystemRef.parse('@me'), {
+      caseSensitiveProxyTags: true
+    })).toMatchObject({ caseSensitiveProxyTags: true })
   })
 
   test('updateOwnSystemGuildSettings', async () => {
