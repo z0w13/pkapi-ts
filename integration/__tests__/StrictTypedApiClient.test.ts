@@ -117,7 +117,13 @@ describe('PluralKit', () => {
 
   test('updateOwnSystemGuildSettings', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'old name')
+
+    expect(await client.updateOwnSystemGuildSettings(GuildSnowflake.parse('1'), {
+      tag: 'newtag',
+    })).toMatchObject({ tag: 'newtag' })
   })
 
   test('updateOwnSystemAutoproxySettings', async () => {
