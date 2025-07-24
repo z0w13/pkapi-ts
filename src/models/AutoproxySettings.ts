@@ -13,7 +13,7 @@ const AutoproxySettings = z
     guildId: z.optional(GuildSnowflake),
     channelId: z.optional(ChannelSnowflake),
     autoproxyMode: AutoproxyMode,
-    autoproxyMember: z.optional(MemberID),
+    autoproxyMember: z.nullable(MemberID),
     lastLatchTimestamp: z.nullable(z.date())
   })
   .refine((v) => v.autoproxyMode === 'front' && v.autoproxyMember, {
