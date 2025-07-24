@@ -38,7 +38,7 @@ describe('PluralKit', () => {
     const db = await getDatabase()
     await createSystemWithToken(db, 'tstsys', 'test system')
 
-    const client = getTypedClient()
+    const client = getTypedClient(true)
     const system = await client.getSystem(SystemRef.parse('@me'))
     expect(system.id).toBe('tstsys')
   })
@@ -76,7 +76,7 @@ describe('PluralKit', () => {
     const db = await getDatabase()
     await createSystemWithToken(db, 'exmpl', 'old name')
 
-    const client = getTypedClient()
+    const client = getTypedClient(true)
     const system = await client.updateSystem(SystemRef.parse('exmpl'), {
       name: 'new name',
     })
