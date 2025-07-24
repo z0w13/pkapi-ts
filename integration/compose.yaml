@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/pluralkit/pluralkit:6c0c7a5c9918c106bef1ccc09b4ee434ca830c1b
+    image: ghcr.io/pluralkit/pluralkit:${DOTNET_IMAGE_TAG}
     command: [ "bin/PluralKit.API.dll" ]
     environment:
       PluralKit__Database: "Host=postgres;Port=5432;Username=pluralkit;Database=pluralkit;Password=pluralkit"
@@ -16,7 +16,7 @@ services:
       redis:
         condition: service_healthy
   api-rust:
-    image: ghcr.io/pluralkit/api:6c0c7a5c9918c106bef1ccc09b4ee434ca830c1b
+    image: ghcr.io/pluralkit/api:${RUST_IMAGE_TAG}
     # so signals actually stop the container
     init: true
     environment:
