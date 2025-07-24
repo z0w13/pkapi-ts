@@ -3,6 +3,9 @@ set -euo pipefail
 
 readonly SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+export DOTNET_IMAGE_TAG="51df2bc9dd9208d09833b239f2ccb779cf4ae8a4"
+export RUST_IMAGE_TAG="47c59902181b6f81b046f9c471780efd85fd708f"
+
 cd "$SCRIPT_DIR"
 docker compose up -d --wait
 
