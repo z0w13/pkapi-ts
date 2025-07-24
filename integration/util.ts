@@ -10,9 +10,9 @@ export async function getDatabase () {
   return pg
 }
 
-export function getTypedClient () {
+export function getTypedClient (authenticated = false) {
   const token = process.env.PLURALKIT_TOKEN
   const baseURL = process.env.PLURALKIT_BASEURL
 
-  return new StrictTypedClient(token, baseURL)
+  return new StrictTypedClient(authenticated ? token : null, baseURL)
 }
