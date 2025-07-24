@@ -9,6 +9,7 @@ export async function getDatabase () {
   await pg.connect()
   return pg
 }
+
 export function getTypedClient () {
   const token = process.env.PLURALKIT_TOKEN
   const baseURL = process.env.PLURALKIT_BASEURL
