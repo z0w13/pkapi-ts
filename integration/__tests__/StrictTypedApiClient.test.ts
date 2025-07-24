@@ -52,6 +52,26 @@ describe('PluralKit', () => {
     expect(system.id).toBe('exmpl')
   })
 
+  test('getSystemSettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getOwnSystemSettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getOwnSystemAutoproxySettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getOwnSystemGuildSettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
   test('updateSystem', async () => {
     const db = await getDatabase()
     await createSystemWithToken(db, 'exmpl', 'old name')
@@ -61,5 +81,160 @@ describe('PluralKit', () => {
       name: 'new name',
     })
     expect(system.name).toBe('new name')
+  })
+
+  test('updateSystemSettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('updateOwnSystemGuildSettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('updateOwnSystemAutoproxySettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getMember', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getSystemMembers', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getMemberGroups', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getMemberGuildSettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('createMember', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('updateMember', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('deleteMember', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('addMemberToGroups', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('removeMemberFromGroups', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('overwriteMemberGroups', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('updateMemberGuildSettings', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getGroup', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getGroups', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getGroupMembers', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('createGroup', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('updateGroup', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('deleteGroup', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('addMembersToGroup', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('removeMembersFromGroup', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('overwriteGroupMembers', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getSwitches', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getSwitch', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getFronters', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('createSwitch', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('updateSwitch', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('updateSwitchMembers', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('deleteSwitch', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+  })
+
+  test('getProxiedMessageInformation', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
   })
 })
