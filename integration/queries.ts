@@ -36,3 +36,7 @@ export async function createSystemGuilds (db: Client, systemId: number, guildId:
 export async function deleteSystem (db: Client, hid: string) {
   await db.query({ text: 'DELETE FROM systems WHERE hid = $1', values: [hid] })
 }
+
+export async function createMember (db: Client, system: number, hid: string, name: string) {
+  return parseInt((await db.query({ text: 'INSERT INTO members (hid, system, name) VALUES ($1, $2, $3) RETURNING id', values: [hid, system, name] })).rows[0]['id'])
+}

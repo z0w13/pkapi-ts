@@ -3,8 +3,9 @@ import { expect, test, describe, beforeEach } from 'vitest'
 import { getDatabase, getTypedClient } from '../util.ts'
 
 import { SystemRef } from '../../src/models/SystemID.ts'
-import { createSystem, createSystemWithToken } from '../queries.ts'
+import { createMember, createSystem, createSystemWithToken } from '../queries.ts'
 import { GuildSnowflake } from '../../src/models/DiscordSnowflake.ts'
+import { MemberRef } from '../../src/models/MemberID.ts'
 
 beforeEach(async () => {
   const db = await getDatabase()
@@ -140,6 +141,11 @@ describe('PluralKit', () => {
   test('getMember', async () => {
     const db = await getDatabase()
     const client = getTypedClient()
+
+    const systemId = await createSystem(db, 'exmpl', 'name')
+    await createMember(db, systemId, 'member', 'system member')
+
+    expect(await client.getMember(MemberRef.parse('member'))).toMatchObject({ name: 'system member' })
   })
 
   test('getSystemMembers', async () => {
