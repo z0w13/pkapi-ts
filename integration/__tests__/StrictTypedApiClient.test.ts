@@ -128,7 +128,13 @@ describe('PluralKit', () => {
 
   test('updateOwnSystemAutoproxySettings', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'name')
+
+    expect(await client.updateOwnSystemAutoproxySettings(GuildSnowflake.parse('1'), {
+      autoproxyMode: 'latch',
+    })).toMatchObject({ autoproxyMode: 'latch' })
   })
 
   test('getMember', async () => {
