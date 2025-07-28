@@ -214,7 +214,12 @@ describe('PluralKit', () => {
 
   test('deleteMember', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    await createMember(db, systemId, 'member', 'name')
+
+    await client.deleteMember(MemberRef.parse('member'))
   })
 
   test('addMemberToGroups', async () => {
