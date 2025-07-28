@@ -461,7 +461,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `/v2/groups/${groupRef}/add`,
+      `/v2/groups/${groupRef}/members/add`,
       {},
       'POST',
       memberRefs,
@@ -483,7 +483,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `/v2/groups/${groupRef}/remove`,
+      `/v2/groups/${groupRef}/members/remove`,
       {},
       'POST',
       memberRefs,
@@ -505,7 +505,7 @@ export default class StrictTypedClient {
     this.checkToken()
 
     const resp = await this.request(
-      `/v2/groups/${groupRef}/overwrite`,
+      `/v2/groups/${groupRef}/members/overwrite`,
       {},
       'POST',
       memberRefs,
