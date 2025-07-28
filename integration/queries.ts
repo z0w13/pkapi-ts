@@ -52,3 +52,11 @@ export async function addMemberToGroup (db: Client, member: number, group: numbe
 export async function createMemberGuildSettings (db: Client, member: number, guild: number, displayName: string) {
   await db.query({ text: 'INSERT INTO member_guild (member, guild, display_name) VALUES ($1, $2, $3)', values: [member, guild, displayName] })
 }
+
+export async function createSwitch (db: Client, system: number, members: Array<number>) {
+  const switchId = parseInt((await db.query({ text: 'INSERT INTO switches (system) VALUES ($1) RETURNING id', values: [system] })).rows[0]['id'])
+  for (const memberId of members) {
+    await db.query({ text: 'INSERT INTO switch_members (switch, member) VALUES ($1, $2)', values: [switchId, memberId] })
+  }
+  return switchId
+}
