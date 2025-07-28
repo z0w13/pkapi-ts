@@ -48,3 +48,7 @@ export async function createGroup (db: Client, system: number, hid: string, name
 export async function addMemberToGroup (db: Client, member: number, group: number) {
   await db.query({ text: 'INSERT INTO group_members (group_id, member_id) VALUES ($1, $2)', values: [group, member] })
 }
+
+export async function createMemberGuildSettings (db: Client, member: number, guild: number, displayName: string) {
+  await db.query({ text: 'INSERT INTO member_guild (member, guild, display_name) VALUES ($1, $2, $3)', values: [member, guild, displayName] })
+}
