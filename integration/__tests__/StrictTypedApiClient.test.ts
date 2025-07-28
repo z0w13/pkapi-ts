@@ -6,6 +6,7 @@ import { SystemRef } from '../../src/models/SystemID.ts'
 import { addMemberToGroup, createGroup, createMember, createMemberGuildSettings, createSystem, createSystemWithToken } from '../queries.ts'
 import { GuildSnowflake } from '../../src/models/DiscordSnowflake.ts'
 import { MemberRef } from '../../src/models/MemberID.ts'
+import { GroupRef } from '../../src/models/GroupID.ts'
 
 beforeEach(async () => {
   const db = await getDatabase()
@@ -224,7 +225,17 @@ describe('PluralKit', () => {
 
   test('addMemberToGroups', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    await createMember(db, systemId, 'member', 'name')
+    await createGroup(db, systemId, 'groupa', 'group A')
+    await createGroup(db, systemId, 'groupb', 'group B')
+
+    await client.addMemberToGroups(MemberRef.parse('member'), [
+      GroupRef.parse('groupa'),
+      GroupRef.parse('groupb')
+    ])
   })
 
   test('removeMemberFromGroups', async () => {
