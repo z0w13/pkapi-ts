@@ -40,3 +40,11 @@ export async function deleteSystem (db: Client, hid: string) {
 export async function createMember (db: Client, system: number, hid: string, name: string) {
   return parseInt((await db.query({ text: 'INSERT INTO members (hid, system, name) VALUES ($1, $2, $3) RETURNING id', values: [hid, system, name] })).rows[0]['id'])
 }
+
+export async function createGroup (db: Client, system: number, hid: string, name: string) {
+  return parseInt((await db.query({ text: 'INSERT INTO groups (hid, system, name) VALUES ($1, $2, $3) RETURNING id', values: [hid, system, name] })).rows[0]['id'])
+}
+
+export async function addMemberToGroup (db: Client, member: number, group: number) {
+  await db.query({ text: 'INSERT INTO group_members (group_id, member_id) VALUES ($1, $2)', values: [group, member] })
+}
