@@ -431,7 +431,16 @@ describe('PluralKit', () => {
 
   test('createSwitch', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    await createMember(db, systemId, 'membra', 'member A')
+
+    expect(await client.createSwitch(SystemRef.parse('exmpl'), [
+      MemberRef.parse('membra')
+    ])).toMatchObject({
+      members: [{ id: 'membra' }]
+    })
   })
 
   test('updateSwitch', async () => {
