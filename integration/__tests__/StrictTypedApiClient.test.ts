@@ -3,8 +3,8 @@ import { expect, test, describe, beforeEach } from 'vitest'
 import { getDatabase, getTypedClient } from '../util.ts'
 
 import { SystemRef } from '../../src/models/SystemID.ts'
-import { addMemberToGroup, createGroup, createMember, createMemberGuildSettings, createSwitch, createSystem, createSystemWithToken, getSwitchUuid } from '../queries.ts'
-import { GuildSnowflake } from '../../src/models/DiscordSnowflake.ts'
+import { addMemberToGroup, createGroup, createMember, createMemberGuildSettings, createMessageInformation, createSwitch, createSystem, createSystemWithToken, getSwitchUuid } from '../queries.ts'
+import { GuildSnowflake, MessageSnowflake } from '../../src/models/DiscordSnowflake.ts'
 import { MemberRef } from '../../src/models/MemberID.ts'
 import { GroupRef } from '../../src/models/GroupID.ts'
 import { SwitchID } from '../../src/models/SwitchID.ts'
@@ -488,6 +488,15 @@ describe('PluralKit', () => {
 
   test('getProxiedMessageInformation', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    const memberId = await createMember(db, systemId, 'member', 'member name')
+    await createMessageInformation(db, '5', '4', '6', '7', memberId)
+
+    expect(await client.getProxiedMessageInformation(MessageSnowflake.parse('5'))).toMatchObject({
+      channel: '6',
+      member: { id: 'member' },
+    })
   })
 })
