@@ -200,7 +200,16 @@ describe('PluralKit', () => {
 
   test('updateMember', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    await createMember(db, systemId, 'member', 'old name')
+
+    expect(await client.updateMember(MemberRef.parse('member'), {
+      name: 'new name',
+    })).toMatchObject({
+      name: 'new name'
+    })
   })
 
   test('deleteMember', async () => {
