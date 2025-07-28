@@ -188,7 +188,14 @@ describe('PluralKit', () => {
 
   test('createMember', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'name')
+    expect(await client.createMember({
+      name: 'system member',
+    })).toMatchObject({
+      name: 'system member'
+    })
   })
 
   test('updateMember', async () => {
