@@ -476,7 +476,14 @@ describe('PluralKit', () => {
 
   test('deleteSwitch', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    await createMember(db, systemId, 'membra', 'member A')
+    const switchId = await createSwitch(db, systemId, [])
+    const switchUuid = await getSwitchUuid(db, switchId)
+
+    await client.deleteSwitch(SystemRef.parse('exmpl'), SwitchID.parse(switchUuid))
   })
 
   test('getProxiedMessageInformation', async () => {
