@@ -295,6 +295,12 @@ describe('PluralKit', () => {
   test('getGroups', async () => {
     const db = await getDatabase()
     const client = getTypedClient()
+
+    const systemId = await createSystem(db, 'exmpl', 'name')
+    await createGroup(db, systemId, 'groupa', 'group A')
+    await createGroup(db, systemId, 'groupb', 'group B')
+
+    expect(await client.getGroups(SystemRef.parse('exmpl'))).toHaveLength(2)
   })
 
   test('getGroupMembers', async () => {
