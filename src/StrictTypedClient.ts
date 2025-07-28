@@ -178,8 +178,8 @@ export default class StrictTypedClient {
     this.checkToken()
 
     return this.requestParsed(
-      `/v2/systems/@me/guilds/${guildId}`,
-      {},
+      '/v2/systems/@me/autoproxy',
+      { guild_id: guildId },
       'PATCH',
       AutoproxySettingsFromApi,
       AutoproxySettings.partial().parse(data),
