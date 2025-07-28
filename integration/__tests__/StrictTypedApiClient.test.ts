@@ -269,7 +269,17 @@ describe('PluralKit', () => {
 
   test('updateMemberGuildSettings', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    const memberId = await createMember(db, systemId, 'member', 'system member')
+    await createMemberGuildSettings(db, memberId, 1, 'old name')
+
+    expect(await client.updateMemberGuildSettings(MemberRef.parse('member'), GuildSnowflake.parse('1'), {
+      displayName: 'new name',
+    })).toMatchObject({
+      displayName: 'new name'
+    })
   })
 
   test('getGroup', async () => {
