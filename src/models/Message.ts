@@ -6,8 +6,8 @@ import {
   UserSnowflake,
   MessageSnowflake
 } from './DiscordSnowflake.ts'
-import Member from './Member.ts'
-import System from './System.ts'
+import Member, { MemberFromApi } from './Member.ts'
+import System, { SystemFromApi } from './System.ts'
 
 const Message = z.object({
   timestamp: z.date(),
@@ -24,5 +24,7 @@ type Message = z.infer<typeof Message>
 export default Message
 
 export const MessageFromApi = Message.extend({
-  timestamp: z.iso.datetime().transform((v) => new Date(v))
+  timestamp: z.iso.datetime().transform((v) => new Date(v)),
+  system: z.optional(SystemFromApi),
+  member: z.optional(MemberFromApi),
 })
