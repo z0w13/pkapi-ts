@@ -419,6 +419,14 @@ describe('PluralKit', () => {
   test('getFronters', async () => {
     const db = await getDatabase()
     const client = getTypedClient()
+
+    const systemId = await createSystem(db, 'exmpl', 'name')
+    const memberId = await createMember(db, systemId, 'membra', 'member A')
+    await createSwitch(db, systemId, [memberId])
+
+    expect(await client.getFronters(SystemRef.parse('exmpl'))).toMatchObject({
+      members: [{ id: 'membra' }]
+    })
   })
 
   test('createSwitch', async () => {
