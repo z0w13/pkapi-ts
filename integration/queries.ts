@@ -64,3 +64,7 @@ export async function createSwitch (db: Client, system: number, members: Array<n
 export async function getSwitchUuid (db: Client, switchId: number) {
   return (await db.query({ text: 'SELECT uuid FROM switches WHERE id = $1', values: [switchId] })).rows[0]['uuid']
 }
+
+export async function createMessageInformation (db: Client, messageId: string, originalMessageId: string, channelId: string, senderId: string, memberId: number) {
+  await db.query({ text: 'INSERT INTO messages (mid, original_mid, channel, sender, member) VALUES ($1, $2, $3, $4, $5)', values: [messageId, originalMessageId, channelId, senderId, memberId] })
+}
