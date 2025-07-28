@@ -445,7 +445,17 @@ describe('PluralKit', () => {
 
   test('updateSwitch', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    const memberId = await createMember(db, systemId, 'membra', 'member A')
+    const switchId = await createSwitch(db, systemId, [memberId])
+    const switchUuid = await getSwitchUuid(db, switchId)
+    const date = new Date(500)
+
+    expect(await client.updateSwitch(SystemRef.parse('exmpl'), SwitchID.parse(switchUuid), date)).toMatchObject({
+      timestamp: date
+    })
   })
 
   test('updateSwitchMembers', async () => {
