@@ -3,10 +3,11 @@ import { expect, test, describe, beforeEach } from 'vitest'
 import { getDatabase, getTypedClient } from '../util.ts'
 
 import { SystemRef } from '../../src/models/SystemID.ts'
-import { addMemberToGroup, createGroup, createMember, createMemberGuildSettings, createSwitch, createSystem, createSystemWithToken } from '../queries.ts'
+import { addMemberToGroup, createGroup, createMember, createMemberGuildSettings, createSwitch, createSystem, createSystemWithToken, getSwitchUuid } from '../queries.ts'
 import { GuildSnowflake } from '../../src/models/DiscordSnowflake.ts'
 import { MemberRef } from '../../src/models/MemberID.ts'
 import { GroupRef } from '../../src/models/GroupID.ts'
+import { SwitchID } from '../../src/models/SwitchID.ts'
 
 beforeEach(async () => {
   const db = await getDatabase()
@@ -404,6 +405,15 @@ describe('PluralKit', () => {
   test('getSwitch', async () => {
     const db = await getDatabase()
     const client = getTypedClient()
+
+    const systemId = await createSystem(db, 'exmpl', 'name')
+    const memberId = await createMember(db, systemId, 'membra', 'member A')
+    const switchId = await createSwitch(db, systemId, [memberId])
+    const switchUuid = await getSwitchUuid(db, switchId)
+
+    expect(await client.getSwitch(SystemRef.parse('exmpl'), SwitchID.parse(switchUuid))).toMatchObject({
+      members: [{ id: 'membra' }]
+    })
   })
 
   test('getFronters', async () => {

@@ -60,3 +60,7 @@ export async function createSwitch (db: Client, system: number, members: Array<n
   }
   return switchId
 }
+
+export async function getSwitchUuid (db: Client, switchId: number) {
+  return (await db.query({ text: 'SELECT uuid FROM switches WHERE id = $1', values: [switchId] })).rows[0]['uuid']
+}
