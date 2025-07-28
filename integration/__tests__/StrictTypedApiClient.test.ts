@@ -319,7 +319,13 @@ describe('PluralKit', () => {
 
   test('createGroup', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    await createSystemWithToken(db, 'exmpl', 'name')
+
+    expect(await client.createGroup({ name: 'new group' })).toMatchObject({
+      name: 'new group',
+    })
   })
 
   test('updateGroup', async () => {
