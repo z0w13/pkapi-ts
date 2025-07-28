@@ -254,7 +254,17 @@ describe('PluralKit', () => {
 
   test('overwriteMemberGroups', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    const memberId = await createMember(db, systemId, 'member', 'name')
+    const groupId = await createGroup(db, systemId, 'groupa', 'group A')
+    await createGroup(db, systemId, 'groupb', 'group B')
+    await addMemberToGroup(db, memberId, groupId)
+
+    await client.overwriteMemberGroups(MemberRef.parse('member'), [
+      GroupRef.parse('groupb'),
+    ])
   })
 
   test('updateMemberGuildSettings', async () => {
