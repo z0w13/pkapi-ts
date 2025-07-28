@@ -15,7 +15,7 @@ const Message = z.object({
   original: MessageSnowflake,
   sender: UserSnowflake,
   channel: ChannelSnowflake,
-  guild: GuildSnowflake,
+  guild: z.nullable(GuildSnowflake),
   system: z.optional(System),
   member: z.optional(Member)
 })
