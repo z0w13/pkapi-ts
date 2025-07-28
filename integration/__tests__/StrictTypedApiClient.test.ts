@@ -352,7 +352,15 @@ describe('PluralKit', () => {
 
   test('addMembersToGroup', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    await createGroup(db, systemId, 'groupa', 'group A')
+    await createMember(db, systemId, 'membra', 'member A')
+
+    await client.addMembersToGroup(GroupRef.parse('groupa'), [
+      MemberRef.parse('membra')
+    ])
   })
 
   test('removeMembersFromGroup', async () => {
