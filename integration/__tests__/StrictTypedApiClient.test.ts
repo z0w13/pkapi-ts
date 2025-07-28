@@ -3,7 +3,7 @@ import { expect, test, describe, beforeEach } from 'vitest'
 import { getDatabase, getTypedClient } from '../util.ts'
 
 import { SystemRef } from '../../src/models/SystemID.ts'
-import { createMember, createSystem, createSystemWithToken } from '../queries.ts'
+import { addMemberToGroup, createGroup, createMember, createSystem, createSystemWithToken } from '../queries.ts'
 import { GuildSnowflake } from '../../src/models/DiscordSnowflake.ts'
 import { MemberRef } from '../../src/models/MemberID.ts'
 
@@ -162,6 +162,15 @@ describe('PluralKit', () => {
   test('getMemberGroups', async () => {
     const db = await getDatabase()
     const client = getTypedClient()
+
+    const systemId = await createSystem(db, 'exmpl', 'name')
+    const memberId = await createMember(db, systemId, 'member', 'system member')
+    const group1Id = await createGroup(db, systemId, 'groupa', 'group A')
+    const group2Id = await createGroup(db, systemId, 'groupb', 'group B')
+    await addMemberToGroup(db, memberId, group1Id)
+    await addMemberToGroup(db, memberId, group2Id)
+
+    expect(await client.getMemberGroups(MemberRef.parse('member'))).toHaveLength(2)
   })
 
   test('getMemberGuildSettings', async () => {
