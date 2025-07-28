@@ -396,7 +396,7 @@ export default class StrictTypedClient {
       `/v2/groups/${groupRef}/members`,
       {},
       'GET',
-      z.array(Member),
+      z.array(MemberFromApi),
       undefined,
       options
     )
