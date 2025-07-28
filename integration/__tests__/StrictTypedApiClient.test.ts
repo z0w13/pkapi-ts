@@ -330,7 +330,14 @@ describe('PluralKit', () => {
 
   test('updateGroup', async () => {
     const db = await getDatabase()
-    const client = getTypedClient()
+    const client = getTypedClient(true)
+
+    const systemId = await createSystemWithToken(db, 'exmpl', 'name')
+    await createGroup(db, systemId, 'groupa', 'old name')
+
+    expect(await client.updateGroup(GroupRef.parse('groupa'), { name: 'new name' })).toMatchObject({
+      name: 'new name',
+    })
   })
 
   test('deleteGroup', async () => {
