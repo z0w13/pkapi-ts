@@ -1,6 +1,6 @@
 {
   "name": "pkapi-ts",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A typescript library for the PluralKit API",
   "types": "dist/main.d.ts",
   "type": "module",
