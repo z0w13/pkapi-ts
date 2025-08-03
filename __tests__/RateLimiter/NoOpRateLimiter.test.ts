@@ -17,12 +17,9 @@ describe('NoOpRateLimiter', function () {
       vi.useFakeTimers()
       const limiter = new NoOpRateLimiter()
 
-      // set done to true after waiting for the ratelimiter
-      let done = false
-      limiter.handleResponse(new Response()).then(() => (done = true))
-
-      await vi.advanceTimersByTimeAsync(0)
-      expect(done).toBe(true)
+      await expect(
+        limiter.handleResponse(new Response())
+      ).toResolveInstantly()
     })
   })
   describe('take', function () {
@@ -30,12 +27,7 @@ describe('NoOpRateLimiter', function () {
       vi.useFakeTimers()
       const limiter = new NoOpRateLimiter()
 
-      // set done to true after waiting for the ratelimiter
-      let done = false
-      limiter.wait().then(() => (done = true))
-
-      await vi.advanceTimersByTimeAsync(0)
-      expect(done).toBe(true)
+      await expect(limiter.wait()).toResolveInstantly()
     })
   })
 })

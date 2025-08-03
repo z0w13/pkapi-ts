@@ -1,6 +1,7 @@
 import 'vitest'
 
 interface CustomMatchers<R = unknown> {
+  toResolveInstantly(): Promise<R>;
   toResolveAfterAtLeast(value: number): Promise<R>;
 }
 
