@@ -35,11 +35,15 @@ export interface Options {
 }
 
 export default class StrictTypedClient {
+  protected getRequestPromiseMap: Map<string, Promise<Response>>
   constructor (
     protected token: string | null = null,
+    protected deduplicateGetRequests = false,
     protected baseURL: string | null = 'https://api.pluralkit.me',
     protected rateLimiter: BaseRateLimiter = new DefaultRateLimiter()
-  ) {}
+  ) {
+    this.getRequestPromiseMap = new Map()
+  }
 
   public async setToken (token: string | null = null) {
     this.token = token
@@ -708,29 +712,16 @@ export default class StrictTypedClient {
     )
   }
 
-  async request<T>(
+  protected getPromiseKey (path: string, parameters: Record<string, string>, options: Options) {
+    return JSON.stringify({ path, parameters, token: options.token ?? this.token })
+  }
+
+  protected async innerRequest (
     path: string,
-    parameters: Record<string, string> = {},
-    method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
-    data: T | undefined,
-    bucket: BucketNames,
-    options: Options
-  ): Promise<Response> {
-    console.log({ path, parameters, method, bucket })
-    const headers = new Headers(data ? { 'Content-Type': 'application/json' } : {})
-    if (this.token) {
-      headers.append('Authorization', this.token ?? options.token)
-    }
-
-    const params = new URLSearchParams(parameters)
-    const requestOptions: RequestInit = {
-      method,
-      headers
-    }
-    if (data) {
-      requestOptions.body = JSON.stringify(objectToSnake(data))
-    }
-
+    params: URLSearchParams,
+    requestOptions: RequestInit,
+    bucket: BucketNames
+  ) {
     while (true) {
       // wait for ratelimits
       await this.rateLimiter.wait(bucket)
@@ -760,6 +751,48 @@ export default class StrictTypedClient {
       await this.rateLimiter.handleResponse(bucket, resp)
       return resp
     }
+  }
+
+  async request<T>(
+    path: string,
+    parameters: Record<string, string> = {},
+    method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+    data: T | undefined,
+    bucket: BucketNames,
+    options: Options
+  ): Promise<Response> {
+    console.log({ path, parameters, method, bucket })
+    const headers = new Headers(data ? { 'Content-Type': 'application/json' } : {})
+    if (this.token) {
+      headers.append('Authorization', this.token ?? options.token)
+    }
+
+    const getRequestPromiseKey = this.getPromiseKey(path, parameters, options)
+    if (
+      this.deduplicateGetRequests &&
+      method === 'GET' &&
+      this.getRequestPromiseMap.has(getRequestPromiseKey)
+    ) {
+      return this.getRequestPromiseMap.get(getRequestPromiseKey)!
+    }
+
+    const params = new URLSearchParams(parameters)
+    const requestOptions: RequestInit = {
+      method,
+      headers
+    }
+    if (data) {
+      requestOptions.body = JSON.stringify(objectToSnake(data))
+    }
+
+    const prom = this.innerRequest(path, params, requestOptions, bucket)
+    if (this.deduplicateGetRequests && method === 'GET') {
+      this.getRequestPromiseMap.set(getRequestPromiseKey, prom)
+      prom.finally(() => this.getRequestPromiseMap.delete(getRequestPromiseKey))
+    }
+
+    // TODO: More elegant solution for body re-use than just cloning the response
+    return prom.then(resp => resp.clone())
   }
 
   async requestParsed<O, T>(
