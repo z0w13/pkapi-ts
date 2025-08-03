@@ -19,7 +19,20 @@ interface RateLimiterOptions {
   decreaseThreshold?: number;
 }
 
-export default class DefaultRateLimiter extends BaseRateLimiter {
+const DEFAULT_OPTIONS: Required<RateLimiterOptions> = {
+  debug: false,
+  errorWindowBase: 5,
+  initialWaitTime: 1000,
+  minWait: 1000,
+  maxWait: 3000,
+  increment: 500,
+  increaseThreshold: 3,
+  decreaseThreshold: 0,
+}
+
+export class Bucket {
+  protected name: string
+
   // Array of timestamps when we triggered a 429
   protected errorTimestamps: Array<number>
   // Timestamp when our rate limit is reset (including our own waitTime)
@@ -30,22 +43,13 @@ export default class DefaultRateLimiter extends BaseRateLimiter {
   protected options: Required<RateLimiterOptions>
 
   constructor (
-    options?: RateLimiterOptions
-    // Base window to use for increasing/decreasing the wait time
+    name: string,
+    options: RateLimiterOptions = {}
   ) {
-    super()
-
+    this.name = name
     this.options = {
-      debug: false,
-      errorWindowBase: 5,
-      initialWaitTime: 1000,
-      minWait: 1000,
-      maxWait: 3000,
-      increment: 500,
-      increaseThreshold: 3,
-      decreaseThreshold: 0,
-
-      ...options,
+      ...DEFAULT_OPTIONS,
+      ...options
     }
     this.waitTime = this.options.initialWaitTime
     this.errorTimestamps = []
@@ -127,7 +131,7 @@ export default class DefaultRateLimiter extends BaseRateLimiter {
 
   private debugLog (data: unknown) {
     if (this.options.debug) {
-      console.debug(data)
+      console.debug({ bucket: this.name }, data)
     }
   }
 
@@ -185,5 +189,41 @@ export default class DefaultRateLimiter extends BaseRateLimiter {
     }
 
     return new Promise<void>((resolve) => setTimeout(resolve, waitTime))
+  }
+}
+
+export default class DefaultRateLimiter extends BaseRateLimiter {
+  protected options: Required<RateLimiterOptions>
+  protected buckets: Map<string, Bucket>
+
+  constructor (options: RateLimiterOptions = {}) {
+    super()
+
+    this.options = {
+      ...DEFAULT_OPTIONS,
+      ...options
+    }
+
+    this.buckets = new Map<string, Bucket>()
+  }
+
+  protected getBucket (name: string): Bucket {
+    if (!this.buckets.has(name)) {
+      this.buckets.set(name, new Bucket(name, this.options))
+    }
+
+    return this.buckets.get(name)!
+  }
+
+  public async handleError (bucket: string, error: unknown): Promise<boolean> {
+    return this.getBucket(bucket).handleError(error)
+  }
+
+  public async handleResponse (bucket: string, res: Response) {
+    return this.getBucket(bucket).handleResponse(res)
+  }
+
+  public async wait (bucket: string) {
+    return this.getBucket(bucket).wait()
   }
 }

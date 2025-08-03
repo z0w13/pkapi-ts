@@ -27,6 +27,9 @@ import {
 import Message, { MessageFromApi } from './models/Message.ts'
 import { SwitchID } from './models/SwitchID.ts'
 
+// From https://pluralkit.me/api/#rate-limiting
+type BucketNames = 'generic_get' | 'generic_update' | 'message'
+
 export interface Options {
   token?: string | null
 }
@@ -55,6 +58,7 @@ export default class StrictTypedClient {
       'GET',
       SystemFromApi,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -69,6 +73,7 @@ export default class StrictTypedClient {
       'GET',
       PublicSystemSettings,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -82,6 +87,7 @@ export default class StrictTypedClient {
       'GET',
       SystemSettings,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -103,6 +109,7 @@ export default class StrictTypedClient {
       'GET',
       AutoproxySettingsFromApi,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -119,6 +126,7 @@ export default class StrictTypedClient {
       'GET',
       SystemGuildSettings,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -136,6 +144,7 @@ export default class StrictTypedClient {
       'PATCH',
       SystemFromApi,
       System.partial().parse(data),
+      'generic_update',
       options
     )
   }
@@ -153,6 +162,7 @@ export default class StrictTypedClient {
       'PATCH',
       SystemSettings,
       SystemSettings.partial().parse(data),
+      'generic_update',
       options
     )
   }
@@ -170,6 +180,7 @@ export default class StrictTypedClient {
       'PATCH',
       SystemGuildSettings,
       SystemGuildSettings.partial().parse(data),
+      'generic_update',
       options
     )
   }
@@ -190,6 +201,7 @@ export default class StrictTypedClient {
       'PATCH',
       AutoproxySettingsFromApi,
       AutoproxySettings.partial().parse(data),
+      'generic_update',
       options
     )
   }
@@ -201,6 +213,7 @@ export default class StrictTypedClient {
       'GET',
       MemberFromApi,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -212,6 +225,7 @@ export default class StrictTypedClient {
       'GET',
       z.array(MemberFromApi),
       undefined,
+      'generic_get',
       options
     )
   }
@@ -223,6 +237,7 @@ export default class StrictTypedClient {
       'GET',
       z.array(Group),
       undefined,
+      'generic_get',
       options
     )
   }
@@ -238,6 +253,7 @@ export default class StrictTypedClient {
       'GET',
       MemberGuildSettings,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -254,6 +270,7 @@ export default class StrictTypedClient {
       'POST',
       MemberFromApi,
       MemberToApi.partial().required({ name: true }).parse(member),
+      'generic_update',
       options
     )
   }
@@ -271,6 +288,7 @@ export default class StrictTypedClient {
       'PATCH',
       MemberFromApi,
       MemberToApi.partial().required({ name: true }).parse(member),
+      'generic_update',
       options
     )
   }
@@ -283,6 +301,7 @@ export default class StrictTypedClient {
       {},
       'DELETE',
       undefined,
+      'generic_update',
       options
     )
 
@@ -305,6 +324,7 @@ export default class StrictTypedClient {
       {},
       'POST',
       groupRefs,
+      'generic_update',
       options
     )
     if (resp.status !== 204) {
@@ -326,6 +346,7 @@ export default class StrictTypedClient {
       {},
       'POST',
       groupRefs,
+      'generic_update',
       options
     )
 
@@ -348,6 +369,7 @@ export default class StrictTypedClient {
       {},
       'POST',
       groupRefs,
+      'generic_update',
       options
     )
 
@@ -372,6 +394,7 @@ export default class StrictTypedClient {
       'PATCH',
       MemberGuildSettings,
       MemberGuildSettings.partial().parse(settings),
+      'generic_update',
       options
     )
   }
@@ -383,6 +406,7 @@ export default class StrictTypedClient {
       'GET',
       Group,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -394,6 +418,7 @@ export default class StrictTypedClient {
      'GET',
      z.array(Group),
      undefined,
+     'generic_get',
      options
     )
   }
@@ -405,6 +430,7 @@ export default class StrictTypedClient {
       'GET',
       z.array(MemberFromApi),
       undefined,
+      'generic_get',
       options
     )
   }
@@ -421,6 +447,7 @@ export default class StrictTypedClient {
       'POST',
       Group,
       Group.partial().required({ name: true }).parse(group),
+      'generic_update',
       options
     )
   }
@@ -438,6 +465,7 @@ export default class StrictTypedClient {
       'PATCH',
       Group,
       Group.partial().parse(data),
+      'generic_update',
       options
     )
   }
@@ -450,6 +478,7 @@ export default class StrictTypedClient {
       {},
       'DELETE',
       undefined,
+      'generic_update',
       options
     )
 
@@ -472,6 +501,7 @@ export default class StrictTypedClient {
       {},
       'POST',
       memberRefs,
+      'generic_update',
       options
     )
 
@@ -494,6 +524,7 @@ export default class StrictTypedClient {
       {},
       'POST',
       memberRefs,
+      'generic_update',
       options
     )
 
@@ -516,6 +547,7 @@ export default class StrictTypedClient {
       {},
       'POST',
       memberRefs,
+      'generic_update',
       options
     )
 
@@ -545,6 +577,7 @@ export default class StrictTypedClient {
       'GET',
       z.array(SwitchWithMemberIDsFromApi),
       undefined,
+      'generic_get',
       options
     )
   }
@@ -560,6 +593,7 @@ export default class StrictTypedClient {
       'GET',
       SwitchWithMembersFromApi,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -571,6 +605,7 @@ export default class StrictTypedClient {
       'GET',
       SwitchWithMembersFromApi,
       undefined,
+      'generic_get',
       options
     )
   }
@@ -596,6 +631,7 @@ export default class StrictTypedClient {
       'POST',
       SwitchWithMembersFromApi,
       data,
+      'generic_update',
       options
     )
   }
@@ -614,6 +650,7 @@ export default class StrictTypedClient {
       'PATCH',
       SwitchWithMembersFromApi,
       { timestamp: timestamp.toISOString() },
+      'generic_update',
       options
     )
   }
@@ -632,6 +669,7 @@ export default class StrictTypedClient {
       'PATCH',
       SwitchWithMembersFromApi,
       memberRefs,
+      'generic_update',
       options
     )
   }
@@ -644,6 +682,7 @@ export default class StrictTypedClient {
       {},
       'DELETE',
       undefined,
+      'generic_update',
       options
     )
 
@@ -664,6 +703,7 @@ export default class StrictTypedClient {
       'GET',
       MessageFromApi,
       undefined,
+      'message',
       options
     )
   }
@@ -673,9 +713,10 @@ export default class StrictTypedClient {
     parameters: Record<string, string> = {},
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     data: T | undefined,
+    bucket: BucketNames,
     options: Options
   ): Promise<Response> {
-    console.log({ path, parameters, method })
+    console.log({ path, parameters, method, bucket })
     const headers = new Headers(data ? { 'Content-Type': 'application/json' } : {})
     if (this.token) {
       headers.append('Authorization', this.token ?? options.token)
@@ -692,11 +733,11 @@ export default class StrictTypedClient {
 
     while (true) {
       // wait for ratelimits
-      await this.rateLimiter.wait()
+      await this.rateLimiter.wait(bucket)
 
       const resp = await fetch(this.baseURL + path + (params.size ? `?${params.toString()}` : ''), requestOptions)
       if (resp.status < 200 || resp.status > 299) {
-        if (await this.rateLimiter.handleError(resp)) {
+        if (await this.rateLimiter.handleError(bucket, resp)) {
           // retry if ratelimiter handled the error
           continue
         }
@@ -716,7 +757,7 @@ export default class StrictTypedClient {
         throw new HTTPError(resp.status, resp.statusText, body)
       }
 
-      await this.rateLimiter.handleResponse(resp)
+      await this.rateLimiter.handleResponse(bucket, resp)
       return resp
     }
   }
@@ -727,9 +768,10 @@ export default class StrictTypedClient {
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     schema: ZodType<O>,
     data: T | undefined,
+    bucket: BucketNames,
     options: Options
   ): Promise<O> {
-    const resp = await this.request(path, parameters, method, data, options)
+    const resp = await this.request(path, parameters, method, data, bucket, options)
     const json = await resp.json()
     if (typeof json !== 'object' || json === null) {
       throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
