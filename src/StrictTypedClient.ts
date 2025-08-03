@@ -3,6 +3,9 @@ import { objectToCamel, objectToSnake } from 'ts-case-convert'
 
 import { APIError, HTTPError, AuthorizationRequired } from './errors.ts'
 
+import BaseRateLimiter from './RateLimiter/BaseRateLimiter.ts'
+import DefaultRateLimiter from './RateLimiter/DefaultRateLimiter.ts'
+
 import System, { SystemFromApi } from './models/System.ts'
 import Member, { MemberFromApi, MemberToApi } from './models/Member.ts'
 import Group from './models/Group.ts'
@@ -29,7 +32,11 @@ export interface Options {
 }
 
 export default class StrictTypedClient {
-  constructor (protected token: string | null = null, protected baseURL: string | null = 'https://api.pluralkit.me') {}
+  constructor (
+    protected token: string | null = null,
+    protected baseURL: string | null = 'https://api.pluralkit.me',
+    protected rateLimiter: BaseRateLimiter = new DefaultRateLimiter()
+  ) {}
 
   public async setToken (token: string | null = null) {
     this.token = token
@@ -683,24 +690,35 @@ export default class StrictTypedClient {
       requestOptions.body = JSON.stringify(objectToSnake(data))
     }
 
-    const resp = await fetch(this.baseURL + path + (params.size ? `?${params.toString()}` : ''), requestOptions)
-    if (resp.status < 200 || resp.status > 299) {
-      const body = await resp.text()
-      if (APIError.isAPIErrorStatus(resp.status)) {
+    while (true) {
+      // wait for ratelimits
+      await this.rateLimiter.wait()
+
+      const resp = await fetch(this.baseURL + path + (params.size ? `?${params.toString()}` : ''), requestOptions)
+      if (resp.status < 200 || resp.status > 299) {
+        if (await this.rateLimiter.handleError(resp)) {
+          // retry if ratelimiter handled the error
+          continue
+        }
+
+        const body = await resp.text()
+        if (APIError.isAPIErrorStatus(resp.status)) {
         // try to parse the error from json and if it fails return a regular HTTPError
-        try {
-          throw APIError.fromResponse(resp, JSON.parse(body))
-        } catch (e) {
-          if (e instanceof APIError || !(e instanceof SyntaxError)) {
-            throw e
+          try {
+            throw APIError.fromResponse(resp, JSON.parse(body))
+          } catch (e) {
+            if (e instanceof APIError || !(e instanceof SyntaxError)) {
+              throw e
+            }
           }
         }
+
+        throw new HTTPError(resp.status, resp.statusText, body)
       }
 
-      throw new HTTPError(resp.status, resp.statusText, body)
+      await this.rateLimiter.handleResponse(resp)
+      return resp
     }
-
-    return resp
   }
 
   async requestParsed<O, T>(
