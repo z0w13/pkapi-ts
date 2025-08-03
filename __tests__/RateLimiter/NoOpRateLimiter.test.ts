@@ -8,7 +8,7 @@ describe('NoOpRateLimiter', function () {
       'returns false with handleError(%j)',
       async function (err) {
         const limiter = new NoOpRateLimiter()
-        expect(await limiter.handleError(err)).toBe(false)
+        expect(await limiter.handleError('bucket', err)).toBe(false)
       }
     )
   })
@@ -18,7 +18,7 @@ describe('NoOpRateLimiter', function () {
       const limiter = new NoOpRateLimiter()
 
       await expect(
-        limiter.handleResponse(new Response())
+        limiter.handleResponse('bucket', new Response())
       ).toResolveInstantly()
     })
   })
@@ -27,7 +27,7 @@ describe('NoOpRateLimiter', function () {
       vi.useFakeTimers()
       const limiter = new NoOpRateLimiter()
 
-      await expect(limiter.wait()).toResolveInstantly()
+      await expect(limiter.wait('bucket')).toResolveInstantly()
     })
   })
 })
