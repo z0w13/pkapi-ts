@@ -45,6 +45,10 @@ export default class StrictTypedClient {
     this.getRequestPromiseMap = new Map()
   }
 
+  public getToken () {
+    return this.token
+  }
+
   public async setToken (token: string | null = null) {
     this.token = token
   }

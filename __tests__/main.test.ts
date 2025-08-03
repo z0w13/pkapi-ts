@@ -18,6 +18,10 @@ afterEach(() => {
 })
 
 describe('PluralKit', () => {
+  test('getToken() returns the set token', () => {
+    const pluralKit = new StrictTypedClient('foo')
+    expect(pluralKit.getToken()).toBe('foo')
+  })
   test('throws when a method that requires token is called without token', async () => {
     const pluralKit = new StrictTypedClient()
     try {
