@@ -315,7 +315,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error deleting member ${memberRef}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -337,7 +337,7 @@ export default class StrictTypedClient {
     )
     if (resp.status !== 204) {
       throw Error(`error adding member ${memberRef} to groups ${groupRefs.join(', ')}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -360,7 +360,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error removing member ${memberRef} from groups ${groupRefs.join(', ')}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -383,7 +383,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error overwriting groups for member ${memberRef} with ${groupRefs.join(', ')}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -492,7 +492,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error deleting group ${groupRef}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -515,7 +515,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error deleting group ${groupRef}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -538,7 +538,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error deleting group ${groupRef}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -561,7 +561,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error overwriting members for group ${groupRef} with ${memberRefs.join(', ')}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }
@@ -696,7 +696,7 @@ export default class StrictTypedClient {
 
     if (resp.status !== 204) {
       throw Error(`error deleting switch ${switchId} for system ${systemRef}`, {
-        cause: await HTTPError.fromResponse(resp)
+        cause: HTTPError.fromResponse(resp, await resp.text())
       })
     }
   }

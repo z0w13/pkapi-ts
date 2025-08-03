@@ -1,12 +1,20 @@
 import { ErrorResponse } from './models/APIError.ts'
 
 export class HTTPError extends Error {
-  constructor (status: number, statusText?: string, content?: unknown) {
-    super(`HTTP Error ${status} ${statusText}: ${content}`)
+  /** http status code */
+  public status: number | undefined
+  /** http status text */
+  public statusText: string | undefined
+
+  constructor (status: number, statusText?: string, content?: unknown, message?: string) {
+    super(message ?? `HTTP Error ${status} ${statusText}: ${content}`)
+
+    this.status = status
+    this.statusText = statusText
   }
 
-  static async fromResponse (resp: Response) {
-    return new HTTPError(resp.status, resp.statusText, await resp.text())
+  static fromResponse (resp: Response, content?: unknown) {
+    return new HTTPError(resp.status, resp.statusText, content)
   }
 }
 
@@ -16,24 +24,18 @@ export class AuthorizationRequired extends Error {
   }
 }
 
-export class APIError extends Error {
-  /** http status code */
-  public status: number | undefined
-  /** http status text */
-  public statusText: string | undefined
+export class APIError extends HTTPError {
   /** code from the PluralKit api */
   public code: number | undefined
   /** message from the PluralKit api */
   public message: string
 
   constructor (resp: Response, apiResponse: ErrorResponse) {
-    super(
+    super(resp.status, resp.statusText, null,
       `API Error: HTTP ${resp.status} ${resp.statusText}, ` +
         `API ${apiResponse.code} ${apiResponse.message}`
     )
 
-    this.status = resp.status
-    this.statusText = resp.statusText
     this.code = apiResponse.code
     this.message = apiResponse.message
   }
