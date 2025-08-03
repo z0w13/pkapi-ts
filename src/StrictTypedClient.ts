@@ -606,16 +606,26 @@ export default class StrictTypedClient {
     )
   }
 
-  async getFronters (systemRef: SystemRef, options: Options = {}): Promise<SwitchWithMembers> {
-    return this.requestParsed(
+  async getFronters (systemRef: SystemRef, options: Options = {}): Promise<SwitchWithMembers | null> {
+    const resp = await this.request(
       `/v2/systems/${systemRef}/fronters`,
       {},
       'GET',
-      SwitchWithMembersFromApi,
       undefined,
       'generic_get',
       options
     )
+
+    if (resp.status === 204) {
+      return null
+    }
+
+    const json = await resp.json()
+    if (typeof json !== 'object' || json === null) {
+      throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
+    }
+
+    return SwitchWithMembersFromApi.parse(objectToCamel(json))
   }
 
   async createSwitch (

@@ -226,7 +226,7 @@ export default class Client extends StrictTypedClient {
     return super.getSwitch(SystemRef.parse(systemRef), SwitchID.parse(switchId), options)
   }
 
-  async getFronters (systemRef: string, options: Options = {}): Promise<SwitchWithMembers> {
+  async getFronters (systemRef: string, options: Options = {}): Promise<SwitchWithMembers | null> {
     return super.getFronters(SystemRef.parse(systemRef), options)
   }
 

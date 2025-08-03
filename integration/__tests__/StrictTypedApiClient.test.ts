@@ -429,6 +429,15 @@ describe('PluralKit', () => {
     })
   })
 
+  test('getFronters, empty', async () => {
+    const db = await getDatabase()
+    const client = getTypedClient()
+
+    await createSystem(db, 'exmpl', 'name')
+
+    expect(await client.getFronters(SystemRef.parse('exmpl'))).toBeNull()
+  })
+
   test('createSwitch', async () => {
     const db = await getDatabase()
     const client = getTypedClient(true)
