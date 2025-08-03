@@ -1,6 +1,24 @@
 import { vi, expect } from 'vitest'
 
 expect.extend({
+  async toResolveInstantly (received: Promise<any>) {
+    let resolved = false
+    received.then(() => (resolved = true))
+
+    await vi.advanceTimersByTimeAsync(0)
+    if (!resolved) {
+      return {
+        pass: false,
+        message: () => `expected ${received} to resolve instantly but it didn't`,
+      }
+    }
+
+    return {
+      pass: true,
+      message: () => `${received} resolved instantly`
+    }
+  },
+
   async toResolveAfterAtLeast (received: Promise<any>, timePassedMs: number) {
     const timeBefore = Date.now()
     let resolvedAt: number | null = null
