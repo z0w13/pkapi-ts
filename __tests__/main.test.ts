@@ -74,4 +74,56 @@ describe('PluralKit', () => {
     await pluralKit.getSystem(SystemRef.parse('exmpl'))
     await expect(pluralKit.getSystem(SystemRef.parse('system'))).toResolveAfterAtLeast(60000)
   })
+
+  test('deduplicates get requests when `deduplicateGetRequests` is true', async () => {
+    vi.useFakeTimers()
+    fetchMock.mockGlobal()
+
+    fetchMock.get('https://api.pluralkit.me/v2/systems/exmpl', {
+      headers: {
+        'x-ratelimit-remaining': '0',
+        'x-ratelimit-reset': (Math.ceil(Date.now() / 1000) + 60).toString(),
+      },
+      body: mockApiSystem({
+        id: 'exmpl',
+        uuid: '8b5eac7a-b019-416f-a9ad-89f62225a815',
+      }),
+    }, { name: 'getSystem', delay: 50 })
+
+    const pluralKit = new StrictTypedClient(null, true)
+    const prom = Promise.all([
+      pluralKit.getSystem(SystemRef.parse('exmpl')),
+      pluralKit.getSystem(SystemRef.parse('exmpl'))
+    ])
+    await vi.runAllTimersAsync()
+    await prom
+
+    expect(fetchMock.callHistory.calls('getSystem')).toHaveLength(1)
+  })
+
+  test("doesn't deduplicates get requests when `deduplicateGetRequests` is false", async () => {
+    vi.useFakeTimers()
+    fetchMock.mockGlobal()
+
+    fetchMock.get('https://api.pluralkit.me/v2/systems/exmpl', {
+      headers: {
+        'x-ratelimit-remaining': '0',
+        'x-ratelimit-reset': (Math.ceil(Date.now() / 1000) + 60).toString(),
+      },
+      body: mockApiSystem({
+        id: 'exmpl',
+        uuid: '8b5eac7a-b019-416f-a9ad-89f62225a815',
+      }),
+    }, { name: 'getSystem', delay: 50 })
+
+    const pluralKit = new StrictTypedClient(null, false)
+    const prom = Promise.all([
+      pluralKit.getSystem(SystemRef.parse('exmpl')),
+      pluralKit.getSystem(SystemRef.parse('exmpl'))
+    ])
+    await vi.runAllTimersAsync()
+    await prom
+
+    expect(fetchMock.callHistory.calls('getSystem')).toHaveLength(2)
+  })
 })
