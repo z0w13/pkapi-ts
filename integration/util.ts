@@ -14,5 +14,5 @@ export function getTypedClient (authenticated = false) {
   const token = process.env.PLURALKIT_TOKEN
   const baseURL = process.env.PLURALKIT_BASEURL
 
-  return new StrictTypedClient(authenticated ? token : null, baseURL)
+  return new StrictTypedClient(authenticated ? token : null, true, baseURL)
 }
