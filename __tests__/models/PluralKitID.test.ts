@@ -1,7 +1,7 @@
 import { assert, test, describe } from 'vitest'
 
 import PluralKitID, { PluralKitIDFromString } from '../../src/models/PluralKitID.ts'
-import { ZodError } from 'zod'
+import { ZodError } from 'zod/v4'
 
 describe('PluralKitID', () => {
   test.each([

@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/v4'
 
 import Member, { MemberFromApi } from './Member.ts'
 import MemberID from './MemberID.ts'

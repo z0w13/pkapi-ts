@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/v4'
 
 import Color from './Color.ts'
 import Birthday, { BirthdayFromString, BirthdayToString } from './Birthday.ts'

@@ -1,7 +1,7 @@
 import { expect, test, describe } from 'vitest'
 
 import Color from '../../src/models/Color.ts'
-import { ZodError } from 'zod'
+import { ZodError } from 'zod/v4'
 
 describe('Birthday', () => {
   test('it parses correctly', () => {

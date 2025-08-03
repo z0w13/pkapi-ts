@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/v4'
 
 import StrictTypedClient, { Options } from './StrictTypedClient.ts'
 import System, { SimpleSystem } from './models/System.ts'

@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/v4'
 
 import { ChannelSnowflake, GuildSnowflake } from './DiscordSnowflake.ts'
 import MemberID from './MemberID.ts'

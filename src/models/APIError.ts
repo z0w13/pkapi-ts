@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/v4'
 
 // https://pluralkit.me/api/errors/#error-object
 const ErrorObject = z.object({

@@ -1,4 +1,4 @@
-import z, { ZodType } from 'zod'
+import z, { ZodType } from 'zod/v4'
 import { objectToCamel, objectToSnake } from 'ts-case-convert'
 
 import { APIError, HTTPError, AuthorizationRequired } from './errors.ts'
