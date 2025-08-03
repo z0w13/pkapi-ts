@@ -29,7 +29,7 @@ export interface Options {
 }
 
 export default class StrictTypedClient {
-  constructor (protected token: string | null = null, protected baseURL: string | null = 'https://api.pluralkit.me/') {}
+  constructor (protected token: string | null = null, protected baseURL: string | null = 'https://api.pluralkit.me') {}
 
   public async setToken (token: string | null = null) {
     this.token = token
