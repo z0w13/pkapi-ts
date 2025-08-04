@@ -1,0 +1,17 @@
+{
+  "name": "require-test",
+  "type": "commonjs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "z0w13",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.1",
+  "dependencies": {
+    "pkapi-ts": "link:../../.."
+  }
+}

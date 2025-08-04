@@ -45,6 +45,9 @@
     "test": "vitest run --coverage --dir tests/unit",
     "test:integration": "bash tests/integration/run.sh",
     "test:watch": "vitest watch --coverage --dir tests/unit",
+    "test:usage": "pnpm run test:usage:require && pnpm run test:usage:import",
+    "test:usage:require": "tests/usage/require/run.sh",
+    "test:usage:import": "tests/usage/import/run.sh",
     "coverage:view": "open coverage/index.html",
     "version": "changeset version",
     "release": "changeset publish"
