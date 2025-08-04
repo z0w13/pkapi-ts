@@ -3,7 +3,7 @@ import z from 'zod/v4'
 import StrictTypedClient, { Options } from './StrictTypedClient.js'
 import System, { SimpleSystem } from './models/System.js'
 import Member, { SimpleMember } from './models/Member.js'
-import Group, { SimpleGroup } from './models/Group.js'
+import Group, { GroupWithMembers, SimpleGroup } from './models/Group.js'
 import SystemSettings from './models/SystemSettings.js'
 import PublicSystemSettings from './models/PublicSystemSettings.js'
 import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.js'
@@ -158,8 +158,11 @@ export default class Client extends StrictTypedClient {
     return super.getGroup(GroupRef.parse(groupRef), options)
   }
 
-  async getGroups (systemRef: string, options: Options = {}): Promise<Array<Group>> {
-    return super.getGroups(SystemRef.parse(systemRef), options)
+  async getGroups (systemRef: string, withMembers?: false, options?: Options): Promise<Array<Group>>
+  async getGroups (systemRef: string, withMembers?: true, options?: Options): Promise<Array<GroupWithMembers>>
+  async getGroups (systemRef: string, withMembers?: boolean, options?: Options): Promise<Array<Group | GroupWithMembers>>
+  async getGroups (systemRef: string, withMembers: boolean = false, options: Options = {}): Promise<Array<Group | GroupWithMembers>> {
+    return super.getGroups(SystemRef.parse(systemRef), withMembers, options)
   }
 
   async getGroupMembers (groupRef: string, options: Options = {}): Promise<Array<Member>> {

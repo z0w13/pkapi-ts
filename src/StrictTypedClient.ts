@@ -8,7 +8,7 @@ import DefaultRateLimiter from './RateLimiter/DefaultRateLimiter.js'
 
 import System, { SystemFromApi } from './models/System.js'
 import Member, { MemberFromApi, MemberToApi } from './models/Member.js'
-import Group from './models/Group.js'
+import Group, { GroupWithMembers } from './models/Group.js'
 import SystemSettings from './models/SystemSettings.js'
 import PublicSystemSettings from './models/PublicSystemSettings.js'
 import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.js'
@@ -419,12 +419,15 @@ export default class StrictTypedClient {
     )
   }
 
-  async getGroups (systemRef: SystemRef, options: Options = {}): Promise<Array<Group>> {
+  async getGroups (systemRef: SystemRef, withMembers?: false, options?: Options): Promise<Array<Group>>
+  async getGroups (systemRef: SystemRef, withMembers?: true, options?: Options): Promise<Array<GroupWithMembers>>
+  async getGroups (systemRef: SystemRef, withMembers?: boolean, options?: Options): Promise<Array<Group | GroupWithMembers>>
+  async getGroups (systemRef: SystemRef, withMembers: boolean = false, options: Options = {}): Promise<Array<Group | GroupWithMembers>> {
     return this.requestParsed(
      `/v2/systems/${systemRef}/groups`,
-     {},
+     withMembers ? { with_members: 'true' } : {},
      'GET',
-     z.array(Group),
+     z.array(withMembers ? GroupWithMembers : Group),
      undefined,
      'generic_get',
      options

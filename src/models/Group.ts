@@ -4,6 +4,7 @@ import Color from './Color.js'
 import { GroupIDFromString, GroupUUID } from './GroupID.js'
 import { SystemIDFromString } from './SystemID.js'
 import GroupPrivacy from './GroupPrivacy.js'
+import { MemberUUID } from './MemberID.js'
 
 const Group = z.object({
   id: GroupIDFromString,
@@ -21,6 +22,13 @@ const Group = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Group = z.infer<typeof Group>
 export default Group
+
+const GroupWithMembers = Group.extend({
+  members: z.array(MemberUUID),
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type GroupWithMembers = z.infer<typeof GroupWithMembers>
+export { GroupWithMembers }
 
 const SimpleGroup = Group.extend({
   id: z.string(),
