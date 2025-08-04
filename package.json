@@ -2,31 +2,319 @@
   "name": "pkapi-ts",
   "version": "0.2.0",
   "description": "A typescript library for the PluralKit API",
-  "types": "dist/main.d.ts",
   "type": "module",
   "exports": {
+    "./Client": {
+      "import": {
+        "types": "./dist/esm/Client.d.ts",
+        "default": "./dist/esm/Client.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/Client.d.ts",
+        "default": "./dist/commonjs/Client.js"
+      }
+    },
+    "./RateLimiter/BaseRateLimiter": {
+      "import": {
+        "types": "./dist/esm/RateLimiter/BaseRateLimiter.d.ts",
+        "default": "./dist/esm/RateLimiter/BaseRateLimiter.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/RateLimiter/BaseRateLimiter.d.ts",
+        "default": "./dist/commonjs/RateLimiter/BaseRateLimiter.js"
+      }
+    },
+    "./RateLimiter/DefaultRateLimiter": {
+      "import": {
+        "types": "./dist/esm/RateLimiter/DefaultRateLimiter.d.ts",
+        "default": "./dist/esm/RateLimiter/DefaultRateLimiter.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/RateLimiter/DefaultRateLimiter.d.ts",
+        "default": "./dist/commonjs/RateLimiter/DefaultRateLimiter.js"
+      }
+    },
+    "./RateLimiter/NoOpRateLimiter": {
+      "import": {
+        "types": "./dist/esm/RateLimiter/NoOpRateLimiter.d.ts",
+        "default": "./dist/esm/RateLimiter/NoOpRateLimiter.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/RateLimiter/NoOpRateLimiter.d.ts",
+        "default": "./dist/commonjs/RateLimiter/NoOpRateLimiter.js"
+      }
+    },
+    "./StrictTypedClient": {
+      "import": {
+        "types": "./dist/esm/StrictTypedClient.d.ts",
+        "default": "./dist/esm/StrictTypedClient.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/StrictTypedClient.d.ts",
+        "default": "./dist/commonjs/StrictTypedClient.js"
+      }
+    },
+    "./errors": {
+      "import": {
+        "types": "./dist/esm/errors.d.ts",
+        "default": "./dist/esm/errors.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/errors.d.ts",
+        "default": "./dist/commonjs/errors.js"
+      }
+    },
     ".": {
       "import": {
-        "types": "./dist/main.d.ts",
-        "default": "./dist/main.js"
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
       },
       "require": {
-        "types": "./dist/main.d.cts",
-        "default": "./dist/main.cjs"
-      },
-      "default": "./dist/main.js"
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
     },
-    "./*": {
+    "./models/APIError": {
       "import": {
-        "types": "./dist/*.d.ts",
-        "default": "./dist/*.js"
+        "types": "./dist/esm/models/APIError.d.ts",
+        "default": "./dist/esm/models/APIError.js"
       },
       "require": {
-        "types": "./dist/*.d.cts",
-        "default": "./dist/*.cjs"
+        "types": "./dist/commonjs/models/APIError.d.ts",
+        "default": "./dist/commonjs/models/APIError.js"
+      }
+    },
+    "./models/AutoproxySettings": {
+      "import": {
+        "types": "./dist/esm/models/AutoproxySettings.d.ts",
+        "default": "./dist/esm/models/AutoproxySettings.js"
       },
-      "default": "./dist/*.js"
-    }
+      "require": {
+        "types": "./dist/commonjs/models/AutoproxySettings.d.ts",
+        "default": "./dist/commonjs/models/AutoproxySettings.js"
+      }
+    },
+    "./models/Birthday": {
+      "import": {
+        "types": "./dist/esm/models/Birthday.d.ts",
+        "default": "./dist/esm/models/Birthday.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/Birthday.d.ts",
+        "default": "./dist/commonjs/models/Birthday.js"
+      }
+    },
+    "./models/Color": {
+      "import": {
+        "types": "./dist/esm/models/Color.d.ts",
+        "default": "./dist/esm/models/Color.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/Color.d.ts",
+        "default": "./dist/commonjs/models/Color.js"
+      }
+    },
+    "./models/DiscordSnowflake": {
+      "import": {
+        "types": "./dist/esm/models/DiscordSnowflake.d.ts",
+        "default": "./dist/esm/models/DiscordSnowflake.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/DiscordSnowflake.d.ts",
+        "default": "./dist/commonjs/models/DiscordSnowflake.js"
+      }
+    },
+    "./models/Group": {
+      "import": {
+        "types": "./dist/esm/models/Group.d.ts",
+        "default": "./dist/esm/models/Group.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/Group.d.ts",
+        "default": "./dist/commonjs/models/Group.js"
+      }
+    },
+    "./models/GroupID": {
+      "import": {
+        "types": "./dist/esm/models/GroupID.d.ts",
+        "default": "./dist/esm/models/GroupID.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/GroupID.d.ts",
+        "default": "./dist/commonjs/models/GroupID.js"
+      }
+    },
+    "./models/GroupPrivacy": {
+      "import": {
+        "types": "./dist/esm/models/GroupPrivacy.d.ts",
+        "default": "./dist/esm/models/GroupPrivacy.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/GroupPrivacy.d.ts",
+        "default": "./dist/commonjs/models/GroupPrivacy.js"
+      }
+    },
+    "./models/Member": {
+      "import": {
+        "types": "./dist/esm/models/Member.d.ts",
+        "default": "./dist/esm/models/Member.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/Member.d.ts",
+        "default": "./dist/commonjs/models/Member.js"
+      }
+    },
+    "./models/MemberGuildSettings": {
+      "import": {
+        "types": "./dist/esm/models/MemberGuildSettings.d.ts",
+        "default": "./dist/esm/models/MemberGuildSettings.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/MemberGuildSettings.d.ts",
+        "default": "./dist/commonjs/models/MemberGuildSettings.js"
+      }
+    },
+    "./models/MemberID": {
+      "import": {
+        "types": "./dist/esm/models/MemberID.d.ts",
+        "default": "./dist/esm/models/MemberID.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/MemberID.d.ts",
+        "default": "./dist/commonjs/models/MemberID.js"
+      }
+    },
+    "./models/MemberPrivacy": {
+      "import": {
+        "types": "./dist/esm/models/MemberPrivacy.d.ts",
+        "default": "./dist/esm/models/MemberPrivacy.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/MemberPrivacy.d.ts",
+        "default": "./dist/commonjs/models/MemberPrivacy.js"
+      }
+    },
+    "./models/Message": {
+      "import": {
+        "types": "./dist/esm/models/Message.d.ts",
+        "default": "./dist/esm/models/Message.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/Message.d.ts",
+        "default": "./dist/commonjs/models/Message.js"
+      }
+    },
+    "./models/PluralKitID": {
+      "import": {
+        "types": "./dist/esm/models/PluralKitID.d.ts",
+        "default": "./dist/esm/models/PluralKitID.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/PluralKitID.d.ts",
+        "default": "./dist/commonjs/models/PluralKitID.js"
+      }
+    },
+    "./models/PrivacyValue": {
+      "import": {
+        "types": "./dist/esm/models/PrivacyValue.d.ts",
+        "default": "./dist/esm/models/PrivacyValue.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/PrivacyValue.d.ts",
+        "default": "./dist/commonjs/models/PrivacyValue.js"
+      }
+    },
+    "./models/ProxyTag": {
+      "import": {
+        "types": "./dist/esm/models/ProxyTag.d.ts",
+        "default": "./dist/esm/models/ProxyTag.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/ProxyTag.d.ts",
+        "default": "./dist/commonjs/models/ProxyTag.js"
+      }
+    },
+    "./models/PublicSystemSettings": {
+      "import": {
+        "types": "./dist/esm/models/PublicSystemSettings.d.ts",
+        "default": "./dist/esm/models/PublicSystemSettings.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/PublicSystemSettings.d.ts",
+        "default": "./dist/commonjs/models/PublicSystemSettings.js"
+      }
+    },
+    "./models/Switch": {
+      "import": {
+        "types": "./dist/esm/models/Switch.d.ts",
+        "default": "./dist/esm/models/Switch.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/Switch.d.ts",
+        "default": "./dist/commonjs/models/Switch.js"
+      }
+    },
+    "./models/SwitchID": {
+      "import": {
+        "types": "./dist/esm/models/SwitchID.d.ts",
+        "default": "./dist/esm/models/SwitchID.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/SwitchID.d.ts",
+        "default": "./dist/commonjs/models/SwitchID.js"
+      }
+    },
+    "./models/System": {
+      "import": {
+        "types": "./dist/esm/models/System.d.ts",
+        "default": "./dist/esm/models/System.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/System.d.ts",
+        "default": "./dist/commonjs/models/System.js"
+      }
+    },
+    "./models/SystemGuildSettings": {
+      "import": {
+        "types": "./dist/esm/models/SystemGuildSettings.d.ts",
+        "default": "./dist/esm/models/SystemGuildSettings.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/SystemGuildSettings.d.ts",
+        "default": "./dist/commonjs/models/SystemGuildSettings.js"
+      }
+    },
+    "./models/SystemID": {
+      "import": {
+        "types": "./dist/esm/models/SystemID.d.ts",
+        "default": "./dist/esm/models/SystemID.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/SystemID.d.ts",
+        "default": "./dist/commonjs/models/SystemID.js"
+      }
+    },
+    "./models/SystemPrivacy": {
+      "import": {
+        "types": "./dist/esm/models/SystemPrivacy.d.ts",
+        "default": "./dist/esm/models/SystemPrivacy.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/SystemPrivacy.d.ts",
+        "default": "./dist/commonjs/models/SystemPrivacy.js"
+      }
+    },
+    "./models/SystemSettings": {
+      "import": {
+        "types": "./dist/esm/models/SystemSettings.d.ts",
+        "default": "./dist/esm/models/SystemSettings.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/SystemSettings.d.ts",
+        "default": "./dist/commonjs/models/SystemSettings.js"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -38,8 +326,9 @@
     "bin"
   ],
   "scripts": {
+    "prepare": "tshy",
+    "build": "pnpm run prepare",
     "start": "node --import tsx src/bin/cli.ts",
-    "build": "tsc && tsup",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run --coverage --dir tests/unit",
@@ -87,7 +376,7 @@
     "neostandard": "^0.12.2",
     "pg": "^8.16.3",
     "pkg-pr-new": "^0.0.54",
-    "tsup": "^8.1.0",
+    "tshy": "^3.0.2",
     "tsx": "^4.19.4",
     "typescript": "^5.5.3",
     "validate-conventional-commit": "^1.0.4",
@@ -102,5 +391,13 @@
     "discord-snowflake": "^2.0.0",
     "ts-case-convert": "^2.1.0",
     "zod": "^4.0.5"
-  }
+  },
+  "tshy": {
+    "exports": [
+      "./src/**"
+    ]
+  },
+  "main": "./dist/commonjs/index.js",
+  "types": "./dist/commonjs/index.d.ts",
+  "module": "./dist/esm/index.js"
 }

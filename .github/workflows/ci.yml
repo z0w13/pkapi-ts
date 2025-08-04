@@ -88,8 +88,6 @@ jobs:
       - uses: pnpm/action-setup@v4
       - name: install dependencies
         run: pnpm install --frozen-lockfile
-      - name: build project
-        run: pnpm build
       - name: run tests (usage:import)
         run: pnpm run test:usage:import
 
@@ -108,8 +106,6 @@ jobs:
       - uses: pnpm/action-setup@v4
       - name: install dependencies
         run: pnpm install --frozen-lockfile
-      - name: build project
-        run: pnpm build
       - name: run tests (usage:require)
         run: pnpm run test:usage:require
 
@@ -124,7 +120,5 @@ jobs:
       - uses: pnpm/action-setup@v4
       - name: install dependencies
         run: pnpm install --frozen-lockfile
-      - name: build project
-        run: pnpm run build
       - name: release preview with pkr-pr-new
         run: pnpm exec pkg-pr-new publish
