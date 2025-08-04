@@ -8,24 +8,24 @@
     ".": {
       "import": {
         "types": "./dist/main.d.ts",
-        "default": "./dist/main.mjs"
+        "default": "./dist/main.js"
       },
       "require": {
         "types": "./dist/main.d.cts",
         "default": "./dist/main.cjs"
       },
-      "default": "./dist/main.mjs"
+      "default": "./dist/main.js"
     },
     "./*": {
       "import": {
         "types": "./dist/*.d.ts",
-        "default": "./dist/*.mjs"
+        "default": "./dist/*.js"
       },
       "require": {
         "types": "./dist/*.d.cts",
         "default": "./dist/*.cjs"
       },
-      "default": "./dist/*.mjs"
+      "default": "./dist/*.js"
     }
   },
   "engines": {

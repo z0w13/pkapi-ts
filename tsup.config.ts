@@ -11,12 +11,6 @@ export default defineConfig([
     sourcemap: false,
     bundle: false,
     splitting: false,
-    outExtension (ctx) {
-      return {
-        dts: '.d.ts',
-        js: ctx.format === 'cjs' ? '.cjs' : '.mjs',
-      }
-    },
     treeshake: false,
     target: 'es2022',
     platform: 'node',
