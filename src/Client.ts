@@ -154,8 +154,11 @@ export default class Client extends StrictTypedClient {
     return super.updateMemberGuildSettings(MemberRef.parse(memberRef), GuildSnowflake.parse(guildId), settings, options)
   }
 
-  async getGroup (groupRef: string, options: Options = {}): Promise<Group> {
-    return super.getGroup(GroupRef.parse(groupRef), options)
+  async getGroup (groupRef: string, withMembers?: false, options?: Options): Promise<Group>
+  async getGroup (groupRef: string, withMembers?: true, options?: Options): Promise<GroupWithMembers>
+  async getGroup (groupRef: string, withMembers?: boolean, options?: Options): Promise<Group | GroupWithMembers>
+  async getGroup (groupRef: string, withMembers: boolean = false, options: Options = {}): Promise<Group> {
+    return super.getGroup(GroupRef.parse(groupRef), withMembers, options)
   }
 
   async getGroups (systemRef: string, withMembers?: false, options?: Options): Promise<Array<Group>>

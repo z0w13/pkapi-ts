@@ -407,8 +407,11 @@ export default class StrictTypedClient {
     )
   }
 
-  async getGroup (groupRef: GroupRef, options: Options = {}): Promise<Group> {
-    return this.requestParsed(
+  async getGroup (groupRef: GroupRef, withMembers?: false, options?: Options): Promise<Group>
+  async getGroup (groupRef: GroupRef, withMembers?: true, options?: Options): Promise<GroupWithMembers>
+  async getGroup (groupRef: GroupRef, withMembers?: boolean, options?: Options): Promise<Group | GroupWithMembers>
+  async getGroup (groupRef: GroupRef, withMembers: boolean = false, options: Options = {}): Promise<Group | GroupWithMembers> {
+    const group = await this.requestParsed(
       `/v2/groups/${groupRef}`,
       {},
       'GET',
@@ -417,6 +420,15 @@ export default class StrictTypedClient {
       'generic_get',
       options
     )
+    if (!withMembers) {
+      return group
+    }
+
+    const members = (await this.getGroupMembers(group.id)).map(m => m.uuid)
+    return GroupWithMembers.parse({
+      ...group,
+      members,
+    })
   }
 
   async getGroups (systemRef: SystemRef, withMembers?: false, options?: Options): Promise<Array<Group>>
