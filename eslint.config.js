@@ -5,7 +5,7 @@ export default [
   ...neostandard({
     ignores: resolveIgnoresFromGitignore(),
     ts: true,   // Enable TypeScript support,
-    filesTs: ['src/**/*.ts', '__tests__/**/*.ts']
+    filesTs: ['src/**/*.ts', 'tests/**/*.ts']
   }),
   plugins.n.configs['flat/recommended-script'],
   pluginSecurity.configs.recommended,
@@ -14,6 +14,7 @@ export default [
       'n/no-process-exit': 'warn',
       'n/no-unsupported-features': 'off',
       'n/no-unpublished-require': 'off',
+      'n/no-missing-import': 'off', // NOTE: doesn't work with tsconfig `paths` option
       'security/detect-non-literal-fs-filename': 'error',
       'security/detect-unsafe-regex': 'error',
       'security/detect-buffer-noassert': 'error',

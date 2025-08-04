@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'vitest'
 
-import Birthday, { BirthdayFromString, BirthdayToString } from '../../src/models/Birthday.js'
+import Birthday, { BirthdayFromString, BirthdayToString } from '../../../../src/models/Birthday.js'
 import { ZodError } from 'zod/v4'
 
 describe('Birthday', () => {

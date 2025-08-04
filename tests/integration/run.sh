@@ -19,6 +19,6 @@ export PLURALKIT_TOKEN="5c+TmmxbLClthBAM1wCHrU+dztnSqSOlR9fBwxoMrhV2ieeVGif5Om0n
 echo "Running migrations..."
 docker compose run --rm api bin/PluralKit.Bot.dll
 
-pnpm exec vitest run --coverage --dir integration/__tests__ "$@"
+pnpm exec vitest run --coverage --dir tests/integration "$@"
 
 docker compose down -v

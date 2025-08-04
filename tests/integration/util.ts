@@ -1,6 +1,6 @@
 import { Client } from 'pg'
 
-import StrictTypedClient from '../src/StrictTypedClient.js'
+import StrictTypedClient from 'src/StrictTypedClient.js'
 
 export async function getDatabase () {
   const postgresUrl = process.env.PLURALKIT_DATABASE

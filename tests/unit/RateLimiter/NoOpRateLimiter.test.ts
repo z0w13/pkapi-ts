@@ -1,6 +1,6 @@
 import { vi, describe, expect, it } from 'vitest'
 
-import NoOpRateLimiter from '../../src/RateLimiter/NoOpRateLimiter.js'
+import NoOpRateLimiter from 'src/RateLimiter/NoOpRateLimiter.js'
 
 describe('NoOpRateLimiter', function () {
   describe('handleError', function () {

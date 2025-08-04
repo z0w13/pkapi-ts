@@ -42,9 +42,9 @@
     "build": "tsc && tsup",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "vitest run --coverage --dir __tests__",
-    "test:integration": "bash integration/run.sh",
-    "test:watch": "vitest watch --coverage --dir __tests__",
+    "test": "vitest run --coverage --dir tests/unit",
+    "test:integration": "bash tests/integration/run.sh",
+    "test:watch": "vitest watch --coverage --dir tests/unit",
     "coverage:view": "open coverage/index.html",
     "version": "changeset version",
     "release": "changeset publish"
