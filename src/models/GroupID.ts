@@ -1,6 +1,6 @@
 import z from 'zod/v4'
 
-import PluralKitID, { PluralKitIDFromString } from './PluralKitID.ts'
+import PluralKitID, { PluralKitIDFromString } from './PluralKitID.js'
 
 const GroupID = PluralKitID.brand<'GroupID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information

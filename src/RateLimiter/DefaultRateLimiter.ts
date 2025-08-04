@@ -1,4 +1,4 @@
-import BaseRateLimiter from './BaseRateLimiter.ts'
+import BaseRateLimiter from './BaseRateLimiter.js'
 
 interface RateLimiterOptions {
   // Print debug info

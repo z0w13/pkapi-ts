@@ -1,5 +1,5 @@
 import z from 'zod/v4'
-import { GuildSnowflake } from './DiscordSnowflake.ts'
+import { GuildSnowflake } from './DiscordSnowflake.js'
 
 const SystemGuildSettings = z.object({
   proxyingEnabled: z.boolean(),

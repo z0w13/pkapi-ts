@@ -1,6 +1,6 @@
 import z from 'zod/v4'
 
-import PrivacyValue from './PrivacyValue.ts'
+import PrivacyValue from './PrivacyValue.js'
 
 const GroupPrivacy = z.object({
   namePrivacy: PrivacyValue,

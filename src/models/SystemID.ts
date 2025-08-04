@@ -1,5 +1,5 @@
 import z from 'zod/v4'
-import PluralKitID, { PluralKitIDFromString } from './PluralKitID.ts'
+import PluralKitID, { PluralKitIDFromString } from './PluralKitID.js'
 
 const SystemID = z.union([PluralKitID, z.literal('@me').brand<'PluralKitID'>()]).brand<'SystemID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information

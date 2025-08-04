@@ -1,6 +1,6 @@
 import { vi, describe, expect, it } from 'vitest'
 
-import DefaultRateLimiter, { Bucket } from '../../src/RateLimiter/DefaultRateLimiter.ts'
+import DefaultRateLimiter, { Bucket } from '../../src/RateLimiter/DefaultRateLimiter.js'
 
 class TestBucket extends Bucket {
   public setErrorTimestamps (timestamps: Array<number>) {

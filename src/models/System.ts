@@ -1,8 +1,8 @@
 import z from 'zod/v4'
 
-import Color from './Color.ts'
-import { SystemIDFromString, SystemUUID } from './SystemID.ts'
-import SystemPrivacy from './SystemPrivacy.ts'
+import Color from './Color.js'
+import { SystemIDFromString, SystemUUID } from './SystemID.js'
+import SystemPrivacy from './SystemPrivacy.js'
 
 const System = z.object({
   id: SystemIDFromString,

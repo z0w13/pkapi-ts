@@ -1,11 +1,11 @@
 import z from 'zod/v4'
 
-import Color from './Color.ts'
-import Birthday, { BirthdayFromString, BirthdayToString } from './Birthday.ts'
-import ProxyTag from './ProxyTag.ts'
-import SystemID from './SystemID.ts'
-import { MemberIDFromString, MemberUUID } from './MemberID.ts'
-import MemberPrivacy from './MemberPrivacy.ts'
+import Color from './Color.js'
+import Birthday, { BirthdayFromString, BirthdayToString } from './Birthday.js'
+import ProxyTag from './ProxyTag.js'
+import SystemID from './SystemID.js'
+import { MemberIDFromString, MemberUUID } from './MemberID.js'
+import MemberPrivacy from './MemberPrivacy.js'
 
 const Member = z.object({
   id: MemberIDFromString,

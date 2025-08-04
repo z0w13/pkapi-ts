@@ -5,9 +5,9 @@ import {
   ChannelSnowflake,
   UserSnowflake,
   MessageSnowflake
-} from './DiscordSnowflake.ts'
-import Member, { MemberFromApi } from './Member.ts'
-import System, { SystemFromApi } from './System.ts'
+} from './DiscordSnowflake.js'
+import Member, { MemberFromApi } from './Member.js'
+import System, { SystemFromApi } from './System.js'
 
 const Message = z.object({
   timestamp: z.date(),

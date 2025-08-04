@@ -1,4 +1,4 @@
-import { ErrorResponse } from './models/APIError.ts'
+import { ErrorResponse } from './models/APIError.js'
 
 export class HTTPError extends Error {
   /** http status code */

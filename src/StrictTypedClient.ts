@@ -1,31 +1,31 @@
 import z, { ZodType } from 'zod/v4'
 import { objectToCamel, objectToSnake } from 'ts-case-convert'
 
-import { APIError, HTTPError, AuthorizationRequired } from './errors.ts'
+import { APIError, HTTPError, AuthorizationRequired } from './errors.js'
 
-import BaseRateLimiter from './RateLimiter/BaseRateLimiter.ts'
-import DefaultRateLimiter from './RateLimiter/DefaultRateLimiter.ts'
+import BaseRateLimiter from './RateLimiter/BaseRateLimiter.js'
+import DefaultRateLimiter from './RateLimiter/DefaultRateLimiter.js'
 
-import System, { SystemFromApi } from './models/System.ts'
-import Member, { MemberFromApi, MemberToApi } from './models/Member.ts'
-import Group from './models/Group.ts'
-import SystemSettings from './models/SystemSettings.ts'
-import PublicSystemSettings from './models/PublicSystemSettings.ts'
-import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.ts'
-import SystemGuildSettings from './models/SystemGuildSettings.ts'
-import { SystemRef } from './models/SystemID.ts'
-import AutoproxySettings, { AutoproxySettingsFromApi } from './models/AutoproxySettings.ts'
-import { MemberRef } from './models/MemberID.ts'
-import { GroupRef } from './models/GroupID.ts'
-import MemberGuildSettings from './models/MemberGuildSettings.ts'
+import System, { SystemFromApi } from './models/System.js'
+import Member, { MemberFromApi, MemberToApi } from './models/Member.js'
+import Group from './models/Group.js'
+import SystemSettings from './models/SystemSettings.js'
+import PublicSystemSettings from './models/PublicSystemSettings.js'
+import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.js'
+import SystemGuildSettings from './models/SystemGuildSettings.js'
+import { SystemRef } from './models/SystemID.js'
+import AutoproxySettings, { AutoproxySettingsFromApi } from './models/AutoproxySettings.js'
+import { MemberRef } from './models/MemberID.js'
+import { GroupRef } from './models/GroupID.js'
+import MemberGuildSettings from './models/MemberGuildSettings.js'
 import {
   SwitchWithMemberIDs,
   SwitchWithMemberIDsFromApi,
   SwitchWithMembers,
   SwitchWithMembersFromApi
-} from './models/Switch.ts'
-import Message, { MessageFromApi } from './models/Message.ts'
-import { SwitchID } from './models/SwitchID.ts'
+} from './models/Switch.js'
+import Message, { MessageFromApi } from './models/Message.js'
+import { SwitchID } from './models/SwitchID.js'
 
 // From https://pluralkit.me/api/#rate-limiting
 type BucketNames = 'generic_get' | 'generic_update' | 'message'

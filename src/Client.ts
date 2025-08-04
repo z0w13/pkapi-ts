@@ -1,24 +1,24 @@
 import z from 'zod/v4'
 
-import StrictTypedClient, { Options } from './StrictTypedClient.ts'
-import System, { SimpleSystem } from './models/System.ts'
-import Member, { SimpleMember } from './models/Member.ts'
-import Group, { SimpleGroup } from './models/Group.ts'
-import SystemSettings from './models/SystemSettings.ts'
-import PublicSystemSettings from './models/PublicSystemSettings.ts'
-import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.ts'
-import SystemGuildSettings from './models/SystemGuildSettings.ts'
-import AutoproxySettings from './models/AutoproxySettings.ts'
-import { GroupRef } from './models/GroupID.ts'
-import MemberGuildSettings from './models/MemberGuildSettings.ts'
+import StrictTypedClient, { Options } from './StrictTypedClient.js'
+import System, { SimpleSystem } from './models/System.js'
+import Member, { SimpleMember } from './models/Member.js'
+import Group, { SimpleGroup } from './models/Group.js'
+import SystemSettings from './models/SystemSettings.js'
+import PublicSystemSettings from './models/PublicSystemSettings.js'
+import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.js'
+import SystemGuildSettings from './models/SystemGuildSettings.js'
+import AutoproxySettings from './models/AutoproxySettings.js'
+import { GroupRef } from './models/GroupID.js'
+import MemberGuildSettings from './models/MemberGuildSettings.js'
 import {
   SwitchWithMemberIDs,
   SwitchWithMembers,
-} from './models/Switch.ts'
-import Message from './models/Message.ts'
-import { SystemRef } from './models/SystemID.ts'
-import { MemberRef } from './models/MemberID.ts'
-import { SwitchID } from './models/SwitchID.ts'
+} from './models/Switch.js'
+import Message from './models/Message.js'
+import { SystemRef } from './models/SystemID.js'
+import { MemberRef } from './models/MemberID.js'
+import { SwitchID } from './models/SwitchID.js'
 
 export default class Client extends StrictTypedClient {
   async getSystem (systemRef: string, options: Options = {}): Promise<System> {

@@ -1,6 +1,6 @@
 import z from 'zod/v4'
 
-import SystemSettings from './SystemSettings.ts'
+import SystemSettings from './SystemSettings.js'
 
 const PublicSystemSettings = SystemSettings.pick({
   pingsEnabled: true,

@@ -1,4 +1,4 @@
-import BaseRateLimiter from './BaseRateLimiter.ts'
+import BaseRateLimiter from './BaseRateLimiter.js'
 
 export default class NoOpRateLimiter extends BaseRateLimiter {
   public async handleResponse (_bucket: string, _response: Response) {}

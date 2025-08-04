@@ -1,11 +1,11 @@
 import { vi, assert, expect, test, describe, afterEach } from 'vitest'
 import fetchMock from 'fetch-mock'
 
-import StrictTypedClient from '../src/StrictTypedClient.ts'
-import { GuildSnowflake } from '../src/models/DiscordSnowflake.ts'
-import { AuthorizationRequired } from '../src/errors.ts'
-import { SystemRef } from '../src/models/SystemID.ts'
-import { mockApiSystem } from './util.ts'
+import StrictTypedClient from '../src/StrictTypedClient.js'
+import { GuildSnowflake } from '../src/models/DiscordSnowflake.js'
+import { AuthorizationRequired } from '../src/errors.js'
+import { SystemRef } from '../src/models/SystemID.js'
+import { mockApiSystem } from './util.js'
 
 afterEach(() => {
   // reset fetch-mock

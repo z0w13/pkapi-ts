@@ -1,7 +1,7 @@
 import z from 'zod/v4'
 
-import { ChannelSnowflake, GuildSnowflake } from './DiscordSnowflake.ts'
-import MemberID from './MemberID.ts'
+import { ChannelSnowflake, GuildSnowflake } from './DiscordSnowflake.js'
+import MemberID from './MemberID.js'
 
 const AutoproxyMode = z.literal(['off', 'front', 'latch', 'member'])
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information

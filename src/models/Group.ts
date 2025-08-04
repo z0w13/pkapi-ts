@@ -1,9 +1,9 @@
 import z from 'zod/v4'
 
-import Color from './Color.ts'
-import { GroupIDFromString, GroupUUID } from './GroupID.ts'
-import { SystemIDFromString } from './SystemID.ts'
-import GroupPrivacy from './GroupPrivacy.ts'
+import Color from './Color.js'
+import { GroupIDFromString, GroupUUID } from './GroupID.js'
+import { SystemIDFromString } from './SystemID.js'
+import GroupPrivacy from './GroupPrivacy.js'
 
 const Group = z.object({
   id: GroupIDFromString,

@@ -1,13 +1,13 @@
 import { expect, test, describe, beforeEach } from 'vitest'
 
-import { getDatabase, getTypedClient } from '../util.ts'
+import { getDatabase, getTypedClient } from '../util.js'
 
-import { SystemRef } from '../../src/models/SystemID.ts'
-import { addMemberToGroup, createGroup, createMember, createMemberGuildSettings, createMessageInformation, createSwitch, createSystem, createSystemWithToken, getSwitchUuid } from '../queries.ts'
-import { GuildSnowflake, MessageSnowflake } from '../../src/models/DiscordSnowflake.ts'
-import { MemberRef } from '../../src/models/MemberID.ts'
-import { GroupRef } from '../../src/models/GroupID.ts'
-import { SwitchID } from '../../src/models/SwitchID.ts'
+import { SystemRef } from '../../src/models/SystemID.js'
+import { addMemberToGroup, createGroup, createMember, createMemberGuildSettings, createMessageInformation, createSwitch, createSystem, createSystemWithToken, getSwitchUuid } from '../queries.js'
+import { GuildSnowflake, MessageSnowflake } from '../../src/models/DiscordSnowflake.js'
+import { MemberRef } from '../../src/models/MemberID.js'
+import { GroupRef } from '../../src/models/GroupID.js'
+import { SwitchID } from '../../src/models/SwitchID.js'
 
 beforeEach(async () => {
   const db = await getDatabase()

@@ -1,8 +1,8 @@
 import z from 'zod/v4'
 
-import Member, { MemberFromApi } from './Member.ts'
-import MemberID from './MemberID.ts'
-import { SwitchID } from './SwitchID.ts'
+import Member, { MemberFromApi } from './Member.js'
+import MemberID from './MemberID.js'
+import { SwitchID } from './SwitchID.js'
 
 const Switch = z.object({
   id: SwitchID,
