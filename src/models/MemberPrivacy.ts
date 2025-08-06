@@ -6,6 +6,7 @@ const MemberPrivacy = z.object({
   visibility: PrivacyValue,
   namePrivacy: PrivacyValue,
   descriptionPrivacy: PrivacyValue,
+  bannerPrivacy: PrivacyValue,
   birthdayPrivacy: PrivacyValue,
   pronounPrivacy: PrivacyValue,
   avatarPrivacy: PrivacyValue,

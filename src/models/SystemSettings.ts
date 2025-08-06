@@ -28,7 +28,8 @@ const SystemSettings = z.object({
   proxySwitch: ProxySwitchAction,
   // TODO: Remove nullable as soon as following is deployed:
   //       https://github.com/PluralKit/PluralKit/blob/47c59902181b6f81b046f9c471780efd85fd708f/crates/api/src/endpoints/system.rs#L50
-  nameFormat: z.nullable(z.string())
+  nameFormat: z.nullable(z.string()),
+  descriptionTemplates: z.array(z.string().max(1000)).max(3)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type SystemSettings = z.infer<typeof SystemSettings>

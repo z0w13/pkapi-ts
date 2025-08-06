@@ -17,6 +17,7 @@ const Group = z.object({
   icon: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
+  created: z.nullable(z.iso.datetime()),
   privacy: z.nullable(GroupPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information

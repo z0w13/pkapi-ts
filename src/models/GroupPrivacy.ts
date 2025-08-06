@@ -5,6 +5,7 @@ import PrivacyValue from './PrivacyValue.js'
 const GroupPrivacy = z.object({
   namePrivacy: PrivacyValue,
   descriptionPrivacy: PrivacyValue,
+  bannerPrivacy: PrivacyValue,
   iconPrivacy: PrivacyValue,
   listPrivacy: PrivacyValue,
   metadataPrivacy: PrivacyValue,

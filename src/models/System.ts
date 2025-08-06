@@ -18,6 +18,7 @@ const System = z.object({
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
   created: z.nullable(z.date()),
+  webhookUrl: z.optional(z.nullable(z.url())),
   privacy: z.nullable(SystemPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information

@@ -3,7 +3,10 @@ import z from 'zod/v4'
 import PrivacyValue from './PrivacyValue.js'
 
 const SystemPrivacy = z.object({
+  namePrivacy: PrivacyValue,
+  avatarPrivacy: PrivacyValue,
   descriptionPrivacy: PrivacyValue,
+  bannerPrivacy: PrivacyValue,
   pronounPrivacy: PrivacyValue,
   memberListPrivacy: PrivacyValue,
   groupListPrivacy: PrivacyValue,
