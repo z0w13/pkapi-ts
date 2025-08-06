@@ -17,12 +17,26 @@ const Group = z.object({
   icon: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
-  created: z.nullable(z.iso.datetime()),
+  created: z.nullable(z.date()),
   privacy: z.nullable(GroupPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Group = z.infer<typeof Group>
 export default Group
+
+const GroupFromApi = Group.extend({
+  created: z.nullable(z.iso.datetime().transform((v) => new Date(v))),
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type GroupFromApi = z.infer<typeof GroupFromApi>
+export { GroupFromApi }
+
+const GroupToApi = Group.extend({
+  created: z.nullable(z.date().transform((v) => v.toISOString())),
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type GroupToApi = z.infer<typeof GroupFromApi>
+export { GroupToApi }
 
 const GroupWithMembers = Group.extend({
   members: z.array(MemberUUID),
@@ -30,6 +44,20 @@ const GroupWithMembers = Group.extend({
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type GroupWithMembers = z.infer<typeof GroupWithMembers>
 export { GroupWithMembers }
+
+const GroupWithMembersFromApi = GroupWithMembers.extend({
+  created: z.nullable(z.iso.datetime().transform((v) => new Date(v))),
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type GroupWithMembersFromApi = z.infer<typeof GroupWithMembersFromApi>
+export { GroupWithMembersFromApi }
+
+const GroupWithMembersToApi = GroupWithMembers.extend({
+  created: z.nullable(z.date().transform((v) => v.toISOString())),
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
+type GroupWithMembersToApi = z.infer<typeof GroupWithMembersFromApi>
+export { GroupWithMembersToApi }
 
 const SimpleGroup = Group.extend({
   id: z.string(),

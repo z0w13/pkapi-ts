@@ -8,7 +8,7 @@ import DefaultRateLimiter from './RateLimiter/DefaultRateLimiter.js'
 
 import System, { SystemFromApi } from './models/System.js'
 import Member, { MemberFromApi, MemberToApi } from './models/Member.js'
-import Group, { GroupWithMembers } from './models/Group.js'
+import Group, { GroupFromApi, GroupToApi, GroupWithMembers, GroupWithMembersFromApi } from './models/Group.js'
 import SystemSettings from './models/SystemSettings.js'
 import PublicSystemSettings from './models/PublicSystemSettings.js'
 import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.js'
@@ -243,7 +243,7 @@ export default class StrictTypedClient {
       `/v2/members/${memberRef}/groups`,
       {},
       'GET',
-      z.array(Group),
+      z.array(GroupFromApi),
       undefined,
       'generic_get',
       options
@@ -415,7 +415,7 @@ export default class StrictTypedClient {
       `/v2/groups/${groupRef}`,
       {},
       'GET',
-      Group,
+      GroupFromApi,
       undefined,
       'generic_get',
       options
@@ -439,7 +439,7 @@ export default class StrictTypedClient {
      `/v2/systems/${systemRef}/groups`,
      withMembers ? { with_members: 'true' } : {},
      'GET',
-     z.array(withMembers ? GroupWithMembers : Group),
+     z.array(withMembers ? GroupWithMembersFromApi : GroupFromApi),
      undefined,
      'generic_get',
      options
@@ -468,8 +468,8 @@ export default class StrictTypedClient {
       '/v2/groups',
       {},
       'POST',
-      Group,
-      Group.partial().required({ name: true }).parse(group),
+      GroupFromApi,
+      GroupToApi.partial().required({ name: true }).parse(group),
       'generic_update',
       options
     )
@@ -486,8 +486,8 @@ export default class StrictTypedClient {
       `/v2/groups/${groupRef}`,
       {},
       'PATCH',
-      Group,
-      Group.partial().parse(data),
+      GroupFromApi,
+      GroupToApi.partial().parse(data),
       'generic_update',
       options
     )
