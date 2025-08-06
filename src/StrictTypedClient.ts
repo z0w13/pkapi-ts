@@ -792,8 +792,10 @@ export default class StrictTypedClient {
   ): Promise<Response> {
     console.log({ path, parameters, method, bucket })
     const headers = new Headers(data ? { 'Content-Type': 'application/json' } : {})
-    if (this.token) {
-      headers.append('Authorization', this.token ?? options.token)
+    if (options.token) {
+      headers.append('Authorization', options.token)
+    } else if (this.token) {
+      headers.append('Authorization', this.token)
     }
 
     const getRequestPromiseKey = this.getPromiseKey(path, parameters, options)

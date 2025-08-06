@@ -47,6 +47,17 @@ describe('PluralKit', () => {
     expect(system.id).toBe('tstsys')
   })
 
+  test('getSystem, with token', async () => {
+    const db = await getDatabase()
+    await createSystemWithToken(db, 'tstsys', 'test system')
+
+    const client = getTypedClient()
+    const system = await client.getSystem(SystemRef.parse('@me'), {
+      token: process.env.PLURALKIT_TOKEN,
+    })
+    expect(system.id).toBe('tstsys')
+  })
+
   test('getSystem', async () => {
     const db = await getDatabase()
     await createSystem(db, 'exmpl', 'test system 2')
