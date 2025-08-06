@@ -15,9 +15,9 @@ jobs:
       - name: install dependencies
         run: pnpm install --frozen-lockfile
       - name: install test dependencies (1/2)
-        run: cd tests/usage/import && pnpm install --frozen-lockfile
+        run: cd tests/usage/import && pnpm install --ignore-workspace --frozen-lockfile
       - name: install test dependencies (2/2)
-        run: cd tests/usage/require && pnpm install --frozen-lockfile
+        run: cd tests/usage/require && pnpm install --ignore-workspace --frozen-lockfile
       - name: lint
         run: pnpm lint
   unit:
