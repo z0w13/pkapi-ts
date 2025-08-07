@@ -13,7 +13,7 @@ const Group = z.object({
 
   name: z.string().max(100),
   displayName: z.nullable(z.string().max(100)),
-  description: z.nullable(z.string().max(100)),
+  description: z.nullable(z.string().max(1000)),
   icon: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
