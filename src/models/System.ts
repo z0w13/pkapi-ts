@@ -8,8 +8,6 @@ const System = z.object({
   id: SystemIDFromString,
   uuid: SystemUUID,
 
-  // TODO: Fix when the documentation updates
-  //       see https://github.com/PluralKit/PluralKit/pull/751
   name: z.nullable(z.string().max(100)),
   description: z.nullable(z.string().max(1000)),
   tag: z.nullable(z.string().max(79)),
@@ -17,7 +15,7 @@ const System = z.object({
   avatarUrl: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
-  created: z.nullable(z.date()),
+  created: z.date(),
   webhookUrl: z.optional(z.nullable(z.url())),
   privacy: z.nullable(SystemPrivacy)
 })
@@ -26,7 +24,7 @@ type System = z.infer<typeof System>
 export default System
 
 export const SystemFromApi = System.extend({
-  created: z.nullable(z.iso.datetime().transform((v) => new Date(v)))
+  created: z.iso.datetime().transform((v) => new Date(v))
 })
 
 const SimpleSystem = System.extend({
