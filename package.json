@@ -388,7 +388,6 @@
     ]
   },
   "dependencies": {
-    "discord-snowflake": "^2.0.0",
     "ts-case-convert": "^2.1.0",
     "zod": "^4.0.5"
   },

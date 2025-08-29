@@ -1,9 +1,17 @@
 import z from 'zod/v4'
-import { isSnowflake } from 'discord-snowflake'
 
 const DiscordSnowflake = z
   .string()
-  .refine((value) => isSnowflake(value), { error: 'not a discord snowflake' })
+  .refine(
+    (value) => {
+      try {
+        return BigInt(value).toString() === value
+      } catch (e) {
+        return false
+      }
+    },
+    { error: 'not a discord snowflake' }
+  )
   .brand<'DiscordSnowflake'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type DiscordSnowflake = z.infer<typeof DiscordSnowflake>
