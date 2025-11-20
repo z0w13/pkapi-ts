@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.org/package/pkapi-ts"><img src="https://badgen.net/npm/v/pkapi-ts" alt="npm version"/></a>
-  <a href="https://www.npmjs.org/package/pkapi-ts"><img src="https://badgen.net/npm/license/pkapi-ts" alt="license"/></a>
-  <a href="https://www.npmjs.org/package/pkapi-ts"><img src="https://badgen.net/npm/dt/pkapi-ts" alt="downloads"/></a>
+  <a href="https://www.npmjs.com/package/pkapi-ts"><img src="https://badgen.net/npm/v/pkapi-ts" alt="npm version"/></a>
+  <a href="https://www.npmjs.com/package/pkapi-ts"><img src="https://badgen.net/npm/license/pkapi-ts" alt="license"/></a>
+  <a href="https://www.npmjs.com/package/pkapi-ts"><img src="https://badgen.net/npm/dt/pkapi-ts" alt="downloads"/></a>
   <a href="https://github.com/z0w13/pkapi-ts/actions?workflow=CI"><img src="https://github.com/z0w13/pkapi-ts/workflows/CI/badge.svg" alt="build"/></a>
   <a href="https://codecov.io/gh/z0w13/pkapi-ts"><img src="https://badgen.net/codecov/c/github/z0w13/pkapi-ts" alt="codecov"/></a>
   <a href="https://snyk.io/test/github/z0w13/pkapi-ts"><img src="https://snyk.io/test/github/z0w13/pkapi-ts/badge.svg" alt="Known Vulnerabilities"/></a>
