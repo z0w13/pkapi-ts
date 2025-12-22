@@ -16,7 +16,7 @@ const AutoproxySettings = z
     autoproxyMember: z.nullable(MemberID),
     lastLatchTimestamp: z.nullable(z.date())
   })
-  .refine((v) => v.autoproxyMode === 'front' && v.autoproxyMember, {
+  .refine((v) => !(v.autoproxyMode === 'front' && v.autoproxyMember !== null), {
     error: 'autoproxyMember must be `null` if autoproxyMode is set to `front`'
   })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
