@@ -1,6 +1,6 @@
 import { assert, test, describe } from 'vitest'
 
-import PluralKitID, { PluralKitIDFromString } from '../../../../src/models/PluralKitID.js'
+import PluralKitID from '../../../../src/models/PluralKitID.js'
 import { ZodError } from 'zod/v4'
 
 describe('PluralKitID', () => {
@@ -13,17 +13,20 @@ describe('PluralKitID', () => {
     ['abcde', 'abcde'],
     ['abcdef', 'abcdef'],
     ['AbCdEF', 'abcdef']
-  ])('%s parses to %s', (input, expected) => {
-    assert.equal(PluralKitIDFromString.parse(input), expected)
+  ])('%s decodes to %s', (input, expected) => {
+    assert.equal(PluralKitID.decode(input), expected)
   })
 
-  test.each(['ab-cde', 'abc-de', 'asdfasasdf', 'sdfasdf-sdfsafd'])('%s fails to parse', (input) => {
-    try {
-      PluralKitIDFromString.parse(input)
-    } catch (e) {
-      assert.equal(e instanceof ZodError, true)
+  test.each(['ab-cde', 'abc-de', 'asdfasasdf', 'sdfasdf-sdfsafd'])(
+    '%s fails to decode',
+    (input) => {
+      try {
+        PluralKitID.decode(input)
+      } catch (e) {
+        assert.equal(e instanceof ZodError, true)
+      }
     }
-  })
+  )
 
   test('encodes correctly', () => {
     assert.equal(PluralKitID.parse('abcdef'), 'abcdef')

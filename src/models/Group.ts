@@ -1,15 +1,16 @@
 import z from 'zod/v4'
 
 import Color from './Color.js'
-import { GroupIDFromString, GroupUUID } from './GroupID.js'
-import { SystemIDFromString } from './SystemID.js'
+import GroupID, { GroupUUID } from './GroupID.js'
+import SystemID from './SystemID.js'
 import GroupPrivacy from './GroupPrivacy.js'
 import { MemberUUID } from './MemberID.js'
+import { IsoDateTimeToDateCodec } from './ZodCodecs.js'
 
 const Group = z.object({
-  id: GroupIDFromString,
+  id: GroupID,
   uuid: GroupUUID,
-  system: z.optional(SystemIDFromString),
+  system: z.optional(SystemID),
 
   name: z.string().max(100),
   displayName: z.nullable(z.string().max(100)),
@@ -17,47 +18,19 @@ const Group = z.object({
   icon: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
-  created: z.nullable(z.date()),
+  created: z.nullable(IsoDateTimeToDateCodec),
   privacy: z.nullable(GroupPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Group = z.infer<typeof Group>
 export default Group
 
-const GroupFromApi = Group.extend({
-  created: z.nullable(z.iso.datetime().transform((v) => new Date(v))),
-})
-// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupFromApi = z.infer<typeof GroupFromApi>
-export { GroupFromApi }
-
-const GroupToApi = Group.extend({
-  created: z.nullable(z.date().transform((v) => v.toISOString())),
-})
-// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupToApi = z.infer<typeof GroupFromApi>
-export { GroupToApi }
-
 const GroupWithMembers = Group.extend({
-  members: z.array(MemberUUID),
+  members: z.array(MemberUUID)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type GroupWithMembers = z.infer<typeof GroupWithMembers>
 export { GroupWithMembers }
-
-const GroupWithMembersFromApi = GroupWithMembers.extend({
-  created: z.nullable(z.iso.datetime().transform((v) => new Date(v))),
-})
-// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupWithMembersFromApi = z.infer<typeof GroupWithMembersFromApi>
-export { GroupWithMembersFromApi }
-
-const GroupWithMembersToApi = GroupWithMembers.extend({
-  created: z.nullable(z.date().transform((v) => v.toISOString())),
-})
-// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type GroupWithMembersToApi = z.infer<typeof GroupWithMembersFromApi>
-export { GroupWithMembersToApi }
 
 const SimpleGroup = Group.extend({
   id: z.string(),

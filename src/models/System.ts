@@ -1,11 +1,12 @@
 import z from 'zod/v4'
 
 import Color from './Color.js'
-import { SystemIDFromString, SystemUUID } from './SystemID.js'
+import SystemID, { SystemUUID } from './SystemID.js'
 import SystemPrivacy from './SystemPrivacy.js'
+import { IsoDateTimeToDateCodec } from './ZodCodecs.js'
 
 const System = z.object({
-  id: SystemIDFromString,
+  id: SystemID,
   uuid: SystemUUID,
 
   name: z.nullable(z.string().max(100)),
@@ -15,7 +16,7 @@ const System = z.object({
   avatarUrl: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   color: z.nullable(Color),
-  created: z.date(),
+  created: IsoDateTimeToDateCodec,
   webhookUrl: z.optional(z.nullable(z.url())),
   privacy: z.nullable(SystemPrivacy)
 })
@@ -23,13 +24,9 @@ const System = z.object({
 type System = z.infer<typeof System>
 export default System
 
-export const SystemFromApi = System.extend({
-  created: z.iso.datetime().transform((v) => new Date(v))
-})
-
 const SimpleSystem = System.extend({
   id: z.string(),
-  uuid: z.uuid(),
+  uuid: z.uuid()
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type SimpleSystem = z.infer<typeof SimpleSystem>

@@ -6,11 +6,12 @@ import {
   UserSnowflake,
   MessageSnowflake
 } from './DiscordSnowflake.js'
-import Member, { MemberFromApi } from './Member.js'
-import System, { SystemFromApi } from './System.js'
+import Member from './Member.js'
+import System from './System.js'
+import { IsoDateTimeToDateCodec } from './ZodCodecs.js'
 
 const Message = z.object({
-  timestamp: z.date(),
+  timestamp: IsoDateTimeToDateCodec,
   id: MessageSnowflake,
   original: MessageSnowflake,
   sender: UserSnowflake,
@@ -22,9 +23,3 @@ const Message = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Message = z.infer<typeof Message>
 export default Message
-
-export const MessageFromApi = Message.extend({
-  timestamp: z.iso.datetime().transform((v) => new Date(v)),
-  system: z.optional(SystemFromApi),
-  member: z.optional(MemberFromApi),
-})

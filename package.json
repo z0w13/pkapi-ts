@@ -314,6 +314,16 @@
         "default": "./dist/commonjs/models/SystemSettings.js"
       }
     },
+    "./models/ZodCodecs": {
+      "import": {
+        "types": "./dist/esm/models/ZodCodecs.d.ts",
+        "default": "./dist/esm/models/ZodCodecs.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/models/ZodCodecs.d.ts",
+        "default": "./dist/commonjs/models/ZodCodecs.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "engines": {
@@ -388,7 +398,7 @@
   },
   "dependencies": {
     "ts-case-convert": "^2.1.0",
-    "zod": "^4.0.5"
+    "zod": "^4.2"
   },
   "tshy": {
     "exports": [

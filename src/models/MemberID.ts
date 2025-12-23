@@ -1,16 +1,11 @@
 import z from 'zod/v4'
 
-import PluralKitID, { PluralKitIDFromString } from './PluralKitID.js'
+import PluralKitID from './PluralKitID.js'
 
 const MemberID = PluralKitID.brand<'MemberID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type MemberID = z.infer<typeof MemberID>
 export default MemberID
-
-const MemberIDFromString = PluralKitIDFromString.brand<'MemberID'>()
-// eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
-type MemberIDFromString = z.infer<typeof MemberID>
-export { MemberIDFromString }
 
 const MemberUUID = z.uuidv4().brand<'MemberUUID'>()
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information

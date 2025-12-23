@@ -6,25 +6,20 @@ import { APIError, HTTPError, AuthorizationRequired } from './errors.js'
 import BaseRateLimiter from './RateLimiter/BaseRateLimiter.js'
 import DefaultRateLimiter from './RateLimiter/DefaultRateLimiter.js'
 
-import System, { SystemFromApi } from './models/System.js'
-import Member, { MemberFromApi, MemberToApi } from './models/Member.js'
-import Group, { GroupFromApi, GroupToApi, GroupWithMembers, GroupWithMembersFromApi } from './models/Group.js'
+import System from './models/System.js'
+import Member from './models/Member.js'
+import Group, { GroupWithMembers } from './models/Group.js'
 import SystemSettings from './models/SystemSettings.js'
 import PublicSystemSettings from './models/PublicSystemSettings.js'
 import { GuildSnowflake, MessageSnowflake } from './models/DiscordSnowflake.js'
 import SystemGuildSettings from './models/SystemGuildSettings.js'
 import { SystemRef } from './models/SystemID.js'
-import AutoproxySettings, { AutoproxySettingsFromApi } from './models/AutoproxySettings.js'
+import AutoproxySettings from './models/AutoproxySettings.js'
 import { MemberRef } from './models/MemberID.js'
 import { GroupRef } from './models/GroupID.js'
 import MemberGuildSettings from './models/MemberGuildSettings.js'
-import {
-  SwitchWithMemberIDs,
-  SwitchWithMemberIDsFromApi,
-  SwitchWithMembers,
-  SwitchWithMembersFromApi
-} from './models/Switch.js'
-import Message, { MessageFromApi } from './models/Message.js'
+import { SwitchWithMemberIDs, SwitchWithMembers } from './models/Switch.js'
+import Message from './models/Message.js'
 import { SwitchID } from './models/SwitchID.js'
 
 // From https://pluralkit.me/api/#rate-limiting
@@ -64,7 +59,7 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}`,
       {},
       'GET',
-      SystemFromApi,
+      System,
       undefined,
       'generic_get',
       options
@@ -115,7 +110,7 @@ export default class StrictTypedClient {
       '/v2/systems/@me/autoproxy',
       { guild_id: guildId },
       'GET',
-      AutoproxySettingsFromApi,
+      AutoproxySettings,
       undefined,
       'generic_get',
       options
@@ -150,8 +145,8 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}`,
       {},
       'PATCH',
-      SystemFromApi,
-      System.partial().parse(data),
+      System,
+      System.partial().encode(data),
       'generic_update',
       options
     )
@@ -169,7 +164,7 @@ export default class StrictTypedClient {
       {},
       'PATCH',
       SystemSettings,
-      SystemSettings.partial().parse(data),
+      SystemSettings.partial().encode(data),
       'generic_update',
       options
     )
@@ -187,7 +182,7 @@ export default class StrictTypedClient {
       {},
       'PATCH',
       SystemGuildSettings,
-      SystemGuildSettings.partial().parse(data),
+      SystemGuildSettings.partial().encode(data),
       'generic_update',
       options
     )
@@ -207,8 +202,8 @@ export default class StrictTypedClient {
       '/v2/systems/@me/autoproxy',
       { guild_id: guildId },
       'PATCH',
-      AutoproxySettingsFromApi,
-      AutoproxySettings.partial().parse(data),
+      AutoproxySettings,
+      AutoproxySettings.partial().encode(data),
       'generic_update',
       options
     )
@@ -219,7 +214,7 @@ export default class StrictTypedClient {
       `/v2/members/${memberRef}`,
       {},
       'GET',
-      MemberFromApi,
+      Member,
       undefined,
       'generic_get',
       options
@@ -231,7 +226,7 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}/members`,
       {},
       'GET',
-      z.array(MemberFromApi),
+      z.array(Member),
       undefined,
       'generic_get',
       options
@@ -243,7 +238,7 @@ export default class StrictTypedClient {
       `/v2/members/${memberRef}/groups`,
       {},
       'GET',
-      z.array(GroupFromApi),
+      z.array(Group),
       undefined,
       'generic_get',
       options
@@ -276,8 +271,8 @@ export default class StrictTypedClient {
       '/v2/members',
       {},
       'POST',
-      MemberFromApi,
-      MemberToApi.partial().required({ name: true }).parse(member),
+      Member,
+      Member.partial().required({ name: true }).encode(member),
       'generic_update',
       options
     )
@@ -294,8 +289,8 @@ export default class StrictTypedClient {
       `/v2/members/${memberRef}`,
       {},
       'PATCH',
-      MemberFromApi,
-      MemberToApi.partial().required({ name: true }).parse(member),
+      Member,
+      Member.partial().encode(member),
       'generic_update',
       options
     )
@@ -401,7 +396,7 @@ export default class StrictTypedClient {
       {},
       'PATCH',
       MemberGuildSettings,
-      MemberGuildSettings.partial().parse(settings),
+      MemberGuildSettings.partial().encode(settings),
       'generic_update',
       options
     )
@@ -415,7 +410,7 @@ export default class StrictTypedClient {
       `/v2/groups/${groupRef}`,
       {},
       'GET',
-      GroupFromApi,
+      Group,
       undefined,
       'generic_get',
       options
@@ -436,13 +431,13 @@ export default class StrictTypedClient {
   async getGroups (systemRef: SystemRef, withMembers?: boolean, options?: Options): Promise<Array<Group | GroupWithMembers>>
   async getGroups (systemRef: SystemRef, withMembers: boolean = false, options: Options = {}): Promise<Array<Group | GroupWithMembers>> {
     return this.requestParsed(
-     `/v2/systems/${systemRef}/groups`,
-     withMembers ? { with_members: 'true' } : {},
-     'GET',
-     z.array(withMembers ? GroupWithMembersFromApi : GroupFromApi),
-     undefined,
-     'generic_get',
-     options
+      `/v2/systems/${systemRef}/groups`,
+      withMembers ? { with_members: 'true' } : {},
+      'GET',
+      z.array(withMembers ? GroupWithMembers : Group),
+      undefined,
+      'generic_get',
+      options
     )
   }
 
@@ -451,7 +446,7 @@ export default class StrictTypedClient {
       `/v2/groups/${groupRef}/members`,
       {},
       'GET',
-      z.array(MemberFromApi),
+      z.array(Member),
       undefined,
       'generic_get',
       options
@@ -468,8 +463,8 @@ export default class StrictTypedClient {
       '/v2/groups',
       {},
       'POST',
-      GroupFromApi,
-      GroupToApi.partial().required({ name: true }).parse(group),
+      Group,
+      Group.partial().required({ name: true }).encode(group),
       'generic_update',
       options
     )
@@ -486,8 +481,8 @@ export default class StrictTypedClient {
       `/v2/groups/${groupRef}`,
       {},
       'PATCH',
-      GroupFromApi,
-      GroupToApi.partial().parse(data),
+      Group,
+      Group.partial().encode(data),
       'generic_update',
       options
     )
@@ -598,7 +593,7 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}/switches`,
       params,
       'GET',
-      z.array(SwitchWithMemberIDsFromApi),
+      z.array(SwitchWithMemberIDs),
       undefined,
       'generic_get',
       options
@@ -614,7 +609,7 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'GET',
-      SwitchWithMembersFromApi,
+      SwitchWithMembers,
       undefined,
       'generic_get',
       options
@@ -640,7 +635,7 @@ export default class StrictTypedClient {
       throw new Error(`Expected JSON object, got ${JSON.stringify(json)} instead`)
     }
 
-    return SwitchWithMembersFromApi.parse(objectToCamel(json))
+    return SwitchWithMembers.parse(objectToCamel(json))
   }
 
   async createSwitch (
@@ -662,7 +657,7 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}/switches`,
       {},
       'POST',
-      SwitchWithMembersFromApi,
+      SwitchWithMembers,
       data,
       'generic_update',
       options
@@ -681,7 +676,7 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}/switches/${switchId}`,
       {},
       'PATCH',
-      SwitchWithMembersFromApi,
+      SwitchWithMembers,
       { timestamp: timestamp.toISOString() },
       'generic_update',
       options
@@ -700,7 +695,7 @@ export default class StrictTypedClient {
       `/v2/systems/${systemRef}/switches/${switchId}/members`,
       {},
       'PATCH',
-      SwitchWithMembersFromApi,
+      SwitchWithMembers,
       memberRefs,
       'generic_update',
       options
@@ -734,7 +729,7 @@ export default class StrictTypedClient {
       `/v2/messages/${messageId}`,
       {},
       'GET',
-      MessageFromApi,
+      Message,
       undefined,
       'message',
       options

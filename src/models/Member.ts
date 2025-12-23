@@ -1,14 +1,15 @@
 import z from 'zod/v4'
 
 import Color from './Color.js'
-import Birthday, { BirthdayFromString, BirthdayToString } from './Birthday.js'
+import Birthday from './Birthday.js'
 import ProxyTag from './ProxyTag.js'
 import SystemID from './SystemID.js'
-import { MemberIDFromString, MemberUUID } from './MemberID.js'
+import MemberID, { MemberUUID } from './MemberID.js'
 import MemberPrivacy from './MemberPrivacy.js'
+import { IsoDateTimeToDateCodec } from './ZodCodecs.js'
 
 const Member = z.object({
-  id: MemberIDFromString,
+  id: MemberID,
   uuid: MemberUUID,
   system: z.optional(SystemID),
 
@@ -21,34 +22,23 @@ const Member = z.object({
   webhookAvatarUrl: z.nullable(z.url().max(256)),
   banner: z.nullable(z.url().max(256)),
   description: z.nullable(z.string().max(1000)),
-  created: z.nullable(z.date()),
+  created: z.nullable(IsoDateTimeToDateCodec),
   proxyTags: z.array(ProxyTag),
   keepProxy: z.boolean(),
   tts: z.boolean(),
   autoproxyEnabled: z.nullable(z.boolean()),
   messageCount: z.nullable(z.int().min(0)),
-  lastMessageTimestamp: z.nullable(z.date()),
+  lastMessageTimestamp: z.nullable(IsoDateTimeToDateCodec),
   privacy: z.nullable(MemberPrivacy)
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type Member = z.infer<typeof Member>
-
 export default Member
-
-export const MemberFromApi = Member.extend({
-  birthday: z.nullable(BirthdayFromString),
-  created: z.nullable(z.iso.datetime().transform((v) => new Date(v))),
-  lastMessageTimestamp: z.nullable(z.iso.datetime().transform((v) => new Date(v)))
-})
-
-export const MemberToApi = Member.extend({
-  birthday: z.nullable(BirthdayToString)
-})
 
 const SimpleMember = Member.extend({
   id: z.string(),
   uuid: z.uuid(),
-  system: z.optional(z.string()),
+  system: z.optional(z.string())
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- needed for type information
 type SimpleMember = z.infer<typeof SimpleMember>

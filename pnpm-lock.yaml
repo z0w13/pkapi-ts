@@ -12,8 +12,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       zod:
-        specifier: ^4.0.5
-        version: 4.0.5
+        specifier: ^4.2
+        version: 4.2.1
     devDependencies:
       '@changesets/changelog-github':
         specifier: ^0.5.0
@@ -2506,8 +2506,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  zod@4.0.5:
-    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
+  zod@4.2.1:
+    resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
 
 snapshots:
 
@@ -5248,4 +5248,4 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod@4.0.5: {}
+  zod@4.2.1: {}
