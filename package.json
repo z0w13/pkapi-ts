@@ -398,7 +398,7 @@
   },
   "dependencies": {
     "ts-case-convert": "^2.1.0",
-    "zod": "^4.2"
+    "zod": "^4.3.4"
   },
   "tshy": {
     "exports": [
