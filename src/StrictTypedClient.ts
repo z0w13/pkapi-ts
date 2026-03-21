@@ -746,11 +746,14 @@ export default class StrictTypedClient {
     requestOptions: RequestInit,
     bucket: BucketNames
   ) {
+    // NOTE: `URLSearchParams.size` isn't implemented on Safari < 17, so we do our own thing
+    const paramsString = params.toString()
+
     while (true) {
       // wait for ratelimits
       await this.rateLimiter.wait(bucket)
 
-      const resp = await fetch(this.baseURL + path + (params.size ? `?${params.toString()}` : ''), requestOptions)
+      const resp = await fetch(this.baseURL + path + (paramsString.length ? `?${paramsString}` : ''), requestOptions)
       if (resp.status < 200 || resp.status > 299) {
         if (await this.rateLimiter.handleError(bucket, resp)) {
           // retry if ratelimiter handled the error
