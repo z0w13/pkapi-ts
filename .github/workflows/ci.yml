@@ -38,7 +38,7 @@ jobs:
       - name: run tests (unit)
         run: pnpm run test
       - name: coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v6
         if: github.actor != 'dependabot[bot]'
         with:
           fail_ci_if_error: true
@@ -64,7 +64,7 @@ jobs:
       - name: run tests (integration)
         run: pnpm run test:integration
       - name: coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v6
         if: github.actor != 'dependabot[bot]'
         with:
           fail_ci_if_error: true
