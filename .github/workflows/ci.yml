@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22.x
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: install dependencies
         run: pnpm install --frozen-lockfile
       - name: install test dependencies (1/2)
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{matrix.node}}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: install dependencies
         run: pnpm install --frozen-lockfile
       - name: run tests (unit)
@@ -58,7 +58,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{matrix.node}}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: install dependencies
         run: pnpm install --frozen-lockfile
       - name: run tests (integration)
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{matrix.node}}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: install dependencies
         run: pnpm install --frozen-lockfile
       - name: run tests (usage:import)
@@ -103,7 +103,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{matrix.node}}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: install dependencies
         run: pnpm install --frozen-lockfile
       - name: run tests (usage:require)
@@ -117,6 +117,6 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "22.x"
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: install dependencies
         run: pnpm install --frozen-lockfile
