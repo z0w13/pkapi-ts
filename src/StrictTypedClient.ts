@@ -44,7 +44,7 @@ export default class StrictTypedClient {
     return this.token
   }
 
-  public async setToken (token: string | null = null) {
+  public setToken (token: string | null = null) {
     this.token = token
   }
 
